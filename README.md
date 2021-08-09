@@ -1,2 +1,2 @@
 # enum-code
-enum code
+enum code.
