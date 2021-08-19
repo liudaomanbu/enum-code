@@ -1,7 +1,7 @@
 package org.caotc.code.util;
 
 import lombok.experimental.UtilityClass;
-import org.caotc.code.annotation.EnumCode;
+import org.caotc.code.annotation.Code;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -15,11 +15,11 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * 基于{@link EnumCode}注解的枚举工具类
+ * 基于{@link Code}注解的枚举工具类
  *
  * @author caotc
  * @date 2021-08-01
- * @see EnumCode
+ * @see Code
  * @since 1.0.0
  **/
 @UtilityClass
@@ -36,7 +36,7 @@ public class EnumCodeUtil {
      * @param enumClass 枚举类
      * @param value     枚举值
      * @param <E>       对应枚举
-     * @throws IllegalArgumentException 如果该枚举类没有{@link EnumCode}注解的属性和方法
+     * @throws IllegalArgumentException 如果该枚举类没有{@link Code}注解的属性和方法
      * @author caotc
      * @date 2021-08-01
      * @since 1.0.0
@@ -65,7 +65,7 @@ public class EnumCodeUtil {
      *
      * @param e 枚举
      * @return 枚举对应的值
-     * @throws IllegalArgumentException 如果该枚举类没有{@link EnumCode}注解的属性和方法
+     * @throws IllegalArgumentException 如果该枚举类没有{@link Code}注解的属性和方法
      * @author caotc
      * @date 2021-08-01
      * @since 1.0.0
@@ -95,7 +95,7 @@ public class EnumCodeUtil {
             Optional<Field> getValueFieldOptional = findCodeField(enumClass);
             if (!getValueMethodOptional.isPresent() && !getValueFieldOptional.isPresent()) {
                 throw new IllegalArgumentException(
-                        enumClass + " must have a method or field with the annotation " + EnumCode.class);
+                        enumClass + " must have a method or field with the annotation " + Code.class);
             }
             getValueMethodOptional.ifPresent(method -> register(enumClass, enumConstant -> {
                 try {
@@ -128,14 +128,14 @@ public class EnumCodeUtil {
     private static <E extends Enum<E>> Optional<Method> findCodeMethod(Class<E> enumClass) {
         return Arrays.stream(enumClass.getDeclaredMethods())
                 //过滤出有EnumSimpleValue注解的属性
-                .filter(method -> Objects.nonNull(method.getAnnotation(EnumCode.class)))
+                .filter(method -> Objects.nonNull(method.getAnnotation(Code.class)))
                 .findAny();
     }
 
     private static <E extends Enum<E>> Optional<Field> findCodeField(Class<E> enumClass) {
         return Arrays.stream(enumClass.getDeclaredFields())
                 //过滤出有EnumSimpleValue注解的属性
-                .filter(field -> Objects.nonNull(field.getAnnotation(EnumCode.class)))
+                .filter(field -> Objects.nonNull(field.getAnnotation(Code.class)))
                 //将私有属性设为可以获取值
                 .peek(field -> field.setAccessible(Boolean.TRUE)).findAny();
     }

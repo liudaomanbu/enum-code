@@ -18,5 +18,5 @@ import static java.lang.annotation.ElementType.METHOD;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {FIELD, METHOD})
-public @interface EnumCode {
+public @interface Code {
 }
