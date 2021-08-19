@@ -3,7 +3,7 @@ package org.caotc.code.adapter;
 import lombok.*;
 import org.caotc.code.Enumerable;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 
 /**
  * @author caotc
@@ -12,9 +12,9 @@ import java.lang.reflect.Method;
 @Builder
 @Value
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CodeMethodToEnumerableAdapter<C> implements Enumerable<C> {
+public class CodeFieldToEnumerableAdapter<C> implements Enumerable<C> {
     @NonNull
-    Method codeMethod;
+    Field codeField;
     @NonNull
     Object adaptee;
 
@@ -22,7 +22,7 @@ public class CodeMethodToEnumerableAdapter<C> implements Enumerable<C> {
     @Override
     public C code() {
         //noinspection unchecked
-        return (C) codeMethod.invoke(adaptee);
+        return (C) codeField.get(adaptee);
     }
 
 }
