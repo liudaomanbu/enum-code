@@ -43,7 +43,17 @@ public class EnumerableUtil {
         }
     }
 
-    private static <E,C> Optional<CodeReader<E,C>> findCodeReader(Class<E> enumClass) {
+    @SuppressWarnings("unchecked")
+    public static <E,C> CodeReader<E,C> findCodeReaderExact(@NonNull E enumerableAdaptee) {
+        return EnumerableUtil.<E,C>findCodeReaderExact((Class<E>) enumerableAdaptee.getClass());
+    }
+
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    public static <E,C> CodeReader<E,C> findCodeReaderExact(@NonNull Class<E> enumClass) {
+        return EnumerableUtil.<E,C>findCodeReader(enumClass).get();
+    }
+
+    public static <E,C> Optional<CodeReader<E,C>> findCodeReader(@NonNull Class<E> enumClass) {
         Optional<CodeReader<E,C>> codeReader=findAnnotatedCodeMethod(enumClass)
                  .map(CodeMethodReader::new);
         if(codeReader.isPresent()){

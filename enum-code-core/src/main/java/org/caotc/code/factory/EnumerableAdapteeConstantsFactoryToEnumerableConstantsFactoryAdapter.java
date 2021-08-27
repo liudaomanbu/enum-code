@@ -19,14 +19,13 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapte
     EnumerableAdapteeConstantsFactory<E> enumerableAdapteeConstantsFactory;
     @NonNull
     CodeReader<E,C> codeReader;
+    @NonNull
+    EnumerableAdapterFactory<E> enumerableAdapterFactory;
     @Override
     public EnumerableConstants<Enumerable<C>,C> constants() {
         return EnumerableConstants.<Enumerable<C>,C>builder().values(enumerableAdapteeConstantsFactory.constants()
                 .stream()
-                .map(e->CodeAnnotationToEnumerableAdapter.<E,C>builder()
-                        .adaptee(e)
-                        .codeReader(codeReader)
-                        .build())
+                .map(enumerableAdapterFactory::<C>adapt)
                 .collect(ImmutableSet.toImmutableSet()))
                 .build();
     }
