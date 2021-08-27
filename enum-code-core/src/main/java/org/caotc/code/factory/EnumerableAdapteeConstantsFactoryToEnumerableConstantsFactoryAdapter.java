@@ -18,8 +18,6 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapte
     @NonNull
     EnumerableAdapteeConstantsFactory<E> enumerableAdapteeConstantsFactory;
     @NonNull
-    CodeReader<E,C> codeReader;
-    @NonNull
     EnumerableAdapterFactory<E> enumerableAdapterFactory;
     @Override
     public EnumerableConstants<Enumerable<C>,C> constants() {
