@@ -4,6 +4,9 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import org.caotc.code.CodeFieldReader;
+import org.caotc.code.CodeMethodReader;
+import org.caotc.code.CodeReader;
 import org.caotc.code.Enumerable;
 import org.caotc.code.annotation.Code;
 
@@ -28,9 +31,10 @@ public class EnumerableUtil {
     private static final Table<Class<? extends Enumerable<?>>, Object, Enumerable<?>> ENUM_TYPE_TO_ENUM_VALUE_TO_ENUM_TABLE= HashBasedTable.create();
 
     public static boolean isEnumerable(@NonNull Class<?> type){
-        return type.isEnum()
+        return (type.isEnum()
                 || type.isAnnotationPresent(org.caotc.code.annotation.Enumerable.class)
-                || type.isAssignableFrom(Enumerable.class);
+                || type.isAssignableFrom(Enumerable.class))
+                && findCodeReader(type).isPresent();
     }
 
     public static void checkEnumerable(@NonNull Class<?> type){
@@ -39,18 +43,25 @@ public class EnumerableUtil {
         }
     }
 
-    private static <E,C> Optional<Function<E,C>> findCodeReader(Class<E> enumClass) {
-         return findAnnotatedCodeMethod(enumClass)
-                 .map(method-> {
-                     Function<E,C> f=(E)e -> {
-                         try {
-                             return (C)method.invoke(e);
-                         } catch (IllegalAccessException | InvocationTargetException e) {
-                             throw new RuntimeException(e);
-                         }
-                     };
-                     return f;
-                 });
+    private static <E,C> Optional<CodeReader<E,C>> findCodeReader(Class<E> enumClass) {
+        Optional<CodeReader<E,C>> codeReader=findAnnotatedCodeMethod(enumClass)
+                 .map(CodeMethodReader::new);
+        if(codeReader.isPresent()){
+            return codeReader;
+        }
+        codeReader=findAnnotatedCodeField(enumClass)
+                .map(CodeFieldReader::new);
+        if(codeReader.isPresent()){
+            return codeReader;
+        }
+        codeReader=findCodeMethod(enumClass)
+                .map(CodeMethodReader::new);
+        if(codeReader.isPresent()){
+            return codeReader;
+        }
+        codeReader=findCodeField(enumClass)
+                .map(CodeFieldReader::new);
+        return codeReader;
     }
 
     private static <E> Optional<Method> findAnnotatedCodeMethod(Class<E> enumClass) {

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.CodeAnnotationParser;
+import org.caotc.code.CodeReader;
 import org.caotc.code.Enumerable;
 import org.caotc.code.EnumerableConstants;
 import org.caotc.code.adapter.CodeAnnotationToEnumerableAdapter;
@@ -17,14 +18,14 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapte
     @NonNull
     EnumerableAdapteeConstantsFactory<E> enumerableAdapteeConstantsFactory;
     @NonNull
-    Class<E> adapteeType;
+    CodeReader<E,C> codeReader;
     @Override
     public EnumerableConstants<Enumerable<C>,C> constants() {
         return EnumerableConstants.<Enumerable<C>,C>builder().values(enumerableAdapteeConstantsFactory.constants()
                 .stream()
                 .map(e->CodeAnnotationToEnumerableAdapter.<E,C>builder()
                         .adaptee(e)
-                        .codeReader(CodeAnnotationParser.parse(adapteeType))
+                        .codeReader(codeReader)
                         .build())
                 .collect(ImmutableSet.toImmutableSet()))
                 .build();
