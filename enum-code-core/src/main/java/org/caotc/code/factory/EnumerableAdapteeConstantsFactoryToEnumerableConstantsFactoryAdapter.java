@@ -3,11 +3,8 @@ package org.caotc.code.factory;
 import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
-import org.caotc.code.CodeAnnotationParser;
-import org.caotc.code.CodeReader;
 import org.caotc.code.Enumerable;
 import org.caotc.code.EnumerableConstants;
-import org.caotc.code.adapter.CodeAnnotationToEnumerableAdapter;
 
 /**
  * @author caotc

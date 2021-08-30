@@ -14,7 +14,7 @@ import java.util.function.Function;
 @Builder
 @Value
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CodeAnnotationToEnumerableAdapter<E,C> implements Enumerable<C> {
+public class EnumerableAdapter<E,C> implements Enumerable<C> {
     @NonNull
     CodeReader<E,C> codeReader;
     @NonNull
