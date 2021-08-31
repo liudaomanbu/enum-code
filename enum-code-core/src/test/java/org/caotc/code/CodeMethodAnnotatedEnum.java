@@ -3,6 +3,7 @@ package org.caotc.code;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import org.caotc.code.annotation.Code;
 
 /**
  * @author caotc
@@ -10,8 +11,8 @@ import lombok.experimental.FieldDefaults;
  */
 @AllArgsConstructor
 @FieldDefaults(makeFinal = true)
-@Getter
-public enum TestEnum {
+public enum CodeMethodAnnotatedEnum {
     A(1);
-    int code;
+    @Getter(onMethod_={@Code})
+    int value;
 }
