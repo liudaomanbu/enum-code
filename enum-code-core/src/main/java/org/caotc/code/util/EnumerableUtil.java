@@ -11,10 +11,8 @@ import org.caotc.code.Enumerable;
 import org.caotc.code.annotation.Code;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * 基于{@link Code}注解的枚举工具类
@@ -45,7 +43,7 @@ public class EnumerableUtil {
 
     @SuppressWarnings("unchecked")
     public static <E,C> CodeReader<E,C> findCodeReaderExact(@NonNull E enumerableAdaptee) {
-        return EnumerableUtil.<E,C>findCodeReaderExact((Class<E>) enumerableAdaptee.getClass());
+        return findCodeReaderExact((Class<E>) enumerableAdaptee.getClass());
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")

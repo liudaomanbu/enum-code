@@ -15,6 +15,7 @@
 
   <modules>
     <module>enum-code-core</module>
+      <module>enum-code-support-mybatis</module>
   </modules>
 
   <properties>
