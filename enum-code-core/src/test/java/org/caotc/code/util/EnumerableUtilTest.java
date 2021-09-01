@@ -4,6 +4,8 @@ import org.caotc.code.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects;
+
 class EnumerableUtilTest {
     @Test
     void isEnumerableCodeAnnotatedFieldEnum() {
@@ -175,6 +177,14 @@ class EnumerableUtilTest {
 
     @Test
     void checkEnumerable() {
+        ModelConstant.CLASSES
+                .forEach(type-> {
+                        if(EnumerableUtil.isEnumerable(type) ){
+                            EnumerableUtil.checkEnumerable(type);
+                        }else{
+                            Assertions.assertThrows(IllegalArgumentException.class,()->EnumerableUtil.checkEnumerable(type));
+                        }
+                });
     }
 
     @Test
