@@ -1,6 +1,6 @@
 package org.caotc.code.util;
 
-import org.caotc.code.*;
+import org.caotc.code.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -34,6 +34,36 @@ class EnumerableUtilTest {
     void isEnumerableCodeMethodAnnotatedEnum() {
         boolean enumerable = EnumerableUtil.isEnumerable(CodeMethodAnnotatedEnum.class);
         Assertions.assertTrue(enumerable);
+    }
+
+    @Test
+    void isEnumerableCodeFieldEnumerableAnnotatedObject() {
+        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldEnumerableAnnotatedObject.class);
+        Assertions.assertTrue(enumerable);
+    }
+
+    @Test
+    void isEnumerableNoCodeEnum() {
+        boolean enumerable = EnumerableUtil.isEnumerable(NoCodeEnum.class);
+        Assertions.assertFalse(enumerable);
+    }
+
+    @Test
+    void isEnumerableNoCodeEnumerableAnnotatedObject() {
+        boolean enumerable = EnumerableUtil.isEnumerable(NoCodeEnumerableAnnotatedObject.class);
+        Assertions.assertFalse(enumerable);
+    }
+
+    @Test
+    void isEnumerableCodeFieldObject() {
+        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldObject.class);
+        Assertions.assertFalse(enumerable);
+    }
+
+    @Test
+    void isEnumerableObject() {
+        boolean enumerable = EnumerableUtil.isEnumerable(Object.class);
+        Assertions.assertFalse(enumerable);
     }
 
     @Test

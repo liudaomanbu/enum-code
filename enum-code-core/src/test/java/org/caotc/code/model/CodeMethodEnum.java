@@ -1,7 +1,6 @@
-package org.caotc.code;
+package org.caotc.code.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -10,8 +9,11 @@ import lombok.experimental.FieldDefaults;
  */
 @AllArgsConstructor
 @FieldDefaults(makeFinal = true)
-@Getter
-public enum CodeFieldEnum {
+public enum CodeMethodEnum {
     A(1);
-    int code;
+    int value;
+
+    public int code() {
+        return value;
+    }
 }

@@ -1,7 +1,7 @@
 package org.caotc.code.adapter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.caotc.code.CodeFieldEnum;
+import org.caotc.code.model.CodeFieldEnum;
 import org.caotc.code.util.EnumerableUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
