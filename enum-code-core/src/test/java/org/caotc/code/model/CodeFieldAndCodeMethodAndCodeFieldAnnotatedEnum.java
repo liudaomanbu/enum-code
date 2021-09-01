@@ -10,16 +10,13 @@ import org.caotc.code.annotation.Code;
  */
 @AllArgsConstructor
 @FieldDefaults(makeFinal = true)
-public enum CodeFieldAndCodeMethodAndCodeAnnotatedEnum {
-    A(1);
+public enum CodeFieldAndCodeMethodAndCodeFieldAnnotatedEnum {
+    A(1,2);
     int code;
+    @Code
+    public int value;
 
     public int code() {
-        return code;
-    }
-
-    @Code
-    public int abc() {
         return code;
     }
 }

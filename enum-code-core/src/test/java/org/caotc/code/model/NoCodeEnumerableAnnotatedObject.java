@@ -7,7 +7,6 @@ import org.caotc.code.annotation.Enumerable;
  * @author caotc
  * @date 2021-08-31
  */
-@Data
 @Enumerable
 public class NoCodeEnumerableAnnotatedObject {
 }

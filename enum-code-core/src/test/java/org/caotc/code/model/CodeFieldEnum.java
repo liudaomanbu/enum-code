@@ -10,8 +10,7 @@ import lombok.experimental.FieldDefaults;
  */
 @AllArgsConstructor
 @FieldDefaults(makeFinal = true)
-@Getter
 public enum CodeFieldEnum {
     A(1);
-    int code;
+    public int code;
 }

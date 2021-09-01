@@ -1,6 +1,7 @@
 package org.caotc.code.model;
 
 import lombok.AllArgsConstructor;
+import org.caotc.code.annotation.Code;
 import org.caotc.code.annotation.Enumerable;
 
 /**
@@ -9,6 +10,10 @@ import org.caotc.code.annotation.Enumerable;
  */
 @AllArgsConstructor
 @Enumerable
-public class CodeFieldEnumerableAnnotatedObject {
-    public Integer code;
+public class CodeFieldAnnotatedEnumerableAnnotatedObject {
+    Integer code;
+
+    public Integer code() {
+        return code;
+    }
 }
