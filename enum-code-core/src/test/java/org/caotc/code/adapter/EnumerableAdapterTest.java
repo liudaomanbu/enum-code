@@ -14,7 +14,7 @@ class EnumerableAdapterTest {
         EnumerableAdapter<CodeFieldEnum,Integer> testEnumEnumerableAdapter = EnumerableAdapter.<CodeFieldEnum,Integer>builder().adaptee(CodeFieldEnum.A).codeReader(EnumerableUtil.findCodeReaderExact(CodeFieldEnum.A)).build();
         log.debug("testEnumEnumerableAdapter:{}", testEnumEnumerableAdapter);
         Assertions.assertNotNull(testEnumEnumerableAdapter);
-        Assertions.assertEquals((Integer) CodeFieldEnum.A.code(),testEnumEnumerableAdapter.code());
+        Assertions.assertEquals((Integer) CodeFieldEnum.A.code,testEnumEnumerableAdapter.code());
     }
 
 
