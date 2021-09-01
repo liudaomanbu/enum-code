@@ -25,14 +25,14 @@ class EnumerableUtilTest {
     }
 
     @Test
-    void isEnumerableCodeFieldAnnotatedEnum() {
-        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldAnnotatedEnum.class);
+    void isEnumerableCodeAnnotatedFieldEnum() {
+        boolean enumerable = EnumerableUtil.isEnumerable(CodeAnnotatedFieldEnum.class);
         Assertions.assertTrue(enumerable);
     }
 
     @Test
     void isEnumerableCodeMethodAnnotatedEnum() {
-        boolean enumerable = EnumerableUtil.isEnumerable(CodeMethodAnnotatedEnum.class);
+        boolean enumerable = EnumerableUtil.isEnumerable(CodeAnnotatedMethodEnum.class);
         Assertions.assertTrue(enumerable);
     }
 
@@ -43,14 +43,14 @@ class EnumerableUtilTest {
     }
 
     @Test
-    void isEnumerableCodeFieldAndCodeMethodAndCodeMethodAnnotatedEnum() {
-        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldAndCodeMethodAndCodeMethodAnnotatedEnum.class);
+    void isEnumerableCodeFieldAndCodeMethodAndCodeAnnotatedMethodEnum() {
+        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnum.class);
         Assertions.assertTrue(enumerable);
     }
 
     @Test
-    void isEnumerableCodeFieldAndCodeMethodAndCodeFieldAnnotatedEnum() {
-        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldAndCodeMethodAndCodeFieldAnnotatedEnum.class);
+    void isEnumerableCodeFieldAndCodeMethodAndCodeAnnotatedFieldEnum() {
+        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnum.class);
         Assertions.assertTrue(enumerable);
     }
 
@@ -61,14 +61,14 @@ class EnumerableUtilTest {
     }
 
     @Test
-    void isEnumerableCodeFieldAndCodeMethodAndCodeFieldAnnotatedEnumerableAnnotatedObject() {
-        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldAndCodeMethodAndCodeFieldAnnotatedEnumerableAnnotatedObject.class);
+    void isEnumerableCodeFieldAndCodeMethodAndCodeAnnotatedFieldEnumerableAnnotatedObject() {
+        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnumerableAnnotatedObject.class);
         Assertions.assertTrue(enumerable);
     }
 
     @Test
-    void isEnumerableCodeFieldAndCodeMethodAndCodeMethodAnnotatedEnumerableAnnotatedObject() {
-        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldAndCodeMethodAndCodeMethodAnnotatedEnumerableAnnotatedObject.class);
+    void isEnumerableCodeFieldAndCodeMethodAndCodeAnnotatedMethodEnumerableAnnotatedObject() {
+        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnumerableAnnotatedObject.class);
         Assertions.assertTrue(enumerable);
     }
 
@@ -80,7 +80,7 @@ class EnumerableUtilTest {
 
     @Test
     void isEnumerableCodeFieldAnnotatedEnumerableAnnotatedObject() {
-        boolean enumerable = EnumerableUtil.isEnumerable(CodeFieldAnnotatedEnumerableAnnotatedObject.class);
+        boolean enumerable = EnumerableUtil.isEnumerable(CodeAnnotatedFieldEnumerableAnnotatedObject.class);
         Assertions.assertTrue(enumerable);
     }
 
@@ -92,7 +92,7 @@ class EnumerableUtilTest {
 
     @Test
     void isEnumerableCodeMethodAnnotatedEnumerableAnnotatedObject() {
-        boolean enumerable = EnumerableUtil.isEnumerable(CodeMethodAnnotatedEnumerableAnnotatedObject.class);
+        boolean enumerable = EnumerableUtil.isEnumerable(CodeAnnotatedMethodEnumerableAnnotatedObject.class);
         Assertions.assertTrue(enumerable);
     }
 

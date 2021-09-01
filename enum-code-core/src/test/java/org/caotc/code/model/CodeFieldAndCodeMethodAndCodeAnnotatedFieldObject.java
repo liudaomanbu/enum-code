@@ -1,22 +1,20 @@
 package org.caotc.code.model;
 
 import lombok.AllArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.caotc.code.annotation.Code;
+import org.caotc.code.annotation.Enumerable;
 
 /**
  * @author caotc
  * @date 2021-08-31
  */
 @AllArgsConstructor
-@FieldDefaults(makeFinal = true)
-public enum CodeFieldAndCodeMethodAndCodeFieldAnnotatedEnum {
-    A(1,2);
-    int code;
+public class CodeFieldAndCodeMethodAndCodeAnnotatedFieldObject {
+    Integer code;
     @Code
-    public int value;
+    public Integer value;
 
-    public int code() {
+    public Integer code() {
         return code;
     }
 }

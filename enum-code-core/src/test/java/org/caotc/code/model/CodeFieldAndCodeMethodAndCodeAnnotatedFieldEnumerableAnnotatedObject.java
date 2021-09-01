@@ -10,7 +10,7 @@ import org.caotc.code.annotation.Enumerable;
  */
 @AllArgsConstructor
 @Enumerable
-public class CodeFieldAndCodeMethodAndCodeFieldAnnotatedEnumerableAnnotatedObject {
+public class CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnumerableAnnotatedObject {
     Integer code;
     @Code
     public Integer value;
