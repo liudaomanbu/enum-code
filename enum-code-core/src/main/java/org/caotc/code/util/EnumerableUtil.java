@@ -2,6 +2,7 @@ package org.caotc.code.util;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.google.common.reflect.TypeToken;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.caotc.code.CodeFieldReader;
@@ -22,6 +23,7 @@ import java.util.*;
  * @see Code
  * @since 1.0.0
  **/
+@SuppressWarnings("UnstableApiUsage")
 @UtilityClass
 public class EnumerableUtil {
 
@@ -29,10 +31,9 @@ public class EnumerableUtil {
     private static final Table<Class<? extends Enumerable<?>>, Object, Enumerable<?>> ENUM_TYPE_TO_ENUM_VALUE_TO_ENUM_TABLE= HashBasedTable.create();
 
     public static boolean isEnumerable(@NonNull Class<?> type){
-        return (type.isEnum()
-                || type.isAnnotationPresent(org.caotc.code.annotation.Enumerable.class)
-                || type.isAssignableFrom(Enumerable.class))
-                && findCodeReader(type).isPresent();
+        return TypeToken.of(type).isSubtypeOf(Enumerable.class)
+                || ((type.isEnum() || type.isAnnotationPresent(org.caotc.code.annotation.Enumerable.class))
+                    && findCodeReader(type).isPresent());
     }
 
     public static void checkEnumerable(@NonNull Class<?> type){

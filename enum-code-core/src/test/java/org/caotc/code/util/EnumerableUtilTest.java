@@ -4,8 +4,6 @@ import org.caotc.code.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Objects;
-
 class EnumerableUtilTest {
     @Test
     void isEnumerableCodeAnnotatedFieldEnum() {
@@ -173,6 +171,12 @@ class EnumerableUtilTest {
     void isEnumerableNoCodeEnumerableAnnotatedObject() {
         boolean enumerable = EnumerableUtil.isEnumerable(NoCodeEnumerableAnnotatedObject.class);
         Assertions.assertFalse(enumerable);
+    }
+
+    @Test
+    void isEnumerableTestEnumerable() {
+        boolean enumerable = EnumerableUtil.isEnumerable(EnumerableImpl.class);
+        Assertions.assertTrue(enumerable);
     }
 
     @Test

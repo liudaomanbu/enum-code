@@ -16,5 +16,6 @@ public class ModelConstant {
             ,CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnumerableAnnotatedObject.class,CodeFieldAndCodeMethodAndCodeAnnotatedMethodObject.class,CodeFieldAndCodeMethodEnum.class
             ,CodeFieldAndCodeMethodEnumerableAnnotatedObject.class,CodeFieldAndCodeMethodObject.class,CodeFieldEnum.class,CodeFieldEnumerableAnnotatedObject.class,CodeFieldObject.class
             ,CodeGetMethodEnum.class,CodeGetMethodEnumerableAnnotatedObject.class,CodeGetMethodObject.class,CodeMethodEnum.class,CodeMethodEnumerableAnnotatedObject.class
-            ,CodeMethodObject.class,MultipleCodeAnnotatedFieldEnum.class,MultipleCodeAnnotatedFieldEnumerableAnnotatedObject.class,NoCodeEnum.class,NoCodeEnumerableAnnotatedObject.class);
+            ,CodeMethodObject.class,MultipleCodeAnnotatedFieldEnum.class,MultipleCodeAnnotatedFieldEnumerableAnnotatedObject.class,NoCodeEnum.class,NoCodeEnumerableAnnotatedObject.class
+            , EnumerableImpl.class);
 }
