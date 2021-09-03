@@ -1,8 +1,14 @@
 package org.caotc.code.util;
 
+import lombok.SneakyThrows;
+import org.caotc.code.CodeFieldReader;
+import org.caotc.code.CodeMethodReader;
+import org.caotc.code.CodeReader;
 import org.caotc.code.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.NoSuchElementException;
 
 class EnumerableUtilTest {
     @Test
@@ -192,15 +198,65 @@ class EnumerableUtilTest {
     }
 
     @Test
-    void findCodeReaderExact() {
+    @SneakyThrows
+    void findCodeReaderExactCodeAnnotatedFieldEnum() {
+        CodeReader<CodeAnnotatedFieldEnum, Integer> codeReader = EnumerableUtil.findCodeReaderExact(CodeAnnotatedFieldEnum.class);
+        CodeReader<CodeAnnotatedFieldEnum, Integer> codeFieldReader = new CodeFieldReader<>(CodeAnnotatedFieldEnum.class.getDeclaredField("value"));
+        Assertions.assertEquals(codeReader,codeFieldReader);
     }
 
     @Test
-    void testFindCodeReaderExact() {
+    @SneakyThrows
+    void findCodeReaderExactCodeAnnotatedMethodEnum() {
+        CodeReader<CodeAnnotatedMethodEnum, Integer> codeReader = EnumerableUtil.findCodeReaderExact(CodeAnnotatedMethodEnum.class);
+        CodeReader<CodeAnnotatedMethodEnum, Integer> codeMethodReader = new CodeMethodReader<>(CodeAnnotatedMethodEnum.class.getDeclaredMethod("value"));
+        Assertions.assertEquals(codeReader,codeMethodReader);
     }
 
     @Test
-    void findCodeReader() {
+    @SneakyThrows
+    void findCodeReaderExactCodeFieldEnum() {
+        CodeReader<CodeFieldEnum, Integer> codeReader = EnumerableUtil.findCodeReaderExact(CodeFieldEnum.class);
+        CodeReader<CodeFieldEnum, Integer> codeFieldReader = new CodeFieldReader<>(CodeFieldEnum.class.getDeclaredField("code"));
+        Assertions.assertEquals(codeReader,codeFieldReader);
+    }
+
+    @Test
+    @SneakyThrows
+    void findCodeReaderExactCodeMethodEnum() {
+        CodeReader<CodeMethodEnum, Integer> codeReader = EnumerableUtil.findCodeReaderExact(CodeMethodEnum.class);
+        CodeReader<CodeMethodEnum, Integer> codeMethodReader = new CodeMethodReader<>(CodeMethodEnum.class.getDeclaredMethod("code"));
+        Assertions.assertEquals(codeReader,codeMethodReader);
+    }
+
+    @Test
+    void findCodeReaderExactNoCodeEnum() {
+        Assertions.assertThrows(NoSuchElementException.class,()->EnumerableUtil.findCodeReaderExact(NoCodeEnum.class));
+    }
+
+    @Test
+    void findCodeReaderCodeAnnotatedFieldEnum() {
+        Assertions.assertTrue(EnumerableUtil.findCodeReader(CodeAnnotatedFieldEnum.class).isPresent());
+    }
+
+    @Test
+    void findCodeReaderCodeAnnotatedMethodEnum() {
+        Assertions.assertTrue(EnumerableUtil.findCodeReader(CodeAnnotatedMethodEnum.class).isPresent());
+    }
+
+    @Test
+    void findCodeReaderCodeFieldEnum() {
+        Assertions.assertTrue(EnumerableUtil.findCodeReader(CodeFieldEnum.class).isPresent());
+    }
+
+    @Test
+    void findCodeReaderCodeMethodEnum() {
+        Assertions.assertTrue(EnumerableUtil.findCodeReader(CodeMethodEnum.class).isPresent());
+    }
+
+    @Test
+    void findCodeReaderNoCodeEnum() {
+        Assertions.assertFalse(EnumerableUtil.findCodeReader(NoCodeEnum.class).isPresent());
     }
 
     @Test

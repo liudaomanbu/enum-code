@@ -21,7 +21,7 @@ public class EnumerableAdapter<E,C> implements Enumerable<C> {
     E adaptee;
 
     @Override
-    public C code() {
+    public @NonNull C code() {
         return codeReader.read(adaptee);
     }
 

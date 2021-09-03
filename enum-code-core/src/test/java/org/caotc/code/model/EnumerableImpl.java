@@ -1,6 +1,7 @@
 package org.caotc.code.model;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.caotc.code.Enumerable;
 
 /**
@@ -9,8 +10,9 @@ import org.caotc.code.Enumerable;
  */
 @AllArgsConstructor
 public class EnumerableImpl implements Enumerable<Integer> {
+    @NonNull
     Integer value;
-    public Integer code() {
+    public @NonNull Integer code() {
         return value;
     }
 }

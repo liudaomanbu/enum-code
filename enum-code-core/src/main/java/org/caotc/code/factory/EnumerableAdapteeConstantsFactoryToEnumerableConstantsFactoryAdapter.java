@@ -16,8 +16,9 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapte
     EnumerableAdapteeConstantsFactory<E> enumerableAdapteeConstantsFactory;
     @NonNull
     EnumerableAdapterFactory<E> enumerableAdapterFactory;
+
     @Override
-    public EnumerableConstants<Enumerable<C>,C> constants() {
+    public @NonNull EnumerableConstants<Enumerable<C>,C> constants() {
         return EnumerableConstants.<Enumerable<C>,C>builder().values(enumerableAdapteeConstantsFactory.constants()
                 .stream()
                 .map(enumerableAdapterFactory::<C>adapt)
