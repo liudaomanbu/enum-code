@@ -5,6 +5,8 @@ import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.Enumerable;
 import org.caotc.code.EnumerableConstants;
+import org.caotc.code.EnumerableType;
+import org.caotc.code.adapter.EnumerableAdapter;
 
 /**
  * @author caotc
@@ -16,6 +18,8 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapte
     EnumerableAdapteeConstantsFactory<E> enumerableAdapteeConstantsFactory;
     @NonNull
     EnumerableAdapterFactory<E> enumerableAdapterFactory;
+    @NonNull
+    EnumerableType enumerableType;
 
     @Override
     public @NonNull EnumerableConstants<Enumerable<C>,C> constants() {
@@ -25,4 +29,11 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapte
                 .collect(ImmutableSet.toImmutableSet()))
                 .build();
     }
+
+    @Override
+    public @NonNull EnumerableType enumerableType() {
+        return null;
+    }
+
+
 }

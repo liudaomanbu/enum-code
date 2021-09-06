@@ -3,6 +3,7 @@ package org.caotc.code.factory;
 import lombok.NonNull;
 import org.caotc.code.Enumerable;
 import org.caotc.code.EnumerableConstants;
+import org.caotc.code.EnumerableType;
 
 /**
  * @author caotc
@@ -11,4 +12,6 @@ import org.caotc.code.EnumerableConstants;
 public interface EnumerableConstantsFactory<E extends Enumerable<C>,C> {
     @NonNull
     EnumerableConstants<E,C> constants();
+    @NonNull
+    EnumerableType enumerableType();
 }
