@@ -22,7 +22,7 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapte
     EnumerableType enumerableType;
 
     @Override
-    public @NonNull EnumerableConstants<Enumerable<C>,C> constants() {
+    public @NonNull EnumerableConstants<Enumerable<C>,C> create() {
         return EnumerableConstants.<Enumerable<C>,C>builder().values(enumerableAdapteeConstantsFactory.constants()
                 .stream()
                 .map(enumerableAdapterFactory::<C>adapt)
@@ -31,9 +31,8 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapte
     }
 
     @Override
-    public @NonNull EnumerableType enumerableType() {
-        return null;
+    public boolean support(@NonNull EnumerableType type) {
+        return false;
     }
-
 
 }

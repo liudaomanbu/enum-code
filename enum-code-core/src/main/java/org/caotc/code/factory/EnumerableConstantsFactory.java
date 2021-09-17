@@ -11,7 +11,6 @@ import org.caotc.code.EnumerableType;
  */
 public interface EnumerableConstantsFactory<E extends Enumerable<C>,C> {
     @NonNull
-    EnumerableConstants<E,C> constants();
-    @NonNull
-    EnumerableType enumerableType();
+    EnumerableConstants<E,C> create();
+    boolean support(@NonNull EnumerableType type);
 }
