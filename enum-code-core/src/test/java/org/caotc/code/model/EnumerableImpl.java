@@ -10,6 +10,7 @@ import org.caotc.code.Enumerable;
  */
 @AllArgsConstructor
 public class EnumerableImpl implements Enumerable<Integer> {
+    public static final EnumerableImpl INSTANCE=new EnumerableImpl(0);
     @NonNull
     Integer value;
     public @NonNull Integer code() {

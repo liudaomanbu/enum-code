@@ -1,6 +1,7 @@
 package org.caotc.code.util;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.caotc.code.CodeFieldReader;
 import org.caotc.code.CodeMethodReader;
 import org.caotc.code.CodeReader;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 
+@Slf4j
 class EnumerableUtilTest {
     @Test
     void isEnumerableCodeAnnotatedFieldEnum() {

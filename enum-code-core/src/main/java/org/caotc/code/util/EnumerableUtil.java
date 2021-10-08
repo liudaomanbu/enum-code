@@ -1,7 +1,6 @@
 package org.caotc.code.util;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
+import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -10,6 +9,14 @@ import org.caotc.code.CodeMethodReader;
 import org.caotc.code.CodeReader;
 import org.caotc.code.Enumerable;
 import org.caotc.code.annotation.Code;
+import org.caotc.code.factory.CodeReaderEnumerableAdapterFactory;
+import org.caotc.code.factory.EnumConstantFactory;
+import org.caotc.code.factory.EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapter;
+import org.caotc.code.factory.EnumerableConstantsFactory;
+import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
+import org.caotc.code.service.EnumerableAdapterFactoryService;
+import org.caotc.code.service.EnumerableConstantsFactoryService;
+import org.caotc.code.service.EnumerableService;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -26,9 +33,11 @@ import java.util.*;
 @SuppressWarnings("UnstableApiUsage")
 @UtilityClass
 public class EnumerableUtil {
-
-    private static final Map<Enumerable<?>, Object> ENUM_TO_ENUM_VALUE_MAP = new HashMap<>();
-    private static final Table<Class<? extends Enumerable<?>>, Object, Enumerable<?>> ENUM_TYPE_TO_ENUM_VALUE_TO_ENUM_TABLE= HashBasedTable.create();
+    private static final EnumerableAdapteeConstantFactoryService ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE=new EnumerableAdapteeConstantFactoryService(Lists.newArrayList(new EnumConstantFactory()));
+    private static final EnumerableAdapterFactoryService ENUMERABLE_ADAPTER_FACTORY_SERVICE=new EnumerableAdapterFactoryService(Lists.newArrayList(new CodeReaderEnumerableAdapterFactory()));
+    private static final EnumerableConstantsFactory<Object> ENUMERABLE_CONSTANTS_FACTORY=new EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapter(ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE,ENUMERABLE_ADAPTER_FACTORY_SERVICE);
+    private static final EnumerableConstantsFactoryService ENUMERABLE_CONSTANTS_FACTORY_SERVICE=new EnumerableConstantsFactoryService(Lists.newArrayList(ENUMERABLE_CONSTANTS_FACTORY));
+    private static final EnumerableService ENUMERABLE_SERVICE=new EnumerableService(ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
 
     public static boolean isEnumerable(@NonNull Class<?> type){
         return TypeToken.of(type).isSubtypeOf(Enumerable.class)
@@ -38,7 +47,7 @@ public class EnumerableUtil {
 
     public static void checkEnumerable(@NonNull Class<?> type){
         if(!isEnumerable(type)){
-            throw new IllegalArgumentException(type + "is not a Enumerable class");
+            throw new IllegalArgumentException(type + "is not a Enumerable class");//todo
         }
     }
 
@@ -120,16 +129,7 @@ public class EnumerableUtil {
         if(Objects.isNull(enumClass)){
             throw new IllegalArgumentException("enumClass can't be null");
         }
-        if (!ENUM_TYPE_TO_ENUM_VALUE_TO_ENUM_TABLE.containsRow(enumClass)) {
-            register(enumClass);
-        }
-        //put only,check in put
-        @SuppressWarnings("unchecked")
-        E e = (E) ENUM_TYPE_TO_ENUM_VALUE_TO_ENUM_TABLE.get(enumClass,value);
-        if (Objects.isNull(e)) {
-            throw new IllegalArgumentException(value + " can't convert to " + enumClass);
-        }
-        return e;
+        return ENUMERABLE_SERVICE.findByClassAndCode(enumClass,value).get();
     }
 
     /**
@@ -144,22 +144,7 @@ public class EnumerableUtil {
      */
     @SuppressWarnings("unchecked")
     public static <E extends Enumerable<C>, C> C toSimpleValue(E e) {
-        if(Objects.isNull(e)){
-            return null;
-        }
-        if (!ENUM_TO_ENUM_VALUE_MAP.containsKey(e)) {
-            register(e.getClass());//todo class or superclass?
-        }
-        //调用方应该知道结果类型,由调用方决定返回类型,无需调用方强转
-        return (C) ENUM_TO_ENUM_VALUE_MAP.get(e);
-    }
-
-    private static <C,E extends Enumerable<C>> void register(Class<E> enumClass) {
-        E[] enumConstants = enumClass.getEnumConstants();//todo
-        for (E enumConstant : enumConstants) {
-            ENUM_TYPE_TO_ENUM_VALUE_TO_ENUM_TABLE.put(enumClass, enumConstant.code(),enumConstant);
-            ENUM_TO_ENUM_VALUE_MAP.put(enumConstant, enumConstant.code());
-        }
+        return ENUMERABLE_SERVICE.toCode(e);
     }
 
 }

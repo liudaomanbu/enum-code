@@ -3,36 +3,36 @@ package org.caotc.code.factory;
 import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
-import org.caotc.code.Enumerable;
-import org.caotc.code.EnumerableConstants;
-import org.caotc.code.EnumerableType;
-import org.caotc.code.adapter.EnumerableAdapter;
+import org.caotc.code.EnumerableConstant;
+import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
+import org.caotc.code.service.EnumerableAdapterFactoryService;
 
 /**
  * @author caotc
  * @date 2021-08-17
  */
 @Value
-public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapter<E,C> implements EnumerableConstantsFactory<Enumerable<C>,C> {
+public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapter implements EnumerableConstantsFactory<Object> {
     @NonNull
-    EnumerableAdapteeConstantsFactory<E> enumerableAdapteeConstantsFactory;
+    EnumerableAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService;
     @NonNull
-    EnumerableAdapterFactory<E> enumerableAdapterFactory;
-    @NonNull
-    EnumerableType enumerableType;
+    EnumerableAdapterFactoryService enumerableAdapterFactoryService;
 
     @Override
-    public @NonNull EnumerableConstants<Enumerable<C>,C> create() {
-        return EnumerableConstants.<Enumerable<C>,C>builder().values(enumerableAdapteeConstantsFactory.constants()
-                .stream()
-                .map(enumerableAdapterFactory::<C>adapt)
-                .collect(ImmutableSet.toImmutableSet()))
+    public @NonNull <C> EnumerableConstant<C> create(@NonNull Class<?> type) {
+        return EnumerableConstant.<C>builder()
+                .values(enumerableAdapteeConstantFactoryService.create(type)
+                        .stream()
+                        .map(enumerableAdapterFactoryService::<C>adapt)
+                        .collect(ImmutableSet.toImmutableSet()))
                 .build();
     }
 
     @Override
-    public boolean support(@NonNull EnumerableType type) {
-        return false;
+    public boolean support(@NonNull Class<?> type) {
+        return enumerableAdapteeConstantFactoryService.support(type)
+                && enumerableAdapterFactoryService.canAdapt(type);
     }
+
 
 }

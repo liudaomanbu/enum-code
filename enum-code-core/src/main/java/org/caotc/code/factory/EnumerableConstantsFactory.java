@@ -2,15 +2,16 @@ package org.caotc.code.factory;
 
 import lombok.NonNull;
 import org.caotc.code.Enumerable;
-import org.caotc.code.EnumerableConstants;
-import org.caotc.code.EnumerableType;
+import org.caotc.code.EnumerableConstant;
 
 /**
  * @author caotc
  * @date 2021-08-17
  */
-public interface EnumerableConstantsFactory<E extends Enumerable<C>,C> {
+public interface EnumerableConstantsFactory<E> {
     @NonNull
-    EnumerableConstants<E,C> create();
-    boolean support(@NonNull EnumerableType type);
+    <C> EnumerableConstant<C> create(@NonNull Class<? extends E> type);
+
+    //    boolean support(@NonNull EnumerableType type);
+    boolean support(@NonNull Class<?> type);
 }
