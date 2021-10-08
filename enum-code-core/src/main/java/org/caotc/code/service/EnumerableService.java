@@ -2,6 +2,7 @@ package org.caotc.code.service;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -24,32 +25,32 @@ import java.util.Optional;
 @EqualsAndHashCode
 @ToString
 public class EnumerableService {
+    EnumerableAdapterFactoryService enumerableAdapterFactoryService;
     EnumerableConstantsFactoryService enumerableConstantsFactoryService;
-    Map<Object, Object> enumerableToCodeMap = new HashMap<>();
-    Table<Class<?>, Object, Enumerable<?>> enumerableClassToCodeToEnumerableTable = HashBasedTable.create();
+    Map<Class<?>, EnumerableConstant<?>> classToEnumerableConstants = Maps.newConcurrentMap();
 
     /**
      * <p>
      * 值映射为枚举
      * </p>
      *
-     * @param enumClass 枚举类
-     * @param value     枚举值
+     * @param enumerableClass 枚举类
+     * @param code     枚举值
      * @param <E>       对应枚举
      * @throws IllegalArgumentException 如果该枚举类没有{@link Code}注解的属性和方法
      * @author caotc
      * @date 2021-08-01
      * @since 1.0.0
      */
+    @SuppressWarnings("unchecked")
     @NonNull
-    public <C,E> Optional<E> findByClassAndCode(@NonNull Class<E> enumClass,@NonNull C value) {
-        if (!enumerableClassToCodeToEnumerableTable.containsRow(enumClass)) {
-            register(enumClass);
+    public <C,E> Optional<E> find(@NonNull Class<E> enumerableClass, @NonNull C code) {
+        if (!classToEnumerableConstants.containsKey(enumerableClass)) {
+            classToEnumerableConstants.put(enumerableClass,enumerableConstantsFactoryService.create(enumerableClass));
         }
-        //put only,check in put
-        @SuppressWarnings("unchecked")
-        E e = (E) enumerableClassToCodeToEnumerableTable.get(enumClass,value);
-        return Optional.ofNullable(e);
+        return Optional.ofNullable((EnumerableConstant<C>)classToEnumerableConstants.get(enumerableClass))
+                .flatMap(enumerableConstant -> enumerableConstant.findByCode(code))
+                .map(enumerable -> (E)enumerable);
     }
 
     /**
@@ -65,20 +66,9 @@ public class EnumerableService {
     @SuppressWarnings("unchecked")
     @NonNull
     public <C> C toCode(@NonNull Object e) {
-        EnumerableAdapterFactoryService enumerableAdapterFactoryService=null;
-        enumerableAdapterFactoryService.adapt(e);
-        if (!enumerableToCodeMap.containsKey(e)) {
-            register(e.getClass());//todo class or superclass?
-        }
         //调用方应该知道结果类型,由调用方决定返回类型,无需调用方强转
-        return (C) enumerableToCodeMap.get(e);
+        Enumerable<C> enumerable=(e instanceof Enumerable)?(Enumerable<C>) e:enumerableAdapterFactoryService.adapt(e);
+        return enumerable.code();
     }
 
-    private <E> void register(Class<E> enumerableClass) {
-        EnumerableConstant<?> enumerableConstant = enumerableConstantsFactoryService.create(enumerableClass);
-        for (Enumerable<?> enumerable : enumerableConstant) {
-            enumerableClassToCodeToEnumerableTable.put(enumerableClass, enumerable.code(),enumerable);
-            enumerableToCodeMap.put(enumerable, enumerable.code());
-        }
-    }
 }

@@ -37,7 +37,7 @@ public class EnumerableUtil {
     private static final EnumerableAdapterFactoryService ENUMERABLE_ADAPTER_FACTORY_SERVICE=new EnumerableAdapterFactoryService(Lists.newArrayList(new CodeReaderEnumerableAdapterFactory()));
     private static final EnumerableConstantsFactory<Object> ENUMERABLE_CONSTANTS_FACTORY=new EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapter(ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE,ENUMERABLE_ADAPTER_FACTORY_SERVICE);
     private static final EnumerableConstantsFactoryService ENUMERABLE_CONSTANTS_FACTORY_SERVICE=new EnumerableConstantsFactoryService(Lists.newArrayList(ENUMERABLE_CONSTANTS_FACTORY));
-    private static final EnumerableService ENUMERABLE_SERVICE=new EnumerableService(ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
+    private static final EnumerableService ENUMERABLE_SERVICE=new EnumerableService(ENUMERABLE_ADAPTER_FACTORY_SERVICE,ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
 
     public static boolean isEnumerable(@NonNull Class<?> type){
         return TypeToken.of(type).isSubtypeOf(Enumerable.class)
@@ -129,7 +129,7 @@ public class EnumerableUtil {
         if(Objects.isNull(enumClass)){
             throw new IllegalArgumentException("enumClass can't be null");
         }
-        return ENUMERABLE_SERVICE.findByClassAndCode(enumClass,value).get();
+        return ENUMERABLE_SERVICE.find(enumClass,value).get();
     }
 
     /**
@@ -142,8 +142,7 @@ public class EnumerableUtil {
      * @date 2021-08-01
      * @since 1.0.0
      */
-    @SuppressWarnings("unchecked")
-    public static <E extends Enumerable<C>, C> C toSimpleValue(E e) {
+    public static <C> C toSimpleValue(Object e) {
         return ENUMERABLE_SERVICE.toCode(e);
     }
 
