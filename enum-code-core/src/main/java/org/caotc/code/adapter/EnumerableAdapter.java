@@ -1,28 +1,13 @@
 package org.caotc.code.adapter;
 
-import lombok.*;
-import org.caotc.code.CodeReader;
+import lombok.NonNull;
 import org.caotc.code.Enumerable;
-
-import java.lang.reflect.Field;
-import java.util.function.Function;
 
 /**
  * @author caotc
- * @date 2021-08-19
+ * @date 2021-10-09
  */
-@Builder
-@Value
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class EnumerableAdapter<E,C> implements Enumerable<C> {
+public interface EnumerableAdapter <E,C> extends Enumerable<C> {
     @NonNull
-    CodeReader<E,C> codeReader;
-    @NonNull
-    E adaptee;
-
-    @Override
-    public @NonNull C code() {
-        return codeReader.read(adaptee);
-    }
-
+    E adaptee();
 }

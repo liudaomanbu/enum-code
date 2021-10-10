@@ -3,6 +3,7 @@ package org.caotc.code;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableSet;
 import lombok.*;
+import org.caotc.code.adapter.EnumerableAdapter;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -19,87 +20,91 @@ import java.util.function.Function;
 public class EnumerableConstant<C> implements Set<Enumerable<C>> {
     @NonNull
     @Singular
-    ImmutableSet<Enumerable<C>> values;
-
-    @Getter(value=AccessLevel.PRIVATE,lazy = true)
-    ImmutableBiMap<C,Enumerable<C>> codeToEnumerableMap=values.stream()
-            .collect(ImmutableBiMap.toImmutableBiMap(Enumerable::code, Function.identity()));
+    ImmutableSet<Enumerable<C>> enumerables;
 
     @NonNull
-    public Optional<Enumerable<C>> findByCode(@NonNull C code) {
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @Getter(value=AccessLevel.PRIVATE,lazy = true)
+    ImmutableBiMap<C,Enumerable<C>> codeToEnumerableMap= enumerables().stream()
+            .collect(ImmutableBiMap.toImmutableBiMap(Enumerable::code
+                    , Function.identity()));
+
+    @NonNull
+    public Optional<Enumerable<C>> find(@NonNull C code) {
         return Optional.ofNullable(codeToEnumerableMap().get(code));
     }
 
     @Override
     public int size() {
-        return values.size();
+        return enumerables.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return values.isEmpty();
+        return enumerables.isEmpty();
     }
 
     @Override
     public boolean contains(Object o) {
-        return values.contains(o);
+        return enumerables.contains(o);
     }
 
     @Override
     public Iterator<Enumerable<C>> iterator() {
-        return values.iterator();
+        return enumerables.iterator();
     }
 
     @Override
     public Object[] toArray() {
-        return values.toArray();
+        return enumerables.toArray();
     }
 
     @SuppressWarnings({"NullableProblems", "SuspiciousToArrayCall"})
     @Override
     public <T> T[] toArray(T[] a) {
-        return values.toArray(a);
+        return enumerables.toArray(a);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public boolean add(Enumerable<C> cEnumerable) {
-        return values.add(cEnumerable);
+        return enumerables.add(cEnumerable);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public boolean remove(Object o) {
-        return values.remove(o);
+        return enumerables.remove(o);
     }
 
     @SuppressWarnings("NullableProblems")
     @Override
     public boolean containsAll(Collection<?> c) {
-        return values.containsAll(c);
+        return enumerables.containsAll(c);
     }
 
     @SuppressWarnings({"deprecation", "NullableProblems"})
     @Override
     public boolean addAll(Collection<? extends Enumerable<C>> c) {
-        return values.addAll(c);
+        return enumerables.addAll(c);
     }
 
     @SuppressWarnings({"deprecation", "NullableProblems"})
     @Override
     public boolean retainAll(Collection<?> c) {
-        return values.retainAll(c);
+        return enumerables.retainAll(c);
     }
 
     @SuppressWarnings({"deprecation", "NullableProblems"})
     @Override
     public boolean removeAll(Collection<?> c) {
-        return values.removeAll(c);
+        return enumerables.removeAll(c);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public void clear() {
-        values.clear();
+        enumerables.clear();
     }
 }

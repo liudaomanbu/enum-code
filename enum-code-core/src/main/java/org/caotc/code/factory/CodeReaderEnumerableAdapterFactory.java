@@ -3,7 +3,7 @@ package org.caotc.code.factory;
 import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.Enumerable;
-import org.caotc.code.adapter.EnumerableAdapter;
+import org.caotc.code.adapter.EnumerableAdapterImpl;
 import org.caotc.code.util.EnumerableUtil;
 
 /**
@@ -20,7 +20,7 @@ public class CodeReaderEnumerableAdapterFactory implements EnumerableAdapterFact
 
     @Override
     public @NonNull <C> Enumerable<C> adapt(@NonNull Object adaptee) {
-        return EnumerableAdapter.<Object,C>builder()
+        return EnumerableAdapterImpl.<Object,C>builder()
                 .adaptee(adaptee)
                 .codeReader(EnumerableUtil.findCodeReaderExact(adaptee))
                 .build();

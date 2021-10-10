@@ -12,7 +12,7 @@ import org.caotc.code.service.EnumerableAdapterFactoryService;
  * @date 2021-08-17
  */
 @Value
-public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapter implements EnumerableConstantsFactory<Object> {
+public class EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter implements EnumerableConstantFactory<Object> {
     @NonNull
     EnumerableAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService;
     @NonNull
@@ -21,7 +21,7 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantsFactoryAdapte
     @Override
     public @NonNull <C> EnumerableConstant<C> create(@NonNull Class<?> type) {
         return EnumerableConstant.<C>builder()
-                .values(enumerableAdapteeConstantFactoryService.create(type)
+                .enumerables(enumerableAdapteeConstantFactoryService.create(type)
                         .stream()
                         .map(enumerableAdapterFactoryService::<C>adapt)
                         .collect(ImmutableSet.toImmutableSet()))
