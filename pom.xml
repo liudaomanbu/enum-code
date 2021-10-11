@@ -38,7 +38,7 @@
     <guava.version>30.1.1-jre</guava.version>
     <jsqlparser.version>2.0</jsqlparser.version>
 
-    <spring.boot.version>2.1.3.RELEASE</spring.boot.version>
+    <spring.boot.version>2.2.0.RELEASE</spring.boot.version>
     <mybatis-spring-boot-starter.version>1.3.2</mybatis-spring-boot-starter.version>
     <fastjson.version>1.2.57</fastjson.version>
     <jackson.version>2.10.1</jackson.version>
@@ -116,6 +116,17 @@
         <scope>import</scope>
       </dependency>
 
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
 
       <dependency>
         <groupId>org.springframework.boot</groupId>

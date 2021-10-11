@@ -5,14 +5,33 @@ import lombok.extern.slf4j.Slf4j;
 import org.caotc.code.CodeFieldReader;
 import org.caotc.code.CodeMethodReader;
 import org.caotc.code.CodeReader;
+import org.caotc.code.SpringBootJunit5TestApplicationTests;
+import org.caotc.code.factory.EnumerableAdapteeConstantFactory;
+import org.caotc.code.factory.EnumerableImplFactory;
 import org.caotc.code.model.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
+import org.springframework.test.context.event.annotation.BeforeTestMethod;
 
+import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Slf4j
-class EnumerableUtilTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class EnumerableUtilTest extends SpringBootJunit5TestApplicationTests {
+    @Resource
+    Collection<EnumerableAdapteeConstantFactory<?>> enumerableAdapteeConstantFactories;
+
+    @BeforeAll
+    void init(){
+        enumerableAdapteeConstantFactories.forEach(EnumerableUtil::addEnumerableAdapteeConstantFactory);
+    }
+
     @Test
     void isEnumerableCodeAnnotatedFieldEnum() {
         boolean enumerable = EnumerableUtil.isEnumerable(CodeAnnotatedFieldEnum.class);
@@ -262,10 +281,121 @@ class EnumerableUtilTest {
     }
 
     @Test
-    void valueOf() {
+    void valueOfEnumerableEnum() {
+        Optional<CodeFieldEnum> optional = EnumerableUtil.valueOf(CodeFieldEnum.class, CodeFieldEnum.A.code);
+        Assertions.assertTrue(optional.isPresent());
+        Assertions.assertEquals(optional.get(),CodeFieldEnum.A);
     }
 
     @Test
-    void toSimpleValue() {
+    void valueOfEnumerableEnumInvalidCode() {
+        Optional<CodeFieldEnum> optional = EnumerableUtil.valueOf(CodeFieldEnum.class, -1);
+        Assertions.assertFalse(optional.isPresent());
+    }
+
+    @Test
+    void valueOfEnumerable() {
+        Optional<EnumerableImpl> optional = EnumerableUtil.valueOf(EnumerableImpl.class, EnumerableImpl.INSTANCE.code());
+        Assertions.assertTrue(optional.isPresent());
+        Assertions.assertEquals(optional.get(),EnumerableImpl.INSTANCE);
+    }
+
+    @Test
+    void valueOfEnumerableInvalidCode() {
+        Optional<EnumerableImpl> optional = EnumerableUtil.valueOf(EnumerableImpl.class, -1);
+        Assertions.assertFalse(optional.isPresent());
+    }
+
+    @Test
+    void valueOfUnEnumerableObject() {
+        Assertions.assertThrows(IllegalArgumentException.class,()->EnumerableUtil.valueOf(CodeFieldObject.class, 0));
+    }
+
+    @Test
+    void valueOfNoConstantEnumerable() {
+        Assertions.assertThrows(IllegalArgumentException.class,()->EnumerableUtil.valueOf(CodeFieldEnumerableAnnotatedObject.class, 0));
+    }
+
+    @Test
+    void valueOfUnEnumerableEnum() {
+        Assertions.assertThrows(IllegalArgumentException.class,()->EnumerableUtil.valueOf(NoCodeEnum.class, 0));
+    }
+
+    @Test
+    void valueOfExactEnumerableEnum() {
+        CodeFieldEnum enumerable = EnumerableUtil.valueOfExact(CodeFieldEnum.class, CodeFieldEnum.A.code);
+        Assertions.assertEquals(enumerable,CodeFieldEnum.A);
+    }
+
+    @Test
+    void valueOfExactEnumerableEnumInvalidCode() {
+        Assertions.assertThrows(IllegalStateException.class,()->EnumerableUtil.valueOfExact(CodeFieldEnum.class, -1));
+    }
+
+    @Test
+    void valueOfExactEnumerable() {
+        EnumerableImpl enumerable = EnumerableUtil.valueOfExact(EnumerableImpl.class, EnumerableImpl.INSTANCE.code());
+        Assertions.assertEquals(enumerable,EnumerableImpl.INSTANCE);
+    }
+
+    @Test
+    void valueOfExactEnumerableInvalidCode() {
+        Assertions.assertThrows(IllegalStateException.class,()->EnumerableUtil.valueOfExact(EnumerableImpl.class, -1));
+    }
+
+    @Test
+    void valueOfExactUnEnumerableObject() {
+        Assertions.assertThrows(IllegalArgumentException.class,()->EnumerableUtil.valueOfExact(CodeFieldObject.class, 0));
+    }
+
+    @Test
+    void valueOfExactNoConstantEnumerable() {
+        Assertions.assertThrows(IllegalArgumentException.class,()->EnumerableUtil.valueOfExact(CodeFieldEnumerableAnnotatedObject.class, 0));
+    }
+
+    @Test
+    void valueOfExactUnEnumerableEnum() {
+        Assertions.assertThrows(IllegalArgumentException.class,()->EnumerableUtil.valueOfExact(NoCodeEnum.class, 0));
+    }
+
+    @Test
+    void valueOfNullable() {
+        Optional<CodeFieldEnum> optional = EnumerableUtil.valueOfNullable(CodeFieldEnum.class, null);
+        Assertions.assertFalse(optional.isPresent());
+    }
+
+    @Test
+    void toCodeEnumerableEnum() {
+        Object code = EnumerableUtil.toCode(CodeFieldEnum.A);
+        Assertions.assertEquals(code,CodeFieldEnum.A.code);
+    }
+
+    @Test
+    void toCodeEnumerable() {
+        Object code = EnumerableUtil.toCode(EnumerableImpl.INSTANCE);
+        Assertions.assertEquals(code,EnumerableImpl.INSTANCE.code());
+    }
+
+    @Test
+    void toCodeUnEnumerableObject() {
+        Assertions.assertThrows(IllegalArgumentException.class,()->EnumerableUtil.toCode(new CodeFieldObject(0)));
+    }
+
+    @Test
+    void toCodeNoConstantEnumerable() {
+        CodeFieldEnumerableAnnotatedObject enumerable = new CodeFieldEnumerableAnnotatedObject(0);
+        Object code = EnumerableUtil.toCode(enumerable);
+        Assertions.assertEquals(code,enumerable.code);
+    }
+
+    @Test
+    void toCodeUnEnumerableEnum() {
+        Assertions.assertThrows(IllegalArgumentException.class,()->EnumerableUtil.toCode(NoCodeEnum.A));
+    }
+
+    @Test
+    void toCodeNullable() {
+        Object code = EnumerableUtil.toCodeNullable(null);
+        Assertions.assertNull(code);
     }
 }

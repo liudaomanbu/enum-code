@@ -46,16 +46,14 @@ public class EnumerableService {
         }
         EnumerableConstant<C> enumerableConstant = (EnumerableConstant<C>) classToEnumerableConstants.get(enumerableClass);
         return enumerableConstant.find(code)
-                //todo 判断标准是是否实现适配器接口？
-                .map(enumerable -> (enumerable instanceof EnumerableAdapter) ?
-                        ((EnumerableAdapter<E, C>) enumerable).adaptee() : (E) enumerable);
+                .map(enumerable -> unWarpIfNecessary(enumerableClass,enumerable));
     }
 
     @NonNull
     public <C, E> E valueOfExact(@NonNull Class<E> enumerableClass, @NonNull C code) {
-        return valueOf(enumerableClass,code)
+        return valueOf(enumerableClass, code)
                 //todo
-                .orElseThrow(()->new IllegalStateException(enumerableClass+" EnumerableConstant not contains enumerable of code"+code));
+                .orElseThrow(() -> new IllegalStateException(enumerableClass + " EnumerableConstant not contains enumerable of code" + code));
     }
 
     @NonNull
@@ -89,4 +87,17 @@ public class EnumerableService {
                 .map(this::<C>toCode)
                 .orElse(null);
     }
+
+    @SuppressWarnings("unchecked")
+    private <E> E unWarpIfNecessary(@NonNull Class<E> enumerableClass, @NonNull Object enumerable) {
+        if (enumerableClass.isInstance(enumerable)) {
+            return (E) enumerable;
+        }
+        if (enumerable instanceof EnumerableAdapter) {
+            return ((EnumerableAdapter<E, ?>) enumerable).adaptee();
+        }
+        //todo
+        throw new IllegalStateException(enumerableClass + " EnumerableConstant enumerable class is "+enumerable.getClass());
+    }
+
 }

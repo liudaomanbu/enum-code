@@ -9,10 +9,7 @@ import org.caotc.code.CodeMethodReader;
 import org.caotc.code.CodeReader;
 import org.caotc.code.Enumerable;
 import org.caotc.code.annotation.Code;
-import org.caotc.code.factory.CodeReaderEnumerableAdapterFactory;
-import org.caotc.code.factory.EnumConstantFactory;
-import org.caotc.code.factory.EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter;
-import org.caotc.code.factory.EnumerableConstantFactory;
+import org.caotc.code.factory.*;
 import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
 import org.caotc.code.service.EnumerableAdapterFactoryService;
 import org.caotc.code.service.EnumerableConstantFactoryService;
@@ -157,5 +154,9 @@ public class EnumerableUtil {
 
     public static <C> C toCodeNullable(Object e) {
         return ENUMERABLE_SERVICE.toCodeNullable(e);
+    }
+
+    public static void addEnumerableAdapteeConstantFactory(@NonNull EnumerableAdapteeConstantFactory<?> factory){
+        ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE.addFactory(factory);
     }
 }

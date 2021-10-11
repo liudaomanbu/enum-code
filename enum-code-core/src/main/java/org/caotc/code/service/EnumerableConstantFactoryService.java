@@ -15,12 +15,12 @@ import java.util.Collection;
 @ToString
 public class EnumerableConstantFactoryService {
     @NonNull
-    Collection<EnumerableConstantFactory<?>> enumerableConstantsFactories;
+    Collection<EnumerableConstantFactory<?>> factories;
 
     @SuppressWarnings("unchecked")
     @NonNull
     public <E, C> EnumerableConstant<C> create(@NonNull Class<E> enumerableClass) {
-        EnumerableConstantFactory<E> factory = (EnumerableConstantFactory<E>) enumerableConstantsFactories.stream()
+        EnumerableConstantFactory<E> factory = (EnumerableConstantFactory<E>) factories.stream()
                 .filter(enumerableConstantFactory -> enumerableConstantFactory.support(enumerableClass))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(enumerableClass + " not support create EnumerableConstant"));//todo
