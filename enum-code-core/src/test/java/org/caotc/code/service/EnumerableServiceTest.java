@@ -6,22 +6,30 @@ import org.caotc.code.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import javax.annotation.Resource;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Slf4j
 class EnumerableServiceTest extends SpringBootJunit5TestApplicationTests {
+
+    static Stream<Object> enumerables() {
+        return Stream.of(new CodeAnnotatedFieldEnumerableAnnotatedObject(0),new CodeAnnotatedFieldObject(0));
+    }
+
     @Resource
     EnumerableService enumerableService;
 
     @ParameterizedTest
-    @ValueSource
-    void valueOf() {
-        Optional<CodeFieldEnum> optional = enumerableService.valueOf(CodeFieldEnum.class, CodeFieldEnum.A.code);
+    @MethodSource("org.caotc.code.provider.Provider#enumerableAndCodes")
+    void valueOf(Object enumerable,Object code) {
+        Optional<?> optional = enumerableService.valueOf(enumerable.getClass(), code);
         Assertions.assertTrue(optional.isPresent());
-        Assertions.assertEquals(optional.get(), CodeFieldEnum.A);
+        Assertions.assertEquals(optional.get(), enumerable);
     }
 
     @Test
