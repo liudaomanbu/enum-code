@@ -57,9 +57,9 @@ public class EnumerableService {
     }
 
     @NonNull
-    public <C, E> Optional<E> valueOfNullable(@NonNull Class<E> enumerableClass, C code) {
+    public <C, E> Optional<E> valueOfNullable(Class<E> enumerableClass, C code) {
         return Optional.ofNullable(code)
-                .flatMap(c -> this.valueOf(enumerableClass, c));
+                .flatMap(c -> valueOf(enumerableClass, c));
     }
 
     /**
