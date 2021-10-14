@@ -1,5 +1,7 @@
 package org.caotc.code.util;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import lombok.NonNull;
@@ -61,17 +63,22 @@ public class EnumerableUtil {
     }
 
     public static <E, C> Optional<CodeReader<E, C>> findCodeReader(@NonNull Class<E> enumClass) {
-        Optional<CodeReader<E, C>> codeReader = findAnnotatedCodeMethod(enumClass)
-                .map(CodeMethodReader::new);
-        if (codeReader.isPresent()) {
-            return codeReader;
+        ImmutableSet<Method> annotatedCodeMethods = findAnnotatedCodeMethod(enumClass);
+        ImmutableSet<Field> annotatedCodeFields = findAnnotatedCodeField(enumClass);
+
+        if(annotatedCodeMethods.size()+annotatedCodeFields.size()>1){
+            throw new IllegalStateException(enumClass+" have multiple code annotation");
         }
-        codeReader = findAnnotatedCodeField(enumClass)
-                .map(CodeFieldReader::new);
-        if (codeReader.isPresent()) {
-            return codeReader;
+
+        if(!annotatedCodeMethods.isEmpty()){
+            return Optional.of(new CodeMethodReader<>(Iterables.getOnlyElement(annotatedCodeMethods)));
         }
-        codeReader = findCodeMethod(enumClass)
+
+        if(!annotatedCodeFields.isEmpty()){
+            return Optional.of(new CodeFieldReader<>(Iterables.getOnlyElement(annotatedCodeFields)));
+        }
+
+        Optional<CodeReader<E, C>> codeReader = findCodeMethod(enumClass)
                 .map(CodeMethodReader::new);
         if (codeReader.isPresent()) {
             return codeReader;
@@ -81,19 +88,20 @@ public class EnumerableUtil {
         return codeReader;
     }
 
-    private static <E> Optional<Method> findAnnotatedCodeMethod(Class<E> enumClass) {
-        return Arrays.stream(enumClass.getDeclaredMethods())
+    private static <E> ImmutableSet<Method> findAnnotatedCodeMethod(Class<E> enumClass) {
+        return Arrays.stream(enumClass.getDeclaredMethods())//todo
                 //过滤出有EnumSimpleValue注解的属性
                 .filter(method -> Objects.nonNull(method.getAnnotation(Code.class)))
-                .findAny();
+                .collect(ImmutableSet.toImmutableSet());
     }
 
-    private static <E> Optional<Field> findAnnotatedCodeField(Class<E> enumClass) {
-        return Arrays.stream(enumClass.getDeclaredFields())
+    private static <E> ImmutableSet<Field> findAnnotatedCodeField(Class<E> enumClass) {
+        return Arrays.stream(enumClass.getDeclaredFields())//todo
                 //过滤出有EnumSimpleValue注解的属性
                 .filter(field -> Objects.nonNull(field.getAnnotation(Code.class)))
                 //将私有属性设为可以获取值
-                .peek(field -> field.setAccessible(Boolean.TRUE)).findAny();
+                .peek(field -> field.setAccessible(Boolean.TRUE))
+                .collect(ImmutableSet.toImmutableSet());
     }
 
     private static <E> Optional<Method> findCodeMethod(Class<E> enumClass) {
