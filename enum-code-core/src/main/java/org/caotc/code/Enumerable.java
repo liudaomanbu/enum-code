@@ -9,4 +9,6 @@ import lombok.NonNull;
 public interface Enumerable<C> {
     @NonNull
     C code();
+    @NonNull
+    String group();
 }

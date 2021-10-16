@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  */
 @UtilityClass
 public class Provider {
-    private static final int DEFAULT_CODE=0;
+    private static final int DEFAULT_CODE = 0;
     private static final Random RANDOM = new Random();
 
     static Stream<Object> enumerables() {
@@ -79,12 +79,12 @@ public class Provider {
     static Stream<Object> unEnumerables() {
         return Stream.of(new CodeAnnotatedFieldObject(DEFAULT_CODE)
                 , new CodeAnnotatedMethodObject(DEFAULT_CODE)
-                , new CodeFieldAndCodeMethodAndCodeAnnotatedFieldObject(RANDOM.nextInt(),DEFAULT_CODE)
+                , new CodeFieldAndCodeMethodAndCodeAnnotatedFieldObject(RANDOM.nextInt(), DEFAULT_CODE)
                 , new CodeFieldAndCodeMethodAndCodeAnnotatedMethodObject(DEFAULT_CODE)
                 , new CodeFieldAndCodeMethodObject(DEFAULT_CODE)
                 , new CodeFieldObject(DEFAULT_CODE), new CodeGetMethodObject(DEFAULT_CODE), new CodeMethodObject(DEFAULT_CODE)
-                , NoCodeEnum.A
-                , new NoCodeEnumerableAnnotatedObject());
+                , new MultipleCodeAnnotatedFieldObject(DEFAULT_CODE, RANDOM.nextInt())
+                , NoCodeEnum.A, new NoCodeEnumerableAnnotatedObject(), new Object());
     }
 
     static Stream<Class<?>> illegalEnumerableTypes() {
@@ -98,13 +98,24 @@ public class Provider {
     }
 
     static Stream<Arguments> noConstantEnumerableAndCodes() {
-        return Stream.of(Arguments.of(new CodeAnnotatedFieldEnumerableAnnotatedObject(DEFAULT_CODE),DEFAULT_CODE)
-                , Arguments.of(new CodeAnnotatedMethodEnumerableAnnotatedObject(DEFAULT_CODE),DEFAULT_CODE)
-                , Arguments.of(new CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnumerableAnnotatedObject(RANDOM.nextInt(),DEFAULT_CODE),DEFAULT_CODE)
-                , Arguments.of(new CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnumerableAnnotatedObject(DEFAULT_CODE),DEFAULT_CODE)
-                , Arguments.of(new CodeFieldAndCodeMethodEnumerableAnnotatedObject(DEFAULT_CODE),DEFAULT_CODE)
-                , Arguments.of(new CodeFieldEnumerableAnnotatedObject(DEFAULT_CODE),DEFAULT_CODE)
-                , Arguments.of(new CodeGetMethodEnumerableAnnotatedObject(DEFAULT_CODE),DEFAULT_CODE)
-                , Arguments.of(new CodeMethodEnumerableAnnotatedObject(DEFAULT_CODE),DEFAULT_CODE));
+        return Stream.of(Arguments.of(new CodeAnnotatedFieldEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeAnnotatedMethodEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnumerableAnnotatedObject(RANDOM.nextInt(), DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeFieldAndCodeMethodEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeFieldEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeGetMethodEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeMethodEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE));
+    }
+
+    static Stream<Arguments> enumerableTypeAndCodeReaders() {
+        return Stream.of(Arguments.of(new CodeAnnotatedFieldEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeAnnotatedMethodEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnumerableAnnotatedObject(RANDOM.nextInt(), DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeFieldAndCodeMethodEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeFieldEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeGetMethodEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE)
+                , Arguments.of(new CodeMethodEnumerableAnnotatedObject(DEFAULT_CODE), DEFAULT_CODE));
     }
 }

@@ -1,15 +1,11 @@
 package org.caotc.code.util;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import org.caotc.code.CodeFieldReader;
-import org.caotc.code.CodeMethodReader;
-import org.caotc.code.CodeReader;
-import org.caotc.code.Enumerable;
+import org.caotc.code.*;
 import org.caotc.code.annotation.Code;
 import org.caotc.code.factory.*;
 import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
@@ -41,14 +37,22 @@ public class EnumerableUtil {
     private static final EnumerableService ENUMERABLE_SERVICE = new EnumerableService(ENUMERABLE_ADAPTER_FACTORY_SERVICE, ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
 
     public static boolean isEnumerable(@NonNull Class<?> type) {
-        return TypeToken.of(type).isSubtypeOf(Enumerable.class)
-                || ((type.isEnum() || type.isAnnotationPresent(org.caotc.code.annotation.Enumerable.class))
-                && findCodeReader(type).isPresent());
+        //todo super sub
+        return (TypeToken.of(type).isSubtypeOf(Enumerable.class)
+                || type.isEnum()
+                || type.isAnnotationPresent(org.caotc.code.annotation.Enumerable.class))
+                && findCodeReader(type).isPresent();
     }
 
     public static void checkEnumerable(@NonNull Class<?> type) {
         if (!isEnumerable(type)) {
             throw new IllegalArgumentException(type + "is not a Enumerable class");//todo
+        }
+
+        ImmutableSet<Method> annotatedCodeMethods = findAnnotatedCodeMethod(type);
+        ImmutableSet<Field> annotatedCodeFields = findAnnotatedCodeField(type);
+        if (annotatedCodeMethods.size() + annotatedCodeFields.size() > 1) {
+            throw new IllegalArgumentException(type + "is a illegal Enumerable class");//todo
         }
     }
 
@@ -63,22 +67,21 @@ public class EnumerableUtil {
     }
 
     public static <E, C> Optional<CodeReader<E, C>> findCodeReader(@NonNull Class<E> enumClass) {
-        ImmutableSet<Method> annotatedCodeMethods = findAnnotatedCodeMethod(enumClass);
-        ImmutableSet<Field> annotatedCodeFields = findAnnotatedCodeField(enumClass);
-
-        if(annotatedCodeMethods.size()+annotatedCodeFields.size()>1){
-            throw new IllegalStateException(enumClass+" have multiple code annotation");
+        Optional<CodeReader<E, C>> codeReader = findAnnotatedCodeMethod(enumClass)
+                .stream()
+                .<CodeReader<E, C>>map(CodeMethodReader::new)
+                .findAny();
+        if (codeReader.isPresent()) {
+            return codeReader;
         }
-
-        if(!annotatedCodeMethods.isEmpty()){
-            return Optional.of(new CodeMethodReader<>(Iterables.getOnlyElement(annotatedCodeMethods)));
+        codeReader = findAnnotatedCodeField(enumClass)
+                .stream()
+                .<CodeReader<E, C>>map(CodeFieldReader::new)
+                .findAny();
+        if (codeReader.isPresent()) {
+            return codeReader;
         }
-
-        if(!annotatedCodeFields.isEmpty()){
-            return Optional.of(new CodeFieldReader<>(Iterables.getOnlyElement(annotatedCodeFields)));
-        }
-
-        Optional<CodeReader<E, C>> codeReader = findCodeMethod(enumClass)
+        codeReader = findCodeMethod(enumClass)
                 .map(CodeMethodReader::new);
         if (codeReader.isPresent()) {
             return codeReader;
@@ -136,13 +139,28 @@ public class EnumerableUtil {
     }
 
     @NonNull
+    public static <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
+        return ENUMERABLE_SERVICE.valueOf(enumerableClass, code, group);
+    }
+
+    @NonNull
     public static <C, E> E valueOfExact(@NonNull Class<E> enumerableClass, @NonNull C code) {
         return ENUMERABLE_SERVICE.valueOfExact(enumerableClass, code);
     }
 
     @NonNull
-    public static <C, E> Optional<E> valueOfNullable(@NonNull Class<E> enumerableClass, C code) {
+    public static <C, E> E valueOfExact(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
+        return ENUMERABLE_SERVICE.valueOfExact(enumerableClass, code, group);
+    }
+
+    @NonNull
+    public static <C, E> Optional<E> valueOfNullable(Class<E> enumerableClass, C code) {
         return ENUMERABLE_SERVICE.valueOfNullable(enumerableClass, code);
+    }
+
+    @NonNull
+    public static <C, E> Optional<E> valueOfNullable(Class<E> enumerableClass, C code, String group) {
+        return ENUMERABLE_SERVICE.valueOfNullable(enumerableClass, code, group);
     }
 
     /**
@@ -164,7 +182,16 @@ public class EnumerableUtil {
         return ENUMERABLE_SERVICE.toCodeNullable(e);
     }
 
-    public static void addEnumerableAdapteeConstantFactory(@NonNull EnumerableAdapteeConstantFactory<?> factory){
+    public static void evict(@NonNull Class<?> type) {
+        ENUMERABLE_SERVICE.evict(type);
+    }
+
+    public static void evict(@NonNull Class<?> type,String group) {
+        ENUMERABLE_SERVICE.evict(type,group);
+    }
+
+
+    public static void addEnumerableAdapteeConstantFactory(@NonNull EnumerableAdapteeConstantFactory<?> factory) {
         ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE.addFactory(factory);
     }
 }

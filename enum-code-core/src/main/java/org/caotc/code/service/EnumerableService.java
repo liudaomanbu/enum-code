@@ -1,14 +1,12 @@
 package org.caotc.code.service;
 
 import com.google.common.collect.Maps;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.caotc.code.Enumerable;
 import org.caotc.code.EnumerableConstant;
 import org.caotc.code.adapter.EnumerableAdapter;
 import org.caotc.code.annotation.Code;
+import org.caotc.code.common.GroupConstant;
 
 import java.util.Map;
 import java.util.Optional;
@@ -23,7 +21,15 @@ import java.util.Optional;
 public class EnumerableService {
     EnumerableAdapterFactoryService enumerableAdapterFactoryService;
     EnumerableConstantFactoryService enumerableConstantFactoryService;
-    Map<Class<?>, EnumerableConstant<?>> classToEnumerableConstants = Maps.newConcurrentMap();
+    Map<EnumerablePair<?>, EnumerableConstant<?>> classToEnumerableConstants = Maps.newConcurrentMap();
+
+    public void evict(@NonNull Class<?> type) {
+        evict(type, null);
+    }
+
+    public void evict(@NonNull Class<?> type, String group) {
+        classToEnumerableConstants.remove(EnumerablePair.create(type, group));
+    }
 
     /**
      * <p>
@@ -38,15 +44,21 @@ public class EnumerableService {
      * @date 2021-08-01
      * @since 1.0.0
      */
-    @SuppressWarnings("unchecked")
     @NonNull
     public <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code) {
-        if (!classToEnumerableConstants.containsKey(enumerableClass)) {
-            classToEnumerableConstants.put(enumerableClass, enumerableConstantFactoryService.create(enumerableClass));
+        return valueOf(enumerableClass, code, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    @NonNull
+    public <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
+        EnumerablePair<E> pair = EnumerablePair.create(enumerableClass, group);
+        if (!classToEnumerableConstants.containsKey(pair)) {
+            classToEnumerableConstants.put(pair, enumerableConstantFactoryService.create(enumerableClass, group));
         }
-        EnumerableConstant<C> enumerableConstant = (EnumerableConstant<C>) classToEnumerableConstants.get(enumerableClass);
+        EnumerableConstant<C> enumerableConstant = (EnumerableConstant<C>) classToEnumerableConstants.get(pair);
         return enumerableConstant.find(code)
-                .map(enumerable -> unWarpIfNecessary(enumerableClass,enumerable));
+                .map(enumerable -> unWarpIfNecessary(enumerableClass, enumerable));
     }
 
     @NonNull
@@ -57,9 +69,22 @@ public class EnumerableService {
     }
 
     @NonNull
+    public <C, E> E valueOfExact(@NonNull Class<E> enumerableClass, @NonNull C code,String group) {
+        return valueOf(enumerableClass, code, group)
+                //todo
+                .orElseThrow(() -> new IllegalStateException(enumerableClass + " EnumerableConstant not contains enumerable of code" + code));
+    }
+
+    @NonNull
     public <C, E> Optional<E> valueOfNullable(Class<E> enumerableClass, C code) {
         return Optional.ofNullable(code)
                 .flatMap(c -> valueOf(enumerableClass, c));
+    }
+
+    @NonNull
+    public <C, E> Optional<E> valueOfNullable(Class<E> enumerableClass, C code, String group) {
+        return Optional.ofNullable(code)
+                .flatMap(c -> valueOf(enumerableClass, c, group));
     }
 
     /**
@@ -97,7 +122,27 @@ public class EnumerableService {
             return ((EnumerableAdapter<E, ?>) enumerable).adaptee();
         }
         //todo
-        throw new IllegalStateException(enumerableClass + " EnumerableConstant enumerable class is "+enumerable.getClass());
+        throw new IllegalStateException(enumerableClass + " EnumerableConstant enumerable class is " + enumerable.getClass());
     }
 
+    /**
+     * @author caotc
+     * @date 2021-08-20
+     */
+    @Value
+    static class EnumerablePair<T> {
+        public static <T> EnumerablePair<T> create(@NonNull Class<T> type,String group) {
+            return new EnumerablePair<>(type,group);
+        }
+
+        @NonNull
+        Class<T> type;
+        @NonNull
+        String group;
+
+        private EnumerablePair(@NonNull Class<T> type,String group){
+            this.type = type;
+            this.group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
+        }
+    }
 }

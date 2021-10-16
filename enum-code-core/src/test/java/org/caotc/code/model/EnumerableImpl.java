@@ -1,9 +1,9 @@
 package org.caotc.code.model;
 
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.Enumerable;
+import org.caotc.code.common.GroupConstant;
 
 /**
  * @author caotc
@@ -11,10 +11,16 @@ import org.caotc.code.Enumerable;
  */
 @Value
 public class EnumerableImpl implements Enumerable<Integer> {
-    public static final EnumerableImpl INSTANCE=new EnumerableImpl(0);
+    public static final EnumerableImpl INSTANCE = new EnumerableImpl(0);
     @NonNull
     Integer value;
+
     public @NonNull Integer code() {
         return value;
+    }
+
+    @Override
+    public @NonNull String group() {
+        return GroupConstant.DEFAULT;
     }
 }

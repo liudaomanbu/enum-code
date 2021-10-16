@@ -19,6 +19,9 @@ import java.util.function.Function;
 @Builder
 public class EnumerableConstant<C> implements Set<Enumerable<C>> {
     @NonNull
+    String group;
+
+    @NonNull
     @Singular
     ImmutableSet<Enumerable<C>> enumerables;
 

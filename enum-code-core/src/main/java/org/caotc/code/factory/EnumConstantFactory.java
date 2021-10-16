@@ -14,13 +14,13 @@ import java.util.Arrays;
 public class EnumConstantFactory implements EnumerableAdapteeConstantFactory<Enum<?>> {
 
     @Override
-    public <F extends Enum<?>> ImmutableSet<F> create(@NonNull Class<F> type) {
+    public @NonNull <F extends Enum<?>> ImmutableSet<F> create(@NonNull Class<F> type, String group) {
         return Arrays.stream(type.getEnumConstants())
                 .collect(ImmutableSet.toImmutableSet());
     }
 
     @Override
-    public boolean support(@NonNull Class<?> type) {
+    public boolean support(@NonNull Class<?> type, String group) {
         return type.isEnum();
     }
 }

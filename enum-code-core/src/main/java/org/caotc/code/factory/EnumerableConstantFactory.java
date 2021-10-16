@@ -1,7 +1,6 @@
 package org.caotc.code.factory;
 
 import lombok.NonNull;
-import org.caotc.code.Enumerable;
 import org.caotc.code.EnumerableConstant;
 
 /**
@@ -10,8 +9,15 @@ import org.caotc.code.EnumerableConstant;
  */
 public interface EnumerableConstantFactory<E> {
     @NonNull
-    <C> EnumerableConstant<C> create(@NonNull Class<? extends E> type);
+    default <C> EnumerableConstant<C> create(@NonNull Class<? extends E> type) {
+        return create(type, null);
+    }
 
-    //    boolean support(@NonNull EnumerableType type);
-    boolean support(@NonNull Class<?> type);
+    @NonNull <C> EnumerableConstant<C> create(@NonNull Class<? extends E> type,  String group);
+
+    boolean support(@NonNull Class<?> type,  String group);
+
+    default boolean support(@NonNull Class<?> type) {
+        return support(type, null);
+    }
 }

@@ -3,7 +3,6 @@ package org.caotc.code.service;
 import lombok.extern.slf4j.Slf4j;
 import org.caotc.code.SpringBootJunit5TestApplicationTests;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -40,11 +39,10 @@ class EnumerableServiceTest extends SpringBootJunit5TestApplicationTests {
     }
 
 
-    @Disabled("illegal check")
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#illegalEnumerableTypes"})
     void valueOfIllegalEnumerable(Class<?> illegalEnumerable) {
-        Assertions.assertThrows(IllegalStateException.class, () -> enumerableService.valueOf(illegalEnumerable, 0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> enumerableService.valueOf(illegalEnumerable, 0));
     }
 
     @ParameterizedTest
@@ -65,11 +63,10 @@ class EnumerableServiceTest extends SpringBootJunit5TestApplicationTests {
         Assertions.assertThrows(IllegalArgumentException.class, () -> enumerableService.valueOf(unEnumerableType, 0));
     }
 
-    @Disabled("illegal check")
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#illegalEnumerableTypes"})
     void valueOfExactIllegalEnumerable(Class<?> unEnumerableType) {
-        Assertions.assertThrows(IllegalStateException.class, () -> enumerableService.valueOf(unEnumerableType, 0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> enumerableService.valueOf(unEnumerableType, 0));
     }
 
     @ParameterizedTest
@@ -93,11 +90,10 @@ class EnumerableServiceTest extends SpringBootJunit5TestApplicationTests {
         Assertions.assertThrows(IllegalArgumentException.class, () -> enumerableService.valueOfNullable(unEnumerableType, 0));
     }
 
-    @Disabled("illegal check")
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#illegalEnumerableTypes"})
     void valueOfNullableIllegalEnumerable(Class<?> illegalEnumerableType) {
-        Assertions.assertThrows(IllegalStateException.class, () -> enumerableService.valueOfNullable(illegalEnumerableType, 0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> enumerableService.valueOfNullable(illegalEnumerableType, 0));
     }
 
     @ParameterizedTest

@@ -19,9 +19,9 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter
     EnumerableAdapterFactoryService enumerableAdapterFactoryService;
 
     @Override
-    public @NonNull <C> EnumerableConstant<C> create(@NonNull Class<?> type) {
+    public @NonNull <C> EnumerableConstant<C> create(@NonNull Class<?> type, String group) {
         return EnumerableConstant.<C>builder()
-                .enumerables(enumerableAdapteeConstantFactoryService.create(type)
+                .enumerables(enumerableAdapteeConstantFactoryService.create(type, group)
                         .stream()
                         .map(enumerableAdapterFactoryService::<C>adapt)
                         .collect(ImmutableSet.toImmutableSet()))
@@ -29,10 +29,9 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter
     }
 
     @Override
-    public boolean support(@NonNull Class<?> type) {
-        return enumerableAdapteeConstantFactoryService.support(type)
+    public boolean support(@NonNull Class<?> type, String group) {
+        return enumerableAdapteeConstantFactoryService.support(type, group)
                 && enumerableAdapterFactoryService.canAdapt(type);
     }
-
 
 }
