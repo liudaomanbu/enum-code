@@ -5,7 +5,9 @@ import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import org.caotc.code.*;
+import org.caotc.code.CodeFieldReader;
+import org.caotc.code.CodeMethodReader;
+import org.caotc.code.Enumerable;
 import org.caotc.code.annotation.Code;
 import org.caotc.code.factory.*;
 import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
@@ -18,6 +20,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * 基于{@link Code}注解的枚举工具类
@@ -57,26 +60,26 @@ public class EnumerableUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static <E, C> CodeReader<E, C> findCodeReaderExact(@NonNull E enumerableAdaptee) {
+    public static <E, C> Function<E, C> findCodeReaderExact(@NonNull E enumerableAdaptee) {
         return findCodeReaderExact((Class<E>) enumerableAdaptee.getClass());
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
-    public static <E, C> CodeReader<E, C> findCodeReaderExact(@NonNull Class<E> enumClass) {
+    public static <E, C> Function<E, C> findCodeReaderExact(@NonNull Class<E> enumClass) {
         return EnumerableUtil.<E, C>findCodeReader(enumClass).get();
     }
 
-    public static <E, C> Optional<CodeReader<E, C>> findCodeReader(@NonNull Class<E> enumClass) {
-        Optional<CodeReader<E, C>> codeReader = findAnnotatedCodeMethod(enumClass)
+    public static <E, C> Optional<? extends Function<E, C>> findCodeReader(@NonNull Class<E> enumClass) {
+        Optional<? extends Function<E, C>> codeReader = findAnnotatedCodeMethod(enumClass)
                 .stream()
-                .<CodeReader<E, C>>map(CodeMethodReader::new)
+                .<Function<E, C>>map(CodeMethodReader::new)
                 .findAny();
         if (codeReader.isPresent()) {
             return codeReader;
         }
         codeReader = findAnnotatedCodeField(enumClass)
                 .stream()
-                .<CodeReader<E, C>>map(CodeFieldReader::new)
+                .<Function<E, C>>map(CodeFieldReader::new)
                 .findAny();
         if (codeReader.isPresent()) {
             return codeReader;
@@ -189,7 +192,6 @@ public class EnumerableUtil {
     public static void evict(@NonNull Class<?> type,String group) {
         ENUMERABLE_SERVICE.evict(type,group);
     }
-
 
     public static void addEnumerableAdapteeConstantFactory(@NonNull EnumerableAdapteeConstantFactory<?> factory) {
         ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE.addFactory(factory);

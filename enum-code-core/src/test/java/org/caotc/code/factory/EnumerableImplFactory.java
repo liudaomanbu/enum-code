@@ -16,12 +16,12 @@ public class EnumerableImplFactory implements EnumerableAdapteeConstantFactory<E
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull <F extends EnumerableImpl> ImmutableSet<F> create(@NonNull Class<F> type, String group) {
+    public @NonNull <F extends EnumerableImpl> ImmutableSet<F> create(@NonNull Class<F> type, @NonNull String group) {
         return ImmutableSet.of((F) EnumerableImpl.INSTANCE);
     }
 
     @Override
-    public boolean support(@NonNull Class<?> type, String group) {
+    public boolean support(@NonNull Class<?> type, @NonNull String group) {
         return Objects.equals(EnumerableImpl.class, type);
     }
 }

@@ -28,7 +28,7 @@ public class EnumerableService {
     }
 
     public void evict(@NonNull Class<?> type, String group) {
-        classToEnumerableConstants.remove(EnumerablePair.create(type, group));
+        classToEnumerableConstants.remove(EnumerablePair.create(type, Optional.ofNullable(group).orElse(GroupConstant.DEFAULT)));
     }
 
     /**
@@ -52,7 +52,7 @@ public class EnumerableService {
     @SuppressWarnings("unchecked")
     @NonNull
     public <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
-        EnumerablePair<E> pair = EnumerablePair.create(enumerableClass, group);
+        EnumerablePair<E> pair = EnumerablePair.create(enumerableClass, Optional.ofNullable(group).orElse(GroupConstant.DEFAULT));
         if (!classToEnumerableConstants.containsKey(pair)) {
             classToEnumerableConstants.put(pair, enumerableConstantFactoryService.create(enumerableClass, group));
         }
@@ -129,20 +129,11 @@ public class EnumerableService {
      * @author caotc
      * @date 2021-08-20
      */
-    @Value
+    @Value(staticConstructor = "create")
     static class EnumerablePair<T> {
-        public static <T> EnumerablePair<T> create(@NonNull Class<T> type,String group) {
-            return new EnumerablePair<>(type,group);
-        }
-
         @NonNull
         Class<T> type;
         @NonNull
         String group;
-
-        private EnumerablePair(@NonNull Class<T> type,String group){
-            this.type = type;
-            this.group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
-        }
     }
 }

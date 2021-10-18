@@ -5,9 +5,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.caotc.code.EnumerableConstant;
+import org.caotc.code.common.GroupConstant;
 import org.caotc.code.factory.EnumerableConstantFactory;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * @author caotc
@@ -28,10 +30,11 @@ public class EnumerableConstantFactoryService {
     @SuppressWarnings("unchecked")
     @NonNull
     public <E, C> EnumerableConstant<C> create(@NonNull Class<E> enumerableClass,String group) {
+        String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
         EnumerableConstantFactory<E> factory = (EnumerableConstantFactory<E>) factories.stream()
-                .filter(enumerableConstantFactory -> enumerableConstantFactory.support(enumerableClass, group))
+                .filter(enumerableConstantFactory -> enumerableConstantFactory.support(enumerableClass, $group))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(enumerableClass + ":" + group + " not support create EnumerableConstant"));//todo
-        return factory.create(enumerableClass, group);
+                .orElseThrow(() -> new IllegalArgumentException(enumerableClass + ":" + $group + " not support create EnumerableConstant"));//todo
+        return factory.create(enumerableClass, $group);
     }
 }

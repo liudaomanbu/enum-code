@@ -5,9 +5,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.caotc.code.common.GroupConstant;
 import org.caotc.code.factory.EnumerableAdapteeConstantFactory;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * @author caotc
@@ -26,7 +28,7 @@ public class EnumerableAdapteeConstantFactoryService {
 
     public boolean support(@NonNull Class<?> type, String group) {
         return factories.stream()
-                .anyMatch(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.support(type, group));
+                .anyMatch(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.support(type, Optional.ofNullable(group).orElse(GroupConstant.DEFAULT)));
     }
 
     @NonNull
@@ -37,11 +39,12 @@ public class EnumerableAdapteeConstantFactoryService {
     @SuppressWarnings({"unchecked"})
     @NonNull
     public <E> ImmutableSet<E> create(@NonNull Class<E> type, String group) {
+        String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
         EnumerableAdapteeConstantFactory<E> factory = (EnumerableAdapteeConstantFactory<E>) factories.stream()
-                .filter(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.support(type, group))
+                .filter(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.support(type, $group))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(group + "not support create constant"));//todo
-        return factory.create(type, group);
+                .orElseThrow(() -> new IllegalArgumentException($group + "not support create constant"));//todo
+        return factory.create(type, $group);
     }
 
     public void addFactory(@NonNull EnumerableAdapteeConstantFactory<?> factory) {

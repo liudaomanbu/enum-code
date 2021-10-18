@@ -5,13 +5,14 @@ import lombok.SneakyThrows;
 import lombok.Value;
 
 import java.lang.reflect.Field;
+import java.util.function.Function;
 
 /**
  * @author caotc
  * @date 2021-08-24
  */
 @Value
-public class CodeFieldReader<E, C> extends CodeReader<E, C> {
+public class CodeFieldReader<E, C> implements Function<E, C> {
     @NonNull
     Field field;
 
@@ -23,7 +24,7 @@ public class CodeFieldReader<E, C> extends CodeReader<E, C> {
     @SuppressWarnings("unchecked")
     @SneakyThrows
     @Override
-    public @NonNull C read(@NonNull E enumerableAdaptee) {
+    public @NonNull C apply(@NonNull E enumerableAdaptee) {
         return (C) field.get(enumerableAdaptee);
     }
 }
