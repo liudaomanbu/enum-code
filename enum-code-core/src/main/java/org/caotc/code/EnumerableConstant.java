@@ -19,6 +19,9 @@ import java.util.function.Function;
 @Builder
 public class EnumerableConstant<C> implements Set<Enumerable<C>> {
     @NonNull
+    Class<?> originalType;
+
+    @NonNull
     String group;
 
     @NonNull
@@ -28,14 +31,33 @@ public class EnumerableConstant<C> implements Set<Enumerable<C>> {
     @NonNull
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @Getter(value=AccessLevel.PRIVATE,lazy = true)
-    ImmutableBiMap<C,Enumerable<C>> codeToEnumerableMap= enumerables().stream()
+    @Getter(value = AccessLevel.PRIVATE, lazy = true)
+    ImmutableBiMap<C, Enumerable<C>> codeToEnumerableMap = enumerables().stream()
             .collect(ImmutableBiMap.toImmutableBiMap(Enumerable::code
                     , Function.identity()));
 
     @NonNull
     public Optional<Enumerable<C>> find(@NonNull C code) {
         return Optional.ofNullable(codeToEnumerableMap().get(code));
+    }
+
+    @NonNull
+    public <E> Optional<E> findAndUnWarpIfNecessary(@NonNull C code) {
+        return find(code)
+                .map(this::unWarpIfNecessary);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    private <E> E unWarpIfNecessary(@NonNull Object enumerable) {
+        if (originalType().isInstance(enumerable)) {
+            return (E) enumerable;
+        }
+        if (enumerable instanceof EnumerableAdapter) {
+            return ((EnumerableAdapter<E, ?>) enumerable).adaptee();
+        }
+        //todo
+        throw new IllegalStateException(originalType() + " EnumerableConstant enumerable class is " + enumerable.getClass());
     }
 
     @Override

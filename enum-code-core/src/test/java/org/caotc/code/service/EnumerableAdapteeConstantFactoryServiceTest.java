@@ -3,16 +3,17 @@ package org.caotc.code.service;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import lombok.extern.slf4j.Slf4j;
-import org.caotc.code.factory.EnumerableImplFactory;
 import org.caotc.code.factory.EnumConstantFactory;
+import org.caotc.code.factory.EnumerableImplFactory;
 import org.caotc.code.model.*;
+import org.caotc.code.service.impl.DefaultEnumerableAdapteeConstantFactoryService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 class EnumerableAdapteeConstantFactoryServiceTest {
     EnumerableAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService
-            =new EnumerableAdapteeConstantFactoryService(ImmutableList.of(new EnumConstantFactory(),new EnumerableImplFactory()));
+            = new DefaultEnumerableAdapteeConstantFactoryService(ImmutableList.of(new EnumConstantFactory(), new EnumerableImplFactory()));
 
     @Test
     void supportCodeAnnotatedFieldEnum() {

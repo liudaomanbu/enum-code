@@ -5,6 +5,10 @@ import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
 import org.caotc.code.service.EnumerableAdapterFactoryService;
 import org.caotc.code.service.EnumerableConstantFactoryService;
 import org.caotc.code.service.EnumerableService;
+import org.caotc.code.service.impl.DefaultEnumerableAdapteeConstantFactoryService;
+import org.caotc.code.service.impl.DefaultEnumerableAdapterFactoryService;
+import org.caotc.code.service.impl.DefaultEnumerableConstantFactoryService;
+import org.caotc.code.service.impl.DefaultEnumerableService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,7 +33,7 @@ public class TestConfiguration {
 
     @Bean
     public EnumerableAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService(Collection<EnumerableAdapteeConstantFactory<?>> factories){
-        return new EnumerableAdapteeConstantFactoryService(factories);
+        return new DefaultEnumerableAdapteeConstantFactoryService(factories);
     }
 
     @Bean
@@ -39,7 +43,7 @@ public class TestConfiguration {
 
     @Bean
     public EnumerableAdapterFactoryService enumerableAdapterFactoryService(Collection<EnumerableAdapterFactory<?>> factories){
-        return new EnumerableAdapterFactoryService(factories);
+        return new DefaultEnumerableAdapterFactoryService(factories);
     }
 
     @Bean
@@ -49,11 +53,11 @@ public class TestConfiguration {
 
     @Bean
     public EnumerableConstantFactoryService enumerableConstantFactoryService(Collection<EnumerableConstantFactory<?>> factories){
-        return new EnumerableConstantFactoryService(factories);
+        return new DefaultEnumerableConstantFactoryService(factories);
     }
 
     @Bean
     public EnumerableService enumerableService(EnumerableAdapterFactoryService enumerableAdapterFactoryService,EnumerableConstantFactoryService enumerableConstantFactoryService){
-        return new EnumerableService(enumerableAdapterFactoryService,enumerableConstantFactoryService);
+        return new DefaultEnumerableService(enumerableAdapterFactoryService, enumerableConstantFactoryService);
     }
 }

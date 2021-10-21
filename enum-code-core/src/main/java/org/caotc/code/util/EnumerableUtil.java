@@ -14,6 +14,10 @@ import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
 import org.caotc.code.service.EnumerableAdapterFactoryService;
 import org.caotc.code.service.EnumerableConstantFactoryService;
 import org.caotc.code.service.EnumerableService;
+import org.caotc.code.service.impl.DefaultEnumerableAdapteeConstantFactoryService;
+import org.caotc.code.service.impl.DefaultEnumerableAdapterFactoryService;
+import org.caotc.code.service.impl.DefaultEnumerableConstantFactoryService;
+import org.caotc.code.service.impl.DefaultEnumerableService;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -33,11 +37,11 @@ import java.util.function.Function;
 @SuppressWarnings("UnstableApiUsage")
 @UtilityClass
 public class EnumerableUtil {
-    private static final EnumerableAdapteeConstantFactoryService ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE = new EnumerableAdapteeConstantFactoryService(Lists.newArrayList(new EnumConstantFactory()));
-    private static final EnumerableAdapterFactoryService ENUMERABLE_ADAPTER_FACTORY_SERVICE = new EnumerableAdapterFactoryService(Lists.newArrayList(new CodeReaderEnumerableAdapterFactory()));
+    private static final EnumerableAdapteeConstantFactoryService ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE = new DefaultEnumerableAdapteeConstantFactoryService(Lists.newArrayList(new EnumConstantFactory()));
+    private static final EnumerableAdapterFactoryService ENUMERABLE_ADAPTER_FACTORY_SERVICE = new DefaultEnumerableAdapterFactoryService(Lists.newArrayList(new CodeReaderEnumerableAdapterFactory()));
     private static final EnumerableConstantFactory<Object> ENUMERABLE_CONSTANTS_FACTORY = new EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE, ENUMERABLE_ADAPTER_FACTORY_SERVICE);
-    private static final EnumerableConstantFactoryService ENUMERABLE_CONSTANTS_FACTORY_SERVICE = new EnumerableConstantFactoryService(Lists.newArrayList(ENUMERABLE_CONSTANTS_FACTORY));
-    private static final EnumerableService ENUMERABLE_SERVICE = new EnumerableService(ENUMERABLE_ADAPTER_FACTORY_SERVICE, ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
+    private static final EnumerableConstantFactoryService ENUMERABLE_CONSTANTS_FACTORY_SERVICE = new DefaultEnumerableConstantFactoryService(Lists.newArrayList(ENUMERABLE_CONSTANTS_FACTORY));
+    private static final EnumerableService ENUMERABLE_SERVICE = new DefaultEnumerableService(ENUMERABLE_ADAPTER_FACTORY_SERVICE, ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
 
     public static boolean isEnumerable(@NonNull Class<?> type) {
         //todo super sub
