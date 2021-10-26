@@ -22,42 +22,42 @@ import java.util.Collection;
 public class TestConfiguration {
 
     @Bean
-    public EnumConstantFactory enumConstantFactory(){
+    public EnumConstantFactory enumConstantFactory() {
         return new EnumConstantFactory();
     }
 
     @Bean
-    public EnumerableImplFactory enumerableImplFactory(){
+    public EnumerableImplFactory enumerableImplFactory() {
         return new EnumerableImplFactory();
     }
 
     @Bean
-    public EnumerableAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService(Collection<EnumerableAdapteeConstantFactory<?>> factories){
+    public EnumerableAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService(Collection<EnumerableAdapteeConstantFactory<?>> factories) {
         return new DefaultEnumerableAdapteeConstantFactoryService(factories);
     }
 
     @Bean
-    public CodeReaderEnumerableAdapterFactory codeReaderEnumerableAdapterFactory(){
+    public CodeReaderEnumerableAdapterFactory codeReaderEnumerableAdapterFactory() {
         return new CodeReaderEnumerableAdapterFactory();
     }
 
     @Bean
-    public EnumerableAdapterFactoryService enumerableAdapterFactoryService(Collection<EnumerableAdapterFactory<?>> factories){
+    public EnumerableAdapterFactoryService enumerableAdapterFactoryService(Collection<EnumerableAdapterFactory<?>> factories) {
         return new DefaultEnumerableAdapterFactoryService(factories);
     }
 
     @Bean
-    public EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter enumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(EnumerableAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService,EnumerableAdapterFactoryService enumerableAdapterFactoryService){
-        return new EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(enumerableAdapteeConstantFactoryService,enumerableAdapterFactoryService);
+    public EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter enumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(EnumerableAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService, EnumerableAdapterFactoryService enumerableAdapterFactoryService) {
+        return new EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(enumerableAdapteeConstantFactoryService, enumerableAdapterFactoryService);
     }
 
     @Bean
-    public EnumerableConstantFactoryService enumerableConstantFactoryService(Collection<EnumerableConstantFactory<?>> factories){
+    public EnumerableConstantFactoryService enumerableConstantFactoryService(Collection<EnumerableConstantFactory<?>> factories) {
         return new DefaultEnumerableConstantFactoryService(factories);
     }
 
     @Bean
-    public EnumerableService enumerableService(EnumerableAdapterFactoryService enumerableAdapterFactoryService,EnumerableConstantFactoryService enumerableConstantFactoryService){
-        return new DefaultEnumerableService(enumerableAdapterFactoryService, enumerableConstantFactoryService);
+    public EnumerableService enumerableService(EnumerableConstantFactoryService enumerableConstantFactoryService) {
+        return new DefaultEnumerableService(enumerableConstantFactoryService);
     }
 }

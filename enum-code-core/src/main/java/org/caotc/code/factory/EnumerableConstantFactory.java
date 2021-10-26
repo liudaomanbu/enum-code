@@ -9,7 +9,7 @@ import org.caotc.code.EnumerableConstant;
  */
 public interface EnumerableConstantFactory<E> {
 
-    @NonNull <C> EnumerableConstant<C> create(@NonNull Class<? extends E> type, @NonNull String group);
+    @NonNull <C> EnumerableConstant<C> create(@NonNull Class<? extends E> type);
 
-    boolean support(@NonNull Class<?> type, @NonNull String group);
+    boolean support(@NonNull Class<?> type);
 }

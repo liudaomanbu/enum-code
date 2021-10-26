@@ -41,7 +41,7 @@ public class EnumerableUtil {
     private static final EnumerableAdapterFactoryService ENUMERABLE_ADAPTER_FACTORY_SERVICE = new DefaultEnumerableAdapterFactoryService(Lists.newArrayList(new CodeReaderEnumerableAdapterFactory()));
     private static final EnumerableConstantFactory<Object> ENUMERABLE_CONSTANTS_FACTORY = new EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE, ENUMERABLE_ADAPTER_FACTORY_SERVICE);
     private static final EnumerableConstantFactoryService ENUMERABLE_CONSTANTS_FACTORY_SERVICE = new DefaultEnumerableConstantFactoryService(Lists.newArrayList(ENUMERABLE_CONSTANTS_FACTORY));
-    private static final EnumerableService ENUMERABLE_SERVICE = new DefaultEnumerableService(ENUMERABLE_ADAPTER_FACTORY_SERVICE, ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
+    private static final EnumerableService ENUMERABLE_SERVICE = new DefaultEnumerableService(ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
 
     public static boolean isEnumerable(@NonNull Class<?> type) {
         //todo super sub

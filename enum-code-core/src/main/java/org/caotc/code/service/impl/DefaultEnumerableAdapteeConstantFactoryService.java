@@ -20,7 +20,8 @@ public class DefaultEnumerableAdapteeConstantFactoryService implements Enumerabl
     Collection<EnumerableAdapteeConstantFactory<?>> factories;
 
     public boolean support(@NonNull Class<?> type) {
-        return support(type, null);
+        return factories.stream()
+                .anyMatch(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.support(type));
     }
 
     public boolean support(@NonNull Class<?> type, String group) {

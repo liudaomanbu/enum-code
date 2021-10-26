@@ -45,7 +45,6 @@ public class EnumerableConstant<C> implements Set<Enumerable<C>> {
     public <E> Optional<E> findAndUnWarpIfNecessary(@NonNull C code) {
         return find(code)
                 .map(this::unWarpIfNecessary);
-
     }
 
     @SuppressWarnings("unchecked")

@@ -1,13 +1,14 @@
 package org.caotc.code.service.impl;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Table;
 import lombok.NonNull;
 import lombok.Value;
-import org.caotc.code.Enumerable;
 import org.caotc.code.EnumerableConstant;
 import org.caotc.code.annotation.Code;
 import org.caotc.code.common.GroupConstant;
-import org.caotc.code.service.EnumerableAdapterFactoryService;
 import org.caotc.code.service.EnumerableConstantFactoryService;
 import org.caotc.code.service.EnumerableService;
 
@@ -20,16 +21,25 @@ import java.util.Optional;
  */
 @Value
 public class DefaultEnumerableService implements EnumerableService {
-    EnumerableAdapterFactoryService enumerableAdapterFactoryService;
     EnumerableConstantFactoryService enumerableConstantFactoryService;
-    Map<EnumerablePair<?>, EnumerableConstant<?>> classToEnumerableConstants = Maps.newConcurrentMap();
+    Table<Class<?>, String, EnumerableConstant<?>> classToGroupToEnumerableConstant = HashBasedTable.create();
+    Map<?, ?> enumerableToCode = Maps.newHashMap();
 
     public void evict(@NonNull Class<?> type) {
         evict(type, null);
     }
 
     public void evict(@NonNull Class<?> type, String group) {
-        classToEnumerableConstants.remove(EnumerablePair.create(type, Optional.ofNullable(group).orElse(GroupConstant.DEFAULT)));
+        String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
+        if (classToGroupToEnumerableConstant.contains(type, $group)) {
+            synchronized (this) {
+                if (classToGroupToEnumerableConstant.contains(type, $group)) {
+                    EnumerableConstant<?> enumerableConstant = classToGroupToEnumerableConstant.remove(type, $group);
+                    //todo
+                    enumerableConstant.forEach(enumerableToCode::remove);
+                }
+            }
+        }
     }
 
     /**
@@ -53,11 +63,9 @@ public class DefaultEnumerableService implements EnumerableService {
     @SuppressWarnings("unchecked")
     @NonNull
     public <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
-        EnumerablePair<E> pair = EnumerablePair.create(enumerableClass, Optional.ofNullable(group).orElse(GroupConstant.DEFAULT));
-        if (!classToEnumerableConstants.containsKey(pair)) {
-            classToEnumerableConstants.put(pair, enumerableConstantFactoryService.create(enumerableClass, group));
-        }
-        EnumerableConstant<C> enumerableConstant = (EnumerableConstant<C>) classToEnumerableConstants.get(pair);
+        String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
+        initIfNecessary(enumerableClass, $group);
+        EnumerableConstant<C> enumerableConstant = (EnumerableConstant<C>) classToGroupToEnumerableConstant.get(enumerableClass, $group);
         return enumerableConstant.findAndUnWarpIfNecessary(code);
     }
 
@@ -100,11 +108,9 @@ public class DefaultEnumerableService implements EnumerableService {
     @SuppressWarnings("unchecked")
     @NonNull
     public <C> C toCode(@NonNull Object enumerable) {
+        initIfNecessary(enumerableClass, $group);
         //调用方应该知道结果类型,由调用方决定返回类型,无需调用方强转
-        if (enumerable instanceof Enumerable) {
-            return ((Enumerable<C>) enumerable).code();
-        }
-        return enumerableAdapterFactoryService.<C>adapt(enumerable).code();
+        return (C) enumerableToCode.get(enumerable);
     }
 
     public <C> C toCodeNullable(Object enumerable) {
@@ -113,15 +119,29 @@ public class DefaultEnumerableService implements EnumerableService {
                 .orElse(null);
     }
 
-    /**
-     * @author caotc
-     * @date 2021-08-20
-     */
-    @Value(staticConstructor = "create")
-    static class EnumerablePair<T> {
-        @NonNull
-        Class<T> type;
-        @NonNull
-        String group;
+    private <C, E> void initIfNecessary(@NonNull Class<E> enumerableClass) {
+        if (!classToGroupToEnumerableConstant.containsRow(enumerableClass)) {
+            synchronized (this) {
+                if (!classToGroupToEnumerableConstant.containsRow(enumerableClass)) {
+                    ImmutableSet<EnumerableConstant<C>> enumerableConstants = enumerableConstantFactoryService.createAll(enumerableClass);
+                    classToGroupToEnumerableConstant.put(enumerableClass, group, enumerableConstant);
+                    //todo
+//                    enumerableToCode.put();
+                }
+            }
+        }
+    }
+
+    private <C, E> void initIfNecessary(@NonNull Class<E> enumerableClass, @NonNull String group) {
+        if (!classToGroupToEnumerableConstant.contains(enumerableClass, group)) {
+            synchronized (this) {
+                if (!classToGroupToEnumerableConstant.contains(enumerableClass, group)) {
+                    EnumerableConstant<C> enumerableConstant = enumerableConstantFactoryService.create(enumerableClass, group);
+                    classToGroupToEnumerableConstant.put(enumerableClass, group, enumerableConstant);
+                    //todo
+//                    enumerableToCode.put();
+                }
+            }
+        }
     }
 }

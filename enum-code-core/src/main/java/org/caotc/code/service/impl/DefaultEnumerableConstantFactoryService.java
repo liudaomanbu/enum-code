@@ -19,14 +19,9 @@ public class DefaultEnumerableConstantFactoryService implements EnumerableConsta
     @NonNull
     Collection<EnumerableConstantFactory<?>> factories;
 
-    @NonNull
-    public <E, C> EnumerableConstant<C> create(@NonNull Class<E> enumerableClass) {
-        return create(enumerableClass, null);
-    }
-
     @SuppressWarnings("unchecked")
     @NonNull
-    public <E, C> EnumerableConstant<C> create(@NonNull Class<E> enumerableClass, String group) {
+    public <E, C> EnumerableConstant<C> create(@NonNull Class<E> enumerableClass) {
         String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
         EnumerableConstantFactory<E> factory = (EnumerableConstantFactory<E>) factories.stream()
                 .filter(enumerableConstantFactory -> enumerableConstantFactory.support(enumerableClass, $group))
