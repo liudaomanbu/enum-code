@@ -1,7 +1,6 @@
 package org.caotc.code.service.impl;
 
 import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 import lombok.NonNull;
@@ -123,10 +122,8 @@ public class DefaultEnumerableService implements EnumerableService {
         if (!classToGroupToEnumerableConstant.containsRow(enumerableClass)) {
             synchronized (this) {
                 if (!classToGroupToEnumerableConstant.containsRow(enumerableClass)) {
-                    ImmutableSet<EnumerableConstant<C>> enumerableConstants = enumerableConstantFactoryService.createAll(enumerableClass);
-                    classToGroupToEnumerableConstant.put(enumerableClass, group, enumerableConstant);
-                    //todo
-//                    enumerableToCode.put();
+                    enumerableConstantFactoryService.createAll(enumerableClass)
+                            .forEach(this::register);
                 }
             }
         }
@@ -136,12 +133,15 @@ public class DefaultEnumerableService implements EnumerableService {
         if (!classToGroupToEnumerableConstant.contains(enumerableClass, group)) {
             synchronized (this) {
                 if (!classToGroupToEnumerableConstant.contains(enumerableClass, group)) {
-                    EnumerableConstant<C> enumerableConstant = enumerableConstantFactoryService.create(enumerableClass, group);
-                    classToGroupToEnumerableConstant.put(enumerableClass, group, enumerableConstant);
-                    //todo
-//                    enumerableToCode.put();
+                    register(enumerableConstantFactoryService.create(enumerableClass, group));
                 }
             }
         }
+    }
+
+    private void register(@NonNull EnumerableConstant<?> enumerableConstant) {
+        classToGroupToEnumerableConstant.put(enumerableConstant.originalType(), enumerableConstant.group(), enumerableConstant);
+        //todo
+//       enumerableToCode.put();
     }
 }
