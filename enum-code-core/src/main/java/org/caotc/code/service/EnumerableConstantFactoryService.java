@@ -19,10 +19,10 @@ public interface EnumerableConstantFactoryService {
 
     boolean support(@NonNull Class<?> type, String group);
 
-    @NonNull <E, C> EnumerableConstant<C> create(@NonNull Class<E> enumerableClass, String group);
+    @NonNull <E, C> EnumerableConstant<C, E> create(@NonNull Class<E> enumerableClass, String group);
 
     @NonNull
-    default <E, C> ImmutableSet<EnumerableConstant<C>> createAll(@NonNull Class<E> enumerableClass) {
+    default <E, C> ImmutableSet<EnumerableConstant<C, E>> createAll(@NonNull Class<E> enumerableClass) {
         return groups(enumerableClass).stream()
                 .map(group -> this.<E, C>create(enumerableClass, group))
                 .collect(ImmutableSet.toImmutableSet());

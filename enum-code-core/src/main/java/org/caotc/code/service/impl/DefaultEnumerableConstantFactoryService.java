@@ -22,7 +22,7 @@ public class DefaultEnumerableConstantFactoryService implements EnumerableConsta
 
     @SuppressWarnings("unchecked")
     @NonNull
-    public <E, C> EnumerableConstant<C> create(@NonNull Class<E> enumerableClass, String group) {
+    public <E, C> EnumerableConstant<C, E> create(@NonNull Class<E> enumerableClass, String group) {
         String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
         EnumerableConstantFactory<E> factory = (EnumerableConstantFactory<E>) factories.stream()
                 .filter(enumerableConstantFactory -> enumerableConstantFactory.support(enumerableClass, $group))

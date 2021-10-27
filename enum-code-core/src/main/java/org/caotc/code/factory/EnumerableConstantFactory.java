@@ -17,5 +17,5 @@ public interface EnumerableConstantFactory<E> {
     @NonNull
     ImmutableSet<String> groups(@NonNull Class<?> type);
 
-    @NonNull <C> EnumerableConstant<C> create(@NonNull Class<? extends E> type, @NonNull String group);
+    @NonNull <C, F extends E> EnumerableConstant<C, F> create(@NonNull Class<F> type, @NonNull String group);
 }

@@ -12,6 +12,7 @@ import org.caotc.code.service.EnumerableConstantFactoryService;
 import org.caotc.code.service.EnumerableService;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -21,8 +22,8 @@ import java.util.Optional;
 @Value
 public class DefaultEnumerableService implements EnumerableService {
     EnumerableConstantFactoryService enumerableConstantFactoryService;
-    Table<Class<?>, String, EnumerableConstant<?>> classToGroupToEnumerableConstant = HashBasedTable.create();
-    Map<?, ?> enumerableToCode = Maps.newHashMap();
+    Table<Class<?>, String, EnumerableConstant<?, ?>> classToGroupToEnumerableConstant = HashBasedTable.create();
+    Map<Object, Object> enumerableToCode = Maps.newHashMap();
 
     public void evict(@NonNull Class<?> type) {
         evict(type, null);
@@ -33,9 +34,10 @@ public class DefaultEnumerableService implements EnumerableService {
         if (classToGroupToEnumerableConstant.contains(type, $group)) {
             synchronized (this) {
                 if (classToGroupToEnumerableConstant.contains(type, $group)) {
-                    EnumerableConstant<?> enumerableConstant = classToGroupToEnumerableConstant.remove(type, $group);
-                    //todo
-                    enumerableConstant.forEach(enumerableToCode::remove);
+                    EnumerableConstant<?, ?> enumerableConstant = classToGroupToEnumerableConstant.remove(type, $group);
+                    if (Objects.nonNull(enumerableConstant)) {
+                        enumerableConstant.enumerableAdapteeToCode().keySet().forEach(enumerableToCode::remove);
+                    }
                 }
             }
         }
@@ -64,8 +66,9 @@ public class DefaultEnumerableService implements EnumerableService {
     public <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
         String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
         initIfNecessary(enumerableClass, $group);
-        EnumerableConstant<C> enumerableConstant = (EnumerableConstant<C>) classToGroupToEnumerableConstant.get(enumerableClass, $group);
-        return enumerableConstant.findAndUnWarpIfNecessary(code);
+        EnumerableConstant<C, E> enumerableConstant = (EnumerableConstant<C, E>) classToGroupToEnumerableConstant.get(enumerableClass, $group);
+        return Optional.ofNullable(enumerableConstant)
+                .flatMap(e -> e.findAndUnWarpIfNecessary(code));
     }
 
     @NonNull
@@ -118,7 +121,7 @@ public class DefaultEnumerableService implements EnumerableService {
                 .orElse(null);
     }
 
-    private <C, E> void initIfNecessary(@NonNull Class<E> enumerableClass) {
+    private <E> void initIfNecessary(@NonNull Class<E> enumerableClass) {
         if (!classToGroupToEnumerableConstant.containsRow(enumerableClass)) {
             synchronized (this) {
                 if (!classToGroupToEnumerableConstant.containsRow(enumerableClass)) {
@@ -129,7 +132,7 @@ public class DefaultEnumerableService implements EnumerableService {
         }
     }
 
-    private <C, E> void initIfNecessary(@NonNull Class<E> enumerableClass, @NonNull String group) {
+    private <E> void initIfNecessary(@NonNull Class<E> enumerableClass, @NonNull String group) {
         if (!classToGroupToEnumerableConstant.contains(enumerableClass, group)) {
             synchronized (this) {
                 if (!classToGroupToEnumerableConstant.contains(enumerableClass, group)) {
@@ -139,9 +142,8 @@ public class DefaultEnumerableService implements EnumerableService {
         }
     }
 
-    private void register(@NonNull EnumerableConstant<?> enumerableConstant) {
+    private void register(@NonNull EnumerableConstant<?, ?> enumerableConstant) {
         classToGroupToEnumerableConstant.put(enumerableConstant.originalType(), enumerableConstant.group(), enumerableConstant);
-        //todo
-//       enumerableToCode.put();
+        enumerableToCode.putAll(enumerableConstant.enumerableAdapteeToCode());
     }
 }
