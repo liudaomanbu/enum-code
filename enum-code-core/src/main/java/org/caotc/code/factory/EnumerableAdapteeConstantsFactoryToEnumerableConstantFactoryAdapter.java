@@ -40,7 +40,7 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter
         return EnumerableConstant.<C>builder()
                 .enumerables(enumerableAdapteeConstantFactoryService.create(type, group)
                         .stream()
-                        .map(adaptee -> enumerableAdapterFactoryService.<C>adapt(adaptee, t -> group))
+                        .map(adaptee -> enumerableAdapterFactoryService.<C, Object>adapt(adaptee, t -> group))
                         .collect(ImmutableSet.toImmutableSet()))
                 .build();
     }

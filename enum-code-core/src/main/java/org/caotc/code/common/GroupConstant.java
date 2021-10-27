@@ -14,4 +14,9 @@ public class GroupConstant {
     public static final String DEFAULT = "default";
     public static final ImmutableSet<String> DEFAULTS = ImmutableSet.of(GroupConstant.DEFAULT);
     public static final Function<Object, String> DEFAULT_READER = t -> DEFAULT;
+
+    @SuppressWarnings("unchecked")
+    public static <E> Function<E, String> defaultReader() {
+        return (Function<E, String>) DEFAULT_READER;
+    }
 }

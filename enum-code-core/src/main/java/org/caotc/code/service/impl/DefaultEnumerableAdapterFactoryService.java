@@ -32,12 +32,12 @@ public class DefaultEnumerableAdapterFactoryService implements EnumerableAdapter
 
     @SuppressWarnings("unchecked")
     @NonNull
-    public <C> Enumerable<C> adapt(@NonNull Object adaptee, Function<Object, String> groupReader) {
-        EnumerableAdapterFactory<Object> factory = (EnumerableAdapterFactory<Object>) factories.stream()
+    public <C, E> Enumerable<C> adapt(@NonNull E adaptee, Function<E, String> groupReader) {
+        EnumerableAdapterFactory<E> factory = (EnumerableAdapterFactory<E>) factories.stream()
                 .filter(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.canAdapt(adaptee.getClass()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(adaptee + "not support adapt to Enumerable"));//todo
-        return factory.adapt(adaptee, Optional.ofNullable(groupReader).orElse(GroupConstant.DEFAULT_READER));
+        return factory.adapt(adaptee, Optional.ofNullable(groupReader).orElse(GroupConstant.defaultReader()));
     }
 
     @Override
