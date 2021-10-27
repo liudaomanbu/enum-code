@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.EnumerableConstant;
+import org.caotc.code.common.GroupConstant;
 import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
 import org.caotc.code.service.EnumerableAdapterFactoryService;
 
@@ -40,7 +41,7 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter
         return EnumerableConstant.<C>builder()
                 .enumerables(enumerableAdapteeConstantFactoryService.create(type, group)
                         .stream()
-                        .map(adaptee -> enumerableAdapterFactoryService.<C, Object>adapt(adaptee, t -> group))
+                        .map(adaptee -> enumerableAdapterFactoryService.<C, Object>adapt(adaptee, GroupConstant.defaultReader()))
                         .collect(ImmutableSet.toImmutableSet()))
                 .build();
     }
