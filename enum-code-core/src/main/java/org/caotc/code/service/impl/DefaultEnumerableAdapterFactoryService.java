@@ -32,7 +32,7 @@ public class DefaultEnumerableAdapterFactoryService implements EnumerableAdapter
 
     @SuppressWarnings("unchecked")
     @NonNull
-    public <C, E> Enumerable<C> adapt(@NonNull E adaptee, Function<E, String> groupReader) {
+    public <C, E> Enumerable<C> adapt(@NonNull E adaptee, Function<? super E, String> groupReader) {
         EnumerableAdapterFactory<E> factory = (EnumerableAdapterFactory<E>) factories.stream()
                 .filter(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.canAdapt(adaptee.getClass()))
                 .findFirst()

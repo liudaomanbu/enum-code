@@ -20,7 +20,7 @@ public interface EnumerableAdapterFactoryService {
         return adapt(adaptee, null);
     }
 
-    @NonNull <C, E> Enumerable<C> adapt(@NonNull E adaptee, Function<E, String> groupReader);
+    @NonNull <C, E> Enumerable<C> adapt(@NonNull E adaptee, Function<? super E, String> groupReader);
 
     void addFactory(@NonNull EnumerableAdapterFactory<?> factory);
 
