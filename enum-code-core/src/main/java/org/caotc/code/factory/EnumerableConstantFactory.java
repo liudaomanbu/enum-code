@@ -10,12 +10,12 @@ import org.caotc.code.EnumerableConstant;
  */
 public interface EnumerableConstantFactory<E> {
 
+    @NonNull
+    ImmutableSet<String> groups(@NonNull Class<?> type);
+
     boolean support(@NonNull Class<?> type);
 
     boolean support(@NonNull Class<?> type, @NonNull String group);
-
-    @NonNull
-    ImmutableSet<String> groups(@NonNull Class<?> type);
 
     @NonNull <C, F extends E> EnumerableConstant<C, F> create(@NonNull Class<F> type, @NonNull String group);
 }
