@@ -37,6 +37,7 @@ import java.util.function.Function;
 @SuppressWarnings("UnstableApiUsage")
 @UtilityClass
 public class EnumerableUtil {
+    //todo can replace
     private static final EnumerableAdapteeConstantFactoryService ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE = new DefaultEnumerableAdapteeConstantFactoryService(Lists.newArrayList(new EnumConstantFactory()));
     private static final EnumerableAdapterFactoryService ENUMERABLE_ADAPTER_FACTORY_SERVICE = new DefaultEnumerableAdapterFactoryService(Lists.newArrayList(new CodeReaderEnumerableAdapterFactory()));
     private static final EnumerableConstantFactory<Object> ENUMERABLE_CONSTANTS_FACTORY = new EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE, ENUMERABLE_ADAPTER_FACTORY_SERVICE);
