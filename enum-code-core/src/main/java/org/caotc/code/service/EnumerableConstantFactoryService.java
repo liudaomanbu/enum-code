@@ -15,14 +15,21 @@ public interface EnumerableConstantFactoryService {
     @NonNull
     ImmutableSet<String> groups(@NonNull Class<?> type);
 
-    @NonNull
-    default <E, C> ImmutableSet<EnumerableConstant<C>> createAll(@NonNull Class<E> enumerableClass) {
-        return create(enumerableClass, null);
-    }
+    boolean support(@NonNull Class<?> type);
+
+    boolean support(@NonNull Class<?> type, String group);
 
     @NonNull <E, C> EnumerableConstant<C> create(@NonNull Class<E> enumerableClass, String group);
+
+    @NonNull
+    default <E, C> ImmutableSet<EnumerableConstant<C>> createAll(@NonNull Class<E> enumerableClass) {
+        return groups(enumerableClass).stream()
+                .map(group -> this.<E, C>create(enumerableClass, group))
+                .collect(ImmutableSet.toImmutableSet());
+    }
 
     void addFactory(@NonNull EnumerableConstantFactory<?> factory);
 
     void removeFactory(@NonNull EnumerableConstantFactory<?> factory);
+
 }

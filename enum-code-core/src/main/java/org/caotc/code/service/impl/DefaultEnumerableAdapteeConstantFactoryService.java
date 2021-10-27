@@ -19,6 +19,15 @@ public class DefaultEnumerableAdapteeConstantFactoryService implements Enumerabl
     @NonNull
     Collection<EnumerableAdapteeConstantFactory<?>> factories;
 
+    @Override
+    public @NonNull ImmutableSet<String> groups(@NonNull Class<?> type) {
+        return factories.stream()
+                .filter(factory -> factory.support(type))
+                .map(factory -> factory.groups(type))
+                .findFirst()
+                .orElseGet(ImmutableSet::of);
+    }
+
     public boolean support(@NonNull Class<?> type) {
         return factories.stream()
                 .anyMatch(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.support(type));

@@ -107,7 +107,7 @@ public class DefaultEnumerableService implements EnumerableService {
     @SuppressWarnings("unchecked")
     @NonNull
     public <C> C toCode(@NonNull Object enumerable) {
-        initIfNecessary(enumerableClass, $group);
+        initIfNecessary(enumerable.getClass());
         //调用方应该知道结果类型,由调用方决定返回类型,无需调用方强转
         return (C) enumerableToCode.get(enumerable);
     }

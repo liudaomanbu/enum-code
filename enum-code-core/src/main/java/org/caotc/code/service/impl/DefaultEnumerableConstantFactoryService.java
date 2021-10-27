@@ -1,5 +1,6 @@
 package org.caotc.code.service.impl;
 
+import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.EnumerableConstant;
@@ -21,13 +22,35 @@ public class DefaultEnumerableConstantFactoryService implements EnumerableConsta
 
     @SuppressWarnings("unchecked")
     @NonNull
-    public <E, C> EnumerableConstant<C> create(@NonNull Class<E> enumerableClass) {
+    public <E, C> EnumerableConstant<C> create(@NonNull Class<E> enumerableClass, String group) {
         String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
         EnumerableConstantFactory<E> factory = (EnumerableConstantFactory<E>) factories.stream()
                 .filter(enumerableConstantFactory -> enumerableConstantFactory.support(enumerableClass, $group))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(enumerableClass + ":" + $group + " not support create EnumerableConstant"));//todo
         return factory.create(enumerableClass, $group);
+    }
+
+    @Override
+    public @NonNull ImmutableSet<String> groups(@NonNull Class<?> type) {
+        return factories.stream()
+                .filter(factory -> factory.support(type))
+                .map(factory -> factory.groups(type))
+                .findFirst()
+                .orElseGet(ImmutableSet::of);
+    }
+
+    @Override
+    public boolean support(@NonNull Class<?> type) {
+        return factories.stream()
+                .anyMatch(factory -> factory.support(type));
+    }
+
+    @Override
+    public boolean support(@NonNull Class<?> type, String group) {
+        String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
+        return factories.stream()
+                .anyMatch(factory -> factory.support(type, $group));
     }
 
     @Override

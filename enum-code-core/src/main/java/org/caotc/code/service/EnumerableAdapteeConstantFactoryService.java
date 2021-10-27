@@ -10,7 +10,10 @@ import org.caotc.code.factory.EnumerableAdapteeConstantFactory;
  */
 public interface EnumerableAdapteeConstantFactoryService {
 
-     boolean support(@NonNull Class<?> type);
+    @NonNull
+    ImmutableSet<String> groups(@NonNull Class<?> type);
+
+    boolean support(@NonNull Class<?> type);
 
     boolean support(@NonNull Class<?> type, String group);
 

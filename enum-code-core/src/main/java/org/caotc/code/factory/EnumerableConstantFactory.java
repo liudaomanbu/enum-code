@@ -1,5 +1,6 @@
 package org.caotc.code.factory;
 
+import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import org.caotc.code.EnumerableConstant;
 
@@ -9,7 +10,12 @@ import org.caotc.code.EnumerableConstant;
  */
 public interface EnumerableConstantFactory<E> {
 
-    @NonNull <C> EnumerableConstant<C> create(@NonNull Class<? extends E> type);
-
     boolean support(@NonNull Class<?> type);
+
+    boolean support(@NonNull Class<?> type, @NonNull String group);
+
+    @NonNull
+    ImmutableSet<String> groups(@NonNull Class<?> type);
+
+    @NonNull <C> EnumerableConstant<C> create(@NonNull Class<? extends E> type, @NonNull String group);
 }
