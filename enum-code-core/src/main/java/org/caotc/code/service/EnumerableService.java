@@ -51,5 +51,9 @@ public interface EnumerableService {
 
     @NonNull <C> C toCode(@NonNull Object enumerable);
 
-    <C> C toCodeNullable(Object enumerable);
+    default <C> C toCodeNullable(Object enumerable) {
+        return Optional.ofNullable(enumerable)
+                .map(this::<C>toCode)
+                .orElse(null);
+    }
 }
