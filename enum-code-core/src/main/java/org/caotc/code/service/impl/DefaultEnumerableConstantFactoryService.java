@@ -34,8 +34,8 @@ public class DefaultEnumerableConstantFactoryService implements EnumerableConsta
     @Override
     public @NonNull ImmutableSet<String> groups(@NonNull Class<?> type) {
         return factories.stream()
-                .filter(factory -> factory.support(type))
                 .map(factory -> factory.groups(type))
+                .filter(groups -> !groups.isEmpty())
                 .findFirst()
                 .orElseGet(ImmutableSet::of);
     }
