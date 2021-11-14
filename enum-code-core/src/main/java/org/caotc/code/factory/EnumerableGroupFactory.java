@@ -8,5 +8,7 @@ import org.caotc.code.EnumerableGroup;
  * @date 2021-11-08
  */
 public interface EnumerableGroupFactory<E> {
-    @NonNull <T extends E> EnumerableGroup<T> createEnumerableGroup(@NonNull Class<T> type);
+    boolean support(@NonNull String group);
+
+    @NonNull <T extends E> EnumerableGroup<T> create(@NonNull String group);
 }

@@ -14,7 +14,7 @@ import java.util.function.Function;
  */
 @Value
 @Builder
-public class EnumerableConstant<C, E> {
+public class EnumerableConstant<C, E> implements EnumerableConverter<C, E> {
     @NonNull
     Class<E> originalType;
 
@@ -68,4 +68,14 @@ public class EnumerableConstant<C, E> {
         throw new IllegalStateException(originalType() + " EnumerableConstant enumerable class is " + enumerable.getClass());
     }
 
+    @Override
+    public @NonNull Optional<E> valueOf(@NonNull C code) {
+        return find(code)
+                .map(this::unWarpIfNecessary);
+    }
+
+    @Override
+    public @NonNull C toCode(@NonNull E enumerable) {
+        return enumerableAdapteeToCode().get(enumerable);
+    }
 }
