@@ -1,9 +1,7 @@
 package org.caotc.code.model;
 
 import lombok.AllArgsConstructor;
-import lombok.ToString;
-import lombok.experimental.FieldDefaults;
-import org.caotc.code.annotation.Code;
+import org.caotc.code.annotation.Enumerable;
 
 /**
  * @author caotc
@@ -13,7 +11,7 @@ import org.caotc.code.annotation.Code;
 public enum CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnum {
     A(1,0);
     int code;
-    @Code
+    @Enumerable.Code
     public int value;
 
     public int code() {

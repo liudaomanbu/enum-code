@@ -11,4 +11,16 @@ import static java.lang.annotation.ElementType.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {TYPE})
 public @interface Enumerable {
+    /**
+     * 专用于枚举类型,可注解在枚举属性和get方法上,以其值作为枚举的对应值
+     *
+     * @author caotc
+     * @date 2021-08-01
+     * @since 1.0.0
+     **/
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(value = {FIELD, METHOD})
+    @interface Code {
+    }
 }

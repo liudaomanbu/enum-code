@@ -1,9 +1,7 @@
 package org.caotc.code.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Value;
-import org.caotc.code.annotation.Code;
 import org.caotc.code.annotation.Enumerable;
 
 /**
@@ -13,6 +11,6 @@ import org.caotc.code.annotation.Enumerable;
 @Value
 @Enumerable
 public class CodeAnnotatedMethodEnumerableAnnotatedObject {
-    @Getter(onMethod_={@Code})
+    @Getter(onMethod_ = {@Enumerable.Code})
     int value;
 }

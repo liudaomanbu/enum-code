@@ -8,7 +8,6 @@ import lombok.experimental.UtilityClass;
 import org.caotc.code.CodeFieldReader;
 import org.caotc.code.CodeMethodReader;
 import org.caotc.code.Enumerable;
-import org.caotc.code.annotation.Code;
 import org.caotc.code.factory.*;
 import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
 import org.caotc.code.service.EnumerableAdapterFactoryService;
@@ -27,11 +26,11 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * 基于{@link Code}注解的枚举工具类
+ * 基于{@link org.caotc.code.annotation.Enumerable.Code}注解的枚举工具类
  *
  * @author caotc
  * @date 2021-08-01
- * @see Code
+ * @see org.caotc.code.annotation.Enumerable.Code
  * @since 1.0.0
  **/
 @SuppressWarnings("UnstableApiUsage")
@@ -102,14 +101,14 @@ public class EnumerableUtil {
     private static <E> ImmutableSet<Method> findAnnotatedCodeMethod(Class<E> enumClass) {
         return Arrays.stream(enumClass.getDeclaredMethods())//todo
                 //过滤出有EnumSimpleValue注解的属性
-                .filter(method -> Objects.nonNull(method.getAnnotation(Code.class)))
+                .filter(method -> Objects.nonNull(method.getAnnotation(org.caotc.code.annotation.Enumerable.Code.class)))
                 .collect(ImmutableSet.toImmutableSet());
     }
 
     private static <E> ImmutableSet<Field> findAnnotatedCodeField(Class<E> enumClass) {
         return Arrays.stream(enumClass.getDeclaredFields())//todo
                 //过滤出有EnumSimpleValue注解的属性
-                .filter(field -> Objects.nonNull(field.getAnnotation(Code.class)))
+                .filter(field -> Objects.nonNull(field.getAnnotation(org.caotc.code.annotation.Enumerable.Code.class)))
                 //将私有属性设为可以获取值
                 .peek(field -> field.setAccessible(Boolean.TRUE))
                 .collect(ImmutableSet.toImmutableSet());

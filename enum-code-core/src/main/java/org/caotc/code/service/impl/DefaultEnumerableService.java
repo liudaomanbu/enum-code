@@ -6,7 +6,7 @@ import com.google.common.collect.Table;
 import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.EnumerableConstant;
-import org.caotc.code.annotation.Code;
+import org.caotc.code.annotation.Enumerable;
 import org.caotc.code.common.GroupConstant;
 import org.caotc.code.service.EnumerableConstantFactoryService;
 import org.caotc.code.service.EnumerableService;
@@ -51,7 +51,7 @@ public class DefaultEnumerableService implements EnumerableService {
      * @param enumerableClass 枚举类
      * @param code            枚举值
      * @param <E>             对应枚举
-     * @throws IllegalArgumentException 如果该枚举类没有{@link Code}注解的属性和方法
+     * @throws IllegalArgumentException 如果该枚举类没有{@link Enumerable.Code}注解的属性和方法
      * @author caotc
      * @date 2021-08-01
      * @since 1.0.0
