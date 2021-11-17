@@ -3,7 +3,7 @@ package org.caotc.code.service.impl;
 import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
-import org.caotc.code.common.GroupConstant;
+import org.caotc.code.common.ReaderConstant;
 import org.caotc.code.factory.EnumerableAdapteeConstantFactory;
 import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
 
@@ -35,7 +35,7 @@ public class DefaultEnumerableAdapteeConstantFactoryService implements Enumerabl
 
     public boolean support(@NonNull Class<?> type, String group) {
         return factories.stream()
-                .anyMatch(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.support(type, Optional.ofNullable(group).orElse(GroupConstant.DEFAULT)));
+                .anyMatch(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.support(type, Optional.ofNullable(group).orElse(ReaderConstant.DEFAULT_GROUP)));
     }
 
     @NonNull
@@ -46,7 +46,7 @@ public class DefaultEnumerableAdapteeConstantFactoryService implements Enumerabl
     @SuppressWarnings({"unchecked"})
     @NonNull
     public <E> ImmutableSet<E> create(@NonNull Class<E> type, String group) {
-        String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
+        String $group = Optional.ofNullable(group).orElse(ReaderConstant.DEFAULT_GROUP);
         EnumerableAdapteeConstantFactory<E> factory = (EnumerableAdapteeConstantFactory<E>) factories.stream()
                 .filter(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.support(type, $group))
                 .findFirst()

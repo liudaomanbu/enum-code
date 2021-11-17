@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.Enumerable;
 import org.caotc.code.adapter.EnumerableAdapterImpl;
+import org.caotc.code.common.ReaderConstant;
 import org.caotc.code.util.EnumerableUtil;
 
 import java.util.function.Function;
@@ -21,11 +22,15 @@ public class CodeReaderEnumerableAdapterFactory implements EnumerableAdapterFact
     }
 
     @Override
-    public @NonNull <C> Enumerable<C> adapt(@NonNull Object adaptee, @NonNull Function<? super Object, String> groupReader) {
+    public @NonNull <C, E> Enumerable<C, E> adapt(@NonNull E adaptee, @NonNull Function<? super E, String> groupReader) {
         EnumerableUtil.checkEnumerable(adaptee.getClass());
-        return EnumerableAdapterImpl.<Object, C>builder()
+        return EnumerableAdapterImpl.<E, C>builder()
                 .adaptee(adaptee)
-                .codeReader(EnumerableUtil.findCodeReaderExact(adaptee))
+                .codeReader(EnumerableUtil.findReaderExact(adaptee, org.caotc.code.annotation.Enumerable.Code.class))
+                .nameReader(EnumerableUtil.<E, String>findReader(adaptee, org.caotc.code.annotation.Enumerable.Name.class)
+                        .orElseGet(ReaderConstant::defaultNameReader))
+                .descriptionReader(EnumerableUtil.<E, String>findReader(adaptee, org.caotc.code.annotation.Enumerable.Description.class)
+                        .orElse(ReaderConstant.defaultGroupReader()))
                 .groupReader(groupReader)
                 .build();
     }

@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.EnumerableConstant;
 import org.caotc.code.annotation.Enumerable;
-import org.caotc.code.common.GroupConstant;
+import org.caotc.code.common.ReaderConstant;
 import org.caotc.code.service.EnumerableConstantFactoryService;
 import org.caotc.code.service.EnumerableService;
 
@@ -30,7 +30,7 @@ public class DefaultEnumerableService implements EnumerableService {
     }
 
     public void evict(@NonNull Class<?> type, String group) {
-        String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
+        String $group = Optional.ofNullable(group).orElse(ReaderConstant.DEFAULT_GROUP);
         if (classToGroupToEnumerableConstant.contains(type, $group)) {
             synchronized (this) {
                 if (classToGroupToEnumerableConstant.contains(type, $group)) {
@@ -64,7 +64,7 @@ public class DefaultEnumerableService implements EnumerableService {
     @SuppressWarnings("unchecked")
     @NonNull
     public <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
-        String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
+        String $group = Optional.ofNullable(group).orElse(ReaderConstant.DEFAULT_GROUP);
         initIfNecessary(enumerableClass, $group);
         EnumerableConstant<C, E> enumerableConstant = (EnumerableConstant<C, E>) classToGroupToEnumerableConstant.get(enumerableClass, $group);
         return Optional.ofNullable(enumerableConstant)

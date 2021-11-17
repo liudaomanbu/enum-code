@@ -23,6 +23,9 @@ public interface EnumerableConstantFactoryService {
 
     @NonNull
     default <E, C> ImmutableSet<EnumerableConstant<C, E>> createAll(@NonNull Class<E> enumerableClass) {
+        if (groups(enumerableClass).isEmpty()) {
+            throw new IllegalArgumentException(enumerableClass + " not support create EnumerableConstant");
+        }
         return groups(enumerableClass).stream()
                 .map(group -> this.<E, C>create(enumerableClass, group))
                 .collect(ImmutableSet.toImmutableSet());

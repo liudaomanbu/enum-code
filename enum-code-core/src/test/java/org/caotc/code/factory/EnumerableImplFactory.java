@@ -3,7 +3,7 @@ package org.caotc.code.factory;
 import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
-import org.caotc.code.common.GroupConstant;
+import org.caotc.code.common.ReaderConstant;
 import org.caotc.code.model.EnumerableImpl;
 
 import java.util.Objects;
@@ -24,7 +24,7 @@ public class EnumerableImplFactory implements EnumerableAdapteeConstantFactory<E
     @Override
     public @NonNull ImmutableSet<String> groups(@NonNull Class<?> type) {
         if (Objects.equals(EnumerableImpl.class, type)) {
-            return GroupConstant.DEFAULTS;
+            return ReaderConstant.DEFAULT_GROUPS;
         }
         return ImmutableSet.of();
     }

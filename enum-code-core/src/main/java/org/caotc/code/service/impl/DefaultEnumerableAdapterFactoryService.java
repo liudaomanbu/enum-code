@@ -3,7 +3,7 @@ package org.caotc.code.service.impl;
 import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.Enumerable;
-import org.caotc.code.common.GroupConstant;
+import org.caotc.code.common.ReaderConstant;
 import org.caotc.code.factory.EnumerableAdapterFactory;
 import org.caotc.code.service.EnumerableAdapterFactoryService;
 
@@ -26,18 +26,18 @@ public class DefaultEnumerableAdapterFactoryService implements EnumerableAdapter
     }
 
     @NonNull
-    public <C> Enumerable<C> adapt(@NonNull Object adaptee) {
+    public <C, E> Enumerable<C, E> adapt(@NonNull E adaptee) {
         return adapt(adaptee, null);
     }
 
     @SuppressWarnings("unchecked")
     @NonNull
-    public <C, E> Enumerable<C> adapt(@NonNull E adaptee, Function<? super E, String> groupReader) {
+    public <C, E> Enumerable<C, E> adapt(@NonNull E adaptee, Function<? super E, String> groupReader) {
         EnumerableAdapterFactory<E> factory = (EnumerableAdapterFactory<E>) factories.stream()
                 .filter(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.canAdapt(adaptee.getClass()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(adaptee + "not support adapt to Enumerable"));//todo
-        return factory.adapt(adaptee, Optional.ofNullable(groupReader).orElse(GroupConstant.defaultReader()));
+        return factory.adapt(adaptee, Optional.ofNullable(groupReader).orElse(ReaderConstant.defaultGroupReader()));
     }
 
     @Override

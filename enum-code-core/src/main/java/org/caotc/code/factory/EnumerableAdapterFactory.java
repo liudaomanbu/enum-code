@@ -12,5 +12,5 @@ import java.util.function.Function;
 public interface EnumerableAdapterFactory<T> {
     boolean canAdapt(@NonNull Class<?> type);
 
-    @NonNull <C> Enumerable<C> adapt(@NonNull T adaptee, @NonNull Function<? super T, String> groupReader);
+    @NonNull <C, F extends T> Enumerable<C, F> adapt(@NonNull F adaptee, @NonNull Function<? super F, String> groupReader);
 }

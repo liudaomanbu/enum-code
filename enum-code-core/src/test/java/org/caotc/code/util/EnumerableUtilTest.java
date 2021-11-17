@@ -152,7 +152,7 @@ class EnumerableUtilTest extends SpringBootJunit5TestApplicationTests {
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#noConstantEnumerableAndCodes")
     void toCodeNoConstantEnumerable(Object enumerable, Object code) {
-        Assertions.assertEquals(code, EnumerableUtil.toCode(enumerable));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.toCode(enumerable));
     }
 
     @ParameterizedTest
@@ -169,7 +169,7 @@ class EnumerableUtilTest extends SpringBootJunit5TestApplicationTests {
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#noConstantEnumerableAndCodes")
     void toCodeNullableNoConstantEnumerable(Object enumerable, Object code) {
-        Assertions.assertEquals(code, EnumerableUtil.toCodeNullable(enumerable));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.toCodeNullable(enumerable));
     }
 
     @ParameterizedTest

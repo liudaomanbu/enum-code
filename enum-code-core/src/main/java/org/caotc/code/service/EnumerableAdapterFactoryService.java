@@ -16,11 +16,11 @@ public interface EnumerableAdapterFactoryService {
     boolean canAdapt(@NonNull Class<?> type);
 
     @NonNull
-    default <C> Enumerable<C> adapt(@NonNull Object adaptee) {
+    default <C, E> Enumerable<C, E> adapt(@NonNull E adaptee) {
         return adapt(adaptee, null);
     }
 
-    @NonNull <C, E> Enumerable<C> adapt(@NonNull E adaptee, Function<? super E, String> groupReader);
+    @NonNull <C, E> Enumerable<C, E> adapt(@NonNull E adaptee, Function<? super E, String> groupReader);
 
     void addFactory(@NonNull EnumerableAdapterFactory<?> factory);
 

@@ -3,14 +3,14 @@ package org.caotc.code.model;
 import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.Enumerable;
-import org.caotc.code.common.GroupConstant;
+import org.caotc.code.common.ReaderConstant;
 
 /**
  * @author caotc
  * @date 2021-09-02
  */
 @Value
-public class EnumerableImpl implements Enumerable<Integer> {
+public class EnumerableImpl implements Enumerable<Integer, EnumerableImpl> {
     public static final EnumerableImpl INSTANCE = new EnumerableImpl(0);
     @NonNull
     Integer value;
@@ -21,6 +21,11 @@ public class EnumerableImpl implements Enumerable<Integer> {
 
     @Override
     public @NonNull String group() {
-        return GroupConstant.DEFAULT;
+        return ReaderConstant.DEFAULT_GROUP;
+    }
+
+    @Override
+    public @NonNull EnumerableImpl unwrap() {
+        return this;
     }
 }

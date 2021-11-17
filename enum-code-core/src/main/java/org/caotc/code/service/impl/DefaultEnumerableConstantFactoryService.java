@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.EnumerableConstant;
-import org.caotc.code.common.GroupConstant;
+import org.caotc.code.common.ReaderConstant;
 import org.caotc.code.factory.EnumerableConstantFactory;
 import org.caotc.code.service.EnumerableConstantFactoryService;
 
@@ -23,7 +23,7 @@ public class DefaultEnumerableConstantFactoryService implements EnumerableConsta
     @SuppressWarnings("unchecked")
     @NonNull
     public <E, C> EnumerableConstant<C, E> create(@NonNull Class<E> enumerableClass, String group) {
-        String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
+        String $group = Optional.ofNullable(group).orElse(ReaderConstant.DEFAULT_GROUP);
         EnumerableConstantFactory<E> factory = (EnumerableConstantFactory<E>) factories.stream()
                 .filter(enumerableConstantFactory -> enumerableConstantFactory.support(enumerableClass, $group))
                 .findFirst()
@@ -48,7 +48,7 @@ public class DefaultEnumerableConstantFactoryService implements EnumerableConsta
 
     @Override
     public boolean support(@NonNull Class<?> type, String group) {
-        String $group = Optional.ofNullable(group).orElse(GroupConstant.DEFAULT);
+        String $group = Optional.ofNullable(group).orElse(ReaderConstant.DEFAULT_GROUP);
         return factories.stream()
                 .anyMatch(factory -> factory.support(type, $group));
     }

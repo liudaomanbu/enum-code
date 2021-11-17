@@ -3,7 +3,7 @@ package org.caotc.code.factory;
 import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
-import org.caotc.code.common.GroupConstant;
+import org.caotc.code.common.ReaderConstant;
 
 import java.util.Arrays;
 
@@ -23,7 +23,7 @@ public class EnumConstantFactory implements EnumerableAdapteeConstantFactory<Enu
     @Override
     public @NonNull ImmutableSet<String> groups(@NonNull Class<?> type) {
         if (type.isEnum()) {
-            return GroupConstant.DEFAULTS;
+            return ReaderConstant.DEFAULT_GROUPS;
         }
         return ImmutableSet.of();
     }

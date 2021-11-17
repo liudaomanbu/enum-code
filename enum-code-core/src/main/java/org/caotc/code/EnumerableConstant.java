@@ -2,7 +2,14 @@ package org.caotc.code;
 
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableSet;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Singular;
+import lombok.ToString;
+import lombok.Value;
 import org.caotc.code.adapter.EnumerableAdapter;
 
 import java.util.Optional;
@@ -23,7 +30,7 @@ public class EnumerableConstant<C, E> implements EnumerableConverter<C, E> {
 
     @NonNull
     @Singular
-    ImmutableSet<Enumerable<C>> enumerables;
+    ImmutableSet<Enumerable<C, E>> enumerables;
 
     @NonNull
     @EqualsAndHashCode.Exclude
@@ -42,11 +49,11 @@ public class EnumerableConstant<C, E> implements EnumerableConverter<C, E> {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @Getter(value = AccessLevel.PRIVATE, lazy = true)
-    ImmutableBiMap<C, Enumerable<C>> codeToEnumerable = enumerables().stream()
+    ImmutableBiMap<C, Enumerable<C, E>> codeToEnumerable = enumerables().stream()
             .collect(ImmutableBiMap.toImmutableBiMap(Enumerable::code, Function.identity()));
 
     @NonNull
-    public Optional<Enumerable<C>> find(@NonNull C code) {
+    public Optional<Enumerable<C, E>> find(@NonNull C code) {
         return Optional.ofNullable(codeToEnumerable().get(code));
     }
 
