@@ -27,14 +27,14 @@ public interface EnumerableService {
     default <C, E> E valueOfExact(@NonNull Class<E> enumerableClass, @NonNull C code) {
         return valueOf(enumerableClass, code)
                 //todo
-                .orElseThrow(() -> new IllegalStateException(enumerableClass + " EnumerableConstant not contains enumerable of code" + code));
+                .orElseThrow(() -> new IllegalStateException(enumerableClass + " EnumerableConstant not contains dictionary of code" + code));
     }
 
     @NonNull
     default <C, E> E valueOfExact(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
         return valueOf(enumerableClass, code, group)
                 //todo
-                .orElseThrow(() -> new IllegalStateException(enumerableClass + " EnumerableConstant not contains enumerable of code" + code));
+                .orElseThrow(() -> new IllegalStateException(enumerableClass + " EnumerableConstant not contains dictionary of code" + code));
     }
 
     @NonNull

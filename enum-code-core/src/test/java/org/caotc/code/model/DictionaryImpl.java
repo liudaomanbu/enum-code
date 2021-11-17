@@ -2,7 +2,7 @@ package org.caotc.code.model;
 
 import lombok.NonNull;
 import lombok.Value;
-import org.caotc.code.Enumerable;
+import org.caotc.code.Dictionary;
 import org.caotc.code.common.ReaderConstant;
 
 /**
@@ -10,8 +10,8 @@ import org.caotc.code.common.ReaderConstant;
  * @date 2021-09-02
  */
 @Value
-public class EnumerableImpl implements Enumerable<Integer, EnumerableImpl> {
-    public static final EnumerableImpl INSTANCE = new EnumerableImpl(0);
+public class DictionaryImpl implements Dictionary<Integer, DictionaryImpl> {
+    public static final DictionaryImpl INSTANCE = new DictionaryImpl(0);
     @NonNull
     Integer value;
 
@@ -25,7 +25,7 @@ public class EnumerableImpl implements Enumerable<Integer, EnumerableImpl> {
     }
 
     @Override
-    public @NonNull EnumerableImpl unwrap() {
+    public @NonNull DictionaryImpl unwrap() {
         return this;
     }
 }

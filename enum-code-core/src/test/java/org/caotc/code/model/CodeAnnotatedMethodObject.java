@@ -2,7 +2,7 @@ package org.caotc.code.model;
 
 import lombok.Getter;
 import lombok.Value;
-import org.caotc.code.annotation.Enumerable;
+import org.caotc.code.annotation.Dictionary;
 
 /**
  * @author caotc
@@ -10,6 +10,6 @@ import org.caotc.code.annotation.Enumerable;
  */
 @Value
 public class CodeAnnotatedMethodObject {
-    @Getter(onMethod_ = {@Enumerable.Code})
+    @Getter(onMethod_ = {@Dictionary.Code})
     int value;
 }

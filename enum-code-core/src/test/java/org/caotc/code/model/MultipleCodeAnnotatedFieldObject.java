@@ -1,7 +1,7 @@
 package org.caotc.code.model;
 
 import lombok.Value;
-import org.caotc.code.annotation.Enumerable;
+import org.caotc.code.annotation.Dictionary;
 
 /**
  * @author caotc
@@ -9,8 +9,8 @@ import org.caotc.code.annotation.Enumerable;
  */
 @Value
 public class MultipleCodeAnnotatedFieldObject {
-    @Enumerable.Code
+    @Dictionary.Code
     public Integer value1;
-    @Enumerable.Code
+    @Dictionary.Code
     public Integer value2;
 }

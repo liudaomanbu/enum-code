@@ -1,9 +1,37 @@
 package org.caotc.code.provider;
 
 import com.google.common.collect.Streams;
-import lombok.Data;
 import lombok.experimental.UtilityClass;
-import org.caotc.code.model.*;
+import org.caotc.code.model.CodeAnnotatedFieldEnum;
+import org.caotc.code.model.CodeAnnotatedFieldEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeAnnotatedFieldObject;
+import org.caotc.code.model.CodeAnnotatedMethodEnum;
+import org.caotc.code.model.CodeAnnotatedMethodEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeAnnotatedMethodObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnum;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedFieldObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnum;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedMethodObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodEnum;
+import org.caotc.code.model.CodeFieldAndCodeMethodEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodObject;
+import org.caotc.code.model.CodeFieldEnum;
+import org.caotc.code.model.CodeFieldEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeFieldObject;
+import org.caotc.code.model.CodeGetMethodEnum;
+import org.caotc.code.model.CodeGetMethodEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeGetMethodObject;
+import org.caotc.code.model.CodeMethodEnum;
+import org.caotc.code.model.CodeMethodEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeMethodObject;
+import org.caotc.code.model.DictionaryImpl;
+import org.caotc.code.model.MultipleCodeAnnotatedFieldEnum;
+import org.caotc.code.model.MultipleCodeAnnotatedFieldEnumerableAnnotatedObject;
+import org.caotc.code.model.MultipleCodeAnnotatedFieldObject;
+import org.caotc.code.model.NoCodeEnum;
+import org.caotc.code.model.NoCodeEnumerableAnnotatedObject;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.Arrays;
@@ -27,7 +55,7 @@ public class Provider {
                         , new CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnumerableAnnotatedObject(RANDOM.nextInt(), RANDOM.nextInt())
                         , new CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnumerableAnnotatedObject(RANDOM.nextInt())
                         , new CodeFieldAndCodeMethodEnumerableAnnotatedObject(RANDOM.nextInt()), new CodeFieldEnumerableAnnotatedObject(RANDOM.nextInt())
-                        , new CodeGetMethodEnumerableAnnotatedObject(RANDOM.nextInt()), new CodeMethodEnumerableAnnotatedObject(RANDOM.nextInt()), EnumerableImpl.INSTANCE));
+                        , new CodeGetMethodEnumerableAnnotatedObject(RANDOM.nextInt()), new CodeMethodEnumerableAnnotatedObject(RANDOM.nextInt()), DictionaryImpl.INSTANCE));
     }
 
     @SuppressWarnings("unchecked")
@@ -55,7 +83,7 @@ public class Provider {
     }
 
     static Stream<Arguments> enumerableOtherInstanceAndCodes() {
-        return Stream.of(Arguments.of(EnumerableImpl.INSTANCE, EnumerableImpl.INSTANCE.code()));
+        return Stream.of(Arguments.of(DictionaryImpl.INSTANCE, DictionaryImpl.INSTANCE.code()));
     }
 
     static Stream<Arguments> enumerableAndCodes() {

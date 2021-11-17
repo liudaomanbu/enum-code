@@ -1,7 +1,7 @@
 package org.caotc.code.factory;
 
 import lombok.NonNull;
-import org.caotc.code.Enumerable;
+import org.caotc.code.Dictionary;
 
 import java.util.function.Function;
 
@@ -12,5 +12,5 @@ import java.util.function.Function;
 public interface EnumerableAdapterFactory<T> {
     boolean canAdapt(@NonNull Class<?> type);
 
-    @NonNull <C, F extends T> Enumerable<C, F> adapt(@NonNull F adaptee, @NonNull Function<? super F, String> groupReader);
+    @NonNull <C, F extends T> Dictionary<C, F> adapt(@NonNull F adaptee, @NonNull Function<? super F, String> groupReader);
 }

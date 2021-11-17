@@ -13,7 +13,7 @@ public class EnumEnumerableConverterFactory<E extends Enum<?>> implements Enumer
     @Override
     public @NonNull <T extends E> EnumerableConverter<?, T> create(@NonNull Class<T> type) {
 //        return EnumerableConstant.<Object,T>builder()
-//                .enumerables(Arrays.stream(type.getEnumConstants()).collect(ImmutableSet.toImmutableSet()))
+//                .dictionaries(Arrays.stream(type.getEnumConstants()).collect(ImmutableSet.toImmutableSet()))
 //                .build();
         return null;
     }

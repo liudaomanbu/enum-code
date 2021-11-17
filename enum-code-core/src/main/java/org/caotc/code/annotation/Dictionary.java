@@ -12,7 +12,7 @@ import static java.lang.annotation.ElementType.TYPE;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {TYPE})
-public @interface Enumerable {
+public @interface Dictionary {
     /**
      * 专用于枚举类型,可注解在枚举属性和get方法上,以其值作为枚举的对应值
      *

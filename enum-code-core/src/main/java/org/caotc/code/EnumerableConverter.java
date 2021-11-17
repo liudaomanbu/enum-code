@@ -19,7 +19,7 @@ public interface EnumerableConverter<C, E> {
     default E valueOfExact(@NonNull C code) {
         return valueOf(code)
                 //todo
-                .orElseThrow(() -> new IllegalStateException(group() + " Enumerable not contains enumerable of code" + code));
+                .orElseThrow(() -> new IllegalStateException(group() + " Dictionary not contains dictionary of code" + code));
     }
 
     @NonNull C toCode(@NonNull E enumerable);

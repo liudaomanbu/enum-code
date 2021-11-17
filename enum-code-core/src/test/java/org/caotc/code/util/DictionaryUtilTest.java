@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class EnumerableUtilTest extends SpringBootJunit5TestApplicationTests {
+class DictionaryUtilTest extends SpringBootJunit5TestApplicationTests {
     @Resource
     Collection<EnumerableAdapteeConstantFactory<?>> enumerableAdapteeConstantFactories;
 

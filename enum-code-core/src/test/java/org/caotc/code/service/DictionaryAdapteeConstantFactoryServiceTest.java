@@ -5,13 +5,41 @@ import com.google.common.collect.ImmutableSet;
 import lombok.extern.slf4j.Slf4j;
 import org.caotc.code.factory.EnumConstantFactory;
 import org.caotc.code.factory.EnumerableImplFactory;
-import org.caotc.code.model.*;
+import org.caotc.code.model.CodeAnnotatedFieldEnum;
+import org.caotc.code.model.CodeAnnotatedFieldEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeAnnotatedFieldObject;
+import org.caotc.code.model.CodeAnnotatedMethodEnum;
+import org.caotc.code.model.CodeAnnotatedMethodEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeAnnotatedMethodObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnum;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedFieldEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedFieldObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnum;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodAndCodeAnnotatedMethodObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodEnum;
+import org.caotc.code.model.CodeFieldAndCodeMethodEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeFieldAndCodeMethodObject;
+import org.caotc.code.model.CodeFieldEnum;
+import org.caotc.code.model.CodeFieldEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeFieldObject;
+import org.caotc.code.model.CodeGetMethodEnum;
+import org.caotc.code.model.CodeGetMethodEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeGetMethodObject;
+import org.caotc.code.model.CodeMethodEnum;
+import org.caotc.code.model.CodeMethodEnumerableAnnotatedObject;
+import org.caotc.code.model.CodeMethodObject;
+import org.caotc.code.model.DictionaryImpl;
+import org.caotc.code.model.MultipleCodeAnnotatedFieldEnum;
+import org.caotc.code.model.MultipleCodeAnnotatedFieldEnumerableAnnotatedObject;
+import org.caotc.code.model.NoCodeEnum;
+import org.caotc.code.model.NoCodeEnumerableAnnotatedObject;
 import org.caotc.code.service.impl.DefaultEnumerableAdapteeConstantFactoryService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
-class EnumerableAdapteeConstantFactoryServiceTest {
+class DictionaryAdapteeConstantFactoryServiceTest {
     EnumerableAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService
             = new DefaultEnumerableAdapteeConstantFactoryService(ImmutableList.of(new EnumConstantFactory(), new EnumerableImplFactory()));
 
@@ -137,7 +165,7 @@ class EnumerableAdapteeConstantFactoryServiceTest {
 
     @Test
     void supportEnumerableImpl() {
-        Assertions.assertTrue(enumerableAdapteeConstantFactoryService.support(EnumerableImpl.class));
+        Assertions.assertTrue(enumerableAdapteeConstantFactoryService.support(DictionaryImpl.class));
     }
 
     @Test
@@ -290,8 +318,8 @@ class EnumerableAdapteeConstantFactoryServiceTest {
 
     @Test
     void createEnumerableImpl() {
-        ImmutableSet<EnumerableImpl> constants = enumerableAdapteeConstantFactoryService.create(EnumerableImpl.class);
-        Assertions.assertIterableEquals(constants,ImmutableSet.of(EnumerableImpl.INSTANCE));
+        ImmutableSet<DictionaryImpl> constants = enumerableAdapteeConstantFactoryService.create(DictionaryImpl.class);
+        Assertions.assertIterableEquals(constants, ImmutableSet.of(DictionaryImpl.INSTANCE));
     }
 
     @Test

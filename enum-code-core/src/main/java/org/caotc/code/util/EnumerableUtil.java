@@ -8,7 +8,7 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.caotc.code.CodeFieldReader;
 import org.caotc.code.CodeMethodReader;
-import org.caotc.code.Enumerable;
+import org.caotc.code.Dictionary;
 import org.caotc.code.factory.CodeReaderEnumerableAdapterFactory;
 import org.caotc.code.factory.EnumConstantFactory;
 import org.caotc.code.factory.EnumerableAdapteeConstantFactory;
@@ -32,11 +32,11 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * 基于{@link org.caotc.code.annotation.Enumerable.Code}注解的枚举工具类
+ * 基于{@link org.caotc.code.annotation.Dictionary.Code}注解的枚举工具类
  *
  * @author caotc
  * @date 2021-08-01
- * @see org.caotc.code.annotation.Enumerable.Code
+ * @see org.caotc.code.annotation.Dictionary.Code
  * @since 1.0.0
  **/
 @SuppressWarnings("UnstableApiUsage")
@@ -51,21 +51,21 @@ public class EnumerableUtil {
 
     public static boolean isEnumerable(@NonNull Class<?> type) {
         //todo super sub
-        return (TypeToken.of(type).isSubtypeOf(Enumerable.class)
+        return (TypeToken.of(type).isSubtypeOf(Dictionary.class)
                 || type.isEnum()
-                || type.isAnnotationPresent(org.caotc.code.annotation.Enumerable.class))
-                && findReader(type, org.caotc.code.annotation.Enumerable.Code.class).isPresent();
+                || type.isAnnotationPresent(org.caotc.code.annotation.Dictionary.class))
+                && findReader(type, org.caotc.code.annotation.Dictionary.Code.class).isPresent();
     }
 
     public static void checkEnumerable(@NonNull Class<?> type) {
         if (!isEnumerable(type)) {
-            throw new IllegalArgumentException(type + "is not a Enumerable class");//todo
+            throw new IllegalArgumentException(type + "is not a Dictionary class");//todo
         }
 
-        ImmutableSet<Method> annotatedCodeMethods = findAnnotatedMethod(type, org.caotc.code.annotation.Enumerable.Code.class);
-        ImmutableSet<Field> annotatedCodeFields = findAnnotatedField(type, org.caotc.code.annotation.Enumerable.Code.class);
+        ImmutableSet<Method> annotatedCodeMethods = findAnnotatedMethod(type, org.caotc.code.annotation.Dictionary.Code.class);
+        ImmutableSet<Field> annotatedCodeFields = findAnnotatedField(type, org.caotc.code.annotation.Dictionary.Code.class);
         if (annotatedCodeMethods.size() + annotatedCodeFields.size() > 1) {
-            throw new IllegalArgumentException(type + "is a illegal Enumerable class");//todo
+            throw new IllegalArgumentException(type + "is a illegal Dictionary class");//todo
         }
     }
 
@@ -146,7 +146,7 @@ public class EnumerableUtil {
      * @param enumerableClass 枚举类
      * @param code            枚举值
      * @param <E>             对应枚举
-     * @throws IllegalArgumentException 如果该枚举类没有{@link org.caotc.code.annotation.Enumerable.Code}注解的属性和方法
+     * @throws IllegalArgumentException 如果该枚举类没有{@link org.caotc.code.annotation.Dictionary.Code}注解的属性和方法
      * @author caotc
      * @date 2021-08-01
      * @since 1.0.0
@@ -186,7 +186,7 @@ public class EnumerableUtil {
      *
      * @param e 枚举
      * @return 枚举对应的值
-     * @throws IllegalArgumentException 如果该枚举类没有{@link org.caotc.code.annotation.Enumerable.Code}注解的属性和方法
+     * @throws IllegalArgumentException 如果该枚举类没有{@link org.caotc.code.annotation.Dictionary.Code}注解的属性和方法
      * @author caotc
      * @date 2021-08-01
      * @since 1.0.0

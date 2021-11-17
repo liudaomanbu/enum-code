@@ -1,12 +1,11 @@
 package org.caotc.code.model;
 
-import lombok.Data;
-import org.caotc.code.annotation.Enumerable;
+import org.caotc.code.annotation.Dictionary;
 
 /**
  * @author caotc
  * @date 2021-08-31
  */
-@Enumerable
+@Dictionary
 public class NoCodeEnumerableAnnotatedObject {
 }

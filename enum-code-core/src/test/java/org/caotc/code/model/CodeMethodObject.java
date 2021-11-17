@@ -1,8 +1,6 @@
 package org.caotc.code.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.caotc.code.annotation.Enumerable;
 
 /**
  * @author caotc

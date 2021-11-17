@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Builder
 @Value
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class EnumerableAdapterImpl<E, C> implements EnumerableAdapter<E, C> {
+public class DictionaryAdapterImpl<E, C> implements DictionaryAdapter<E, C> {
     @NonNull
     E adaptee;
 

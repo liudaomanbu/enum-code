@@ -1,14 +1,14 @@
 package org.caotc.code.model;
 
 import lombok.Value;
-import org.caotc.code.annotation.Enumerable;
+import org.caotc.code.annotation.Dictionary;
 
 /**
  * @author caotc
  * @date 2021-08-31
  */
 @Value
-@Enumerable
+@Dictionary
 public class CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnumerableAnnotatedObject {
     Integer code;
 
@@ -16,7 +16,7 @@ public class CodeFieldAndCodeMethodAndCodeAnnotatedMethodEnumerableAnnotatedObje
         return code;
     }
 
-    @Enumerable.Code
+    @Dictionary.Code
     public Integer abc() {
         return code;
     }

@@ -11,10 +11,14 @@ public interface Dictionary<C, S> {
     C code();
 
     @NonNull
-    String name();
+    default String name() {
+        return "";
+    }
 
     @NonNull
-    String description();
+    default String description() {
+        return "";
+    }
 
     //todo object?
     @NonNull

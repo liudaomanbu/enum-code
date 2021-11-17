@@ -1,7 +1,7 @@
 package org.caotc.code.model;
 
 import lombok.Value;
-import org.caotc.code.annotation.Enumerable;
+import org.caotc.code.annotation.Dictionary;
 
 /**
  * @author caotc
@@ -15,7 +15,7 @@ public class CodeFieldAndCodeMethodAndCodeAnnotatedMethodObject {
         return code;
     }
 
-    @Enumerable.Code
+    @Dictionary.Code
     public Integer abc() {
         return code;
     }

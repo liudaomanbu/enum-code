@@ -38,7 +38,7 @@ public class EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter
     @Override
     public @NonNull <C, F> EnumerableConstant<C, F> create(@NonNull Class<F> type, @NonNull String group) {
         return EnumerableConstant.<C, F>builder()
-                .enumerables(enumerableAdapteeConstantFactoryService.create(type, group)
+                .dictionaries(enumerableAdapteeConstantFactoryService.create(type, group)
                         .stream()
                         .map(adaptee -> enumerableAdapterFactoryService.<C, F>adapt(adaptee, t -> group))
                         .collect(ImmutableSet.toImmutableSet()))

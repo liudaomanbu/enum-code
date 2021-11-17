@@ -10,7 +10,7 @@ import lombok.NonNull;
 import lombok.Singular;
 import lombok.ToString;
 import lombok.Value;
-import org.caotc.code.adapter.EnumerableAdapter;
+import org.caotc.code.adapter.DictionaryAdapter;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -30,14 +30,14 @@ public class EnumerableConstant<C, E> implements EnumerableConverter<C, E> {
 
     @NonNull
     @Singular
-    ImmutableSet<Enumerable<C, E>> enumerables;
+    ImmutableSet<Dictionary<C, E>> dictionaries;
 
     @NonNull
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @Getter(value = AccessLevel.PUBLIC, lazy = true)
-    ImmutableBiMap<C, E> codeToEnumerableAdaptee = enumerables().stream()
-            .collect(ImmutableBiMap.toImmutableBiMap(Enumerable::code, this::unWarpIfNecessary));
+    ImmutableBiMap<C, E> codeToEnumerableAdaptee = dictionaries().stream()
+            .collect(ImmutableBiMap.toImmutableBiMap(Dictionary::code, this::unWarpIfNecessary));
 
     @NonNull
     @EqualsAndHashCode.Exclude
@@ -49,11 +49,11 @@ public class EnumerableConstant<C, E> implements EnumerableConverter<C, E> {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @Getter(value = AccessLevel.PRIVATE, lazy = true)
-    ImmutableBiMap<C, Enumerable<C, E>> codeToEnumerable = enumerables().stream()
-            .collect(ImmutableBiMap.toImmutableBiMap(Enumerable::code, Function.identity()));
+    ImmutableBiMap<C, Dictionary<C, E>> codeToEnumerable = dictionaries().stream()
+            .collect(ImmutableBiMap.toImmutableBiMap(Dictionary::code, Function.identity()));
 
     @NonNull
-    public Optional<Enumerable<C, E>> find(@NonNull C code) {
+    public Optional<Dictionary<C, E>> find(@NonNull C code) {
         return Optional.ofNullable(codeToEnumerable().get(code));
     }
 
@@ -68,11 +68,11 @@ public class EnumerableConstant<C, E> implements EnumerableConverter<C, E> {
         if (originalType().isInstance(enumerable)) {
             return (E) enumerable;
         }
-        if (enumerable instanceof EnumerableAdapter) {
-            return ((EnumerableAdapter<E, ?>) enumerable).adaptee();
+        if (enumerable instanceof DictionaryAdapter) {
+            return ((DictionaryAdapter<E, ?>) enumerable).adaptee();
         }
         //todo
-        throw new IllegalStateException(originalType() + " EnumerableConstant enumerable class is " + enumerable.getClass());
+        throw new IllegalStateException(originalType() + " EnumerableConstant dictionary class is " + enumerable.getClass());
     }
 
     @Override

@@ -12,14 +12,14 @@ import javax.annotation.Resource;
 import java.util.Optional;
 
 @Slf4j
-class EnumerableServiceTest extends SpringBootJunit5TestApplicationTests {
+class DictionaryServiceTest extends SpringBootJunit5TestApplicationTests {
 
     @Resource
     EnumerableService enumerableService;
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#enumerableAndCodes")
-    void valueOf(Object enumerable,Object code) {
+    void valueOf(Object enumerable, Object code) {
         Optional<?> optional = enumerableService.valueOf(enumerable.getClass(), code);
         Assertions.assertTrue(optional.isPresent());
         Assertions.assertEquals(optional.get(), enumerable);
@@ -119,7 +119,7 @@ class EnumerableServiceTest extends SpringBootJunit5TestApplicationTests {
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#noConstantEnumerableAndCodes")
     void toCodeNoConstantEnumerable(Object enumerable,Object code) {
-        Assertions.assertEquals(code, enumerableService.toCode(enumerable));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> enumerableService.toCode(enumerable));
     }
 
     @ParameterizedTest
@@ -136,7 +136,7 @@ class EnumerableServiceTest extends SpringBootJunit5TestApplicationTests {
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#noConstantEnumerableAndCodes")
     void toCodeNullableNoConstantEnumerable(Object enumerable,Object code) {
-        Assertions.assertEquals(code, enumerableService.toCodeNullable(enumerable));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> enumerableService.toCodeNullable(enumerable));
     }
 
     @ParameterizedTest
