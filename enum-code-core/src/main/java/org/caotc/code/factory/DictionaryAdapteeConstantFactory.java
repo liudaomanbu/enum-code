@@ -10,7 +10,7 @@ import java.util.function.Function;
  * @author caotc
  * @date 2021-08-17
  */
-public interface EnumerableAdapteeConstantFactory<E> {
+public interface DictionaryAdapteeConstantFactory<E> {
     @NonNull
     ImmutableSet<String> groups(@NonNull Class<?> type);
 

@@ -2,13 +2,13 @@ package org.caotc.code.service;
 
 import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
-import org.caotc.code.factory.EnumerableAdapteeConstantFactory;
+import org.caotc.code.factory.DictionaryAdapteeConstantFactory;
 
 /**
  * @author caotc
  * @date 2021-10-08
  */
-public interface EnumerableAdapteeConstantFactoryService {
+public interface DictionaryAdapteeConstantFactoryService {
 
     @NonNull
     ImmutableSet<String> groups(@NonNull Class<?> type);
@@ -24,7 +24,7 @@ public interface EnumerableAdapteeConstantFactoryService {
 
     @NonNull <E> ImmutableSet<E> create(@NonNull Class<E> type, String group);
 
-    void addFactory(@NonNull EnumerableAdapteeConstantFactory<?> factory);
+    void addFactory(@NonNull DictionaryAdapteeConstantFactory<?> factory);
 
-    void removeFactory(@NonNull EnumerableAdapteeConstantFactory<?> factory);
+    void removeFactory(@NonNull DictionaryAdapteeConstantFactory<?> factory);
 }

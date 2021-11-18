@@ -7,7 +7,7 @@ import lombok.Value;
  * @date 2021-11-08
  */
 @Value
-public class EnumEnumerableGroupFactory<E extends Enum<?>> implements EnumerableGroupFactory<E> {
+public class EnumDictionaryGroupFactory<E extends Enum<?>> implements DictionaryGroupFactory<E> {
 
 //    @Override
 //    public boolean support(@NonNull String group) {
@@ -17,7 +17,7 @@ public class EnumEnumerableGroupFactory<E extends Enum<?>> implements Enumerable
 //    }
 //
 //    @Override
-//    public @NonNull <T extends E> EnumerableGroup<T> create(@NonNull String group) {
-//        return EnumerableGroup.<T>builder().name(type.getName()).type(type).build();
+//    public @NonNull <T extends E> DictionaryGroup<T> create(@NonNull String group) {
+//        return DictionaryGroup.<T>builder().name(type.getName()).type(type).build();
 //    }
 }

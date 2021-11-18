@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.Dictionary;
 import org.caotc.code.common.ReaderConstant;
-import org.caotc.code.factory.EnumerableAdapterFactory;
-import org.caotc.code.service.EnumerableAdapterFactoryService;
+import org.caotc.code.factory.DictionaryAdapterFactory;
+import org.caotc.code.service.DictionaryAdapterFactoryService;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -16,13 +16,13 @@ import java.util.function.Function;
  * @date 2021-10-21
  */
 @Value
-public class DefaultEnumerableAdapterFactoryService implements EnumerableAdapterFactoryService {
+public class DefaultDictionaryAdapterFactoryService implements DictionaryAdapterFactoryService {
     @NonNull
-    Collection<EnumerableAdapterFactory<?>> factories;
+    Collection<DictionaryAdapterFactory<?>> factories;
 
     public boolean canAdapt(@NonNull Class<?> type) {
         return factories.stream()
-                .anyMatch(enumerableAdapterFactory -> enumerableAdapterFactory.canAdapt(type));
+                .anyMatch(dictionaryAdapterFactory -> dictionaryAdapterFactory.canAdapt(type));
     }
 
     @NonNull
@@ -33,7 +33,7 @@ public class DefaultEnumerableAdapterFactoryService implements EnumerableAdapter
     @SuppressWarnings("unchecked")
     @NonNull
     public <C, E> Dictionary<C, E> adapt(@NonNull E adaptee, Function<? super E, String> groupReader) {
-        EnumerableAdapterFactory<E> factory = (EnumerableAdapterFactory<E>) factories.stream()
+        DictionaryAdapterFactory<E> factory = (DictionaryAdapterFactory<E>) factories.stream()
                 .filter(enumerableAdapteeConstantFactory -> enumerableAdapteeConstantFactory.canAdapt(adaptee.getClass()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(adaptee + "not support adapt to Dictionary"));//todo
@@ -41,12 +41,12 @@ public class DefaultEnumerableAdapterFactoryService implements EnumerableAdapter
     }
 
     @Override
-    public void addFactory(@NonNull EnumerableAdapterFactory<?> factory) {
+    public void addFactory(@NonNull DictionaryAdapterFactory<?> factory) {
         factories.add(factory);
     }
 
     @Override
-    public void removeFactory(@NonNull EnumerableAdapterFactory<?> factory) {
+    public void removeFactory(@NonNull DictionaryAdapterFactory<?> factory) {
         factories.remove(factory);
     }
 }

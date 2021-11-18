@@ -8,7 +8,7 @@ import java.util.Optional;
  * @author caotc
  * @date 2021-10-08
  */
-public interface EnumerableService {
+public interface DictionaryService {
 
     default void evict(@NonNull Class<?> type) {
         evict(type, null);
@@ -27,14 +27,14 @@ public interface EnumerableService {
     default <C, E> E valueOfExact(@NonNull Class<E> enumerableClass, @NonNull C code) {
         return valueOf(enumerableClass, code)
                 //todo
-                .orElseThrow(() -> new IllegalStateException(enumerableClass + " EnumerableConstant not contains dictionary of code" + code));
+                .orElseThrow(() -> new IllegalStateException(enumerableClass + " DictionaryConstant not contains dictionary of code" + code));
     }
 
     @NonNull
     default <C, E> E valueOfExact(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
         return valueOf(enumerableClass, code, group)
                 //todo
-                .orElseThrow(() -> new IllegalStateException(enumerableClass + " EnumerableConstant not contains dictionary of code" + code));
+                .orElseThrow(() -> new IllegalStateException(enumerableClass + " DictionaryConstant not contains dictionary of code" + code));
     }
 
     @NonNull

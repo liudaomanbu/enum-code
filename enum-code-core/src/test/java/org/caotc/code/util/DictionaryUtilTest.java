@@ -2,7 +2,7 @@ package org.caotc.code.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.caotc.code.SpringBootJunit5TestApplicationTests;
-import org.caotc.code.factory.EnumerableAdapteeConstantFactory;
+import org.caotc.code.factory.DictionaryAdapteeConstantFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,41 +19,41 @@ import java.util.Optional;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DictionaryUtilTest extends SpringBootJunit5TestApplicationTests {
     @Resource
-    Collection<EnumerableAdapteeConstantFactory<?>> enumerableAdapteeConstantFactories;
+    Collection<DictionaryAdapteeConstantFactory<?>> enumerableAdapteeConstantFactories;
 
     @BeforeAll
     void init() {
-        enumerableAdapteeConstantFactories.forEach(EnumerableUtil::addEnumerableAdapteeConstantFactory);
+        enumerableAdapteeConstantFactories.forEach(DictionaryUtil::addEnumerableAdapteeConstantFactory);
     }
 
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#enumerableTypes", "org.caotc.code.provider.Provider#illegalEnumerableTypes"})
     void isEnumerable(Class<?> enumerableType) {
-        Assertions.assertTrue(EnumerableUtil.isEnumerable(enumerableType));
+        Assertions.assertTrue(DictionaryUtil.isEnumerable(enumerableType));
     }
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#unEnumerableTypes")
     void isEnumerableUnEnumerable(Class<?> unEnumerableType) {
-        Assertions.assertFalse(EnumerableUtil.isEnumerable(unEnumerableType));
+        Assertions.assertFalse(DictionaryUtil.isEnumerable(unEnumerableType));
     }
 
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#enumerableTypes"})
     void checkEnumerable(Class<?> enumerableType) {
-        EnumerableUtil.checkEnumerable(enumerableType);
+        DictionaryUtil.checkEnumerable(enumerableType);
     }
 
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#unEnumerableTypes", "org.caotc.code.provider.Provider#illegalEnumerableTypes"})
     void checkEnumerableUnEnumerableAndIllegalEnumerable(Class<?> type) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.checkEnumerable(type));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> DictionaryUtil.checkEnumerable(type));
     }
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#enumerableAndCodes")
     void valueOf(Object enumerable, Object code) {
-        Optional<?> optional = EnumerableUtil.valueOf(enumerable.getClass(), code);
+        Optional<?> optional = DictionaryUtil.valueOf(enumerable.getClass(), code);
         Assertions.assertTrue(optional.isPresent());
         Assertions.assertEquals(optional.get(), enumerable);
     }
@@ -61,51 +61,51 @@ class DictionaryUtilTest extends SpringBootJunit5TestApplicationTests {
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#enumerableTypeAndInvalidCode")
     void valueOfInvalidCode(Class<?> enumerableType, Object code) {
-        Optional<?> optional = EnumerableUtil.valueOf(enumerableType, code);
+        Optional<?> optional = DictionaryUtil.valueOf(enumerableType, code);
         Assertions.assertFalse(optional.isPresent());
     }
 
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#unEnumerableTypes", "org.caotc.code.provider.Provider#noConstantEnumerableTypes"})
     void valueOfUnEnumerable(Class<?> unEnumerableType) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.valueOf(unEnumerableType, 0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> DictionaryUtil.valueOf(unEnumerableType, 0));
     }
 
 
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#illegalEnumerableTypes"})
     void valueOfIllegalEnumerable(Class<?> illegalEnumerable) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.valueOf(illegalEnumerable, 0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> DictionaryUtil.valueOf(illegalEnumerable, 0));
     }
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#enumerableAndCodes")
     void valueOfExact(Object enumerable, Object code) {
-        Assertions.assertEquals(EnumerableUtil.valueOfExact(enumerable.getClass(), code), enumerable);
+        Assertions.assertEquals(DictionaryUtil.valueOfExact(enumerable.getClass(), code), enumerable);
     }
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#enumerableTypeAndInvalidCode")
     void valueOfExactInvalidCode(Class<?> enumerableType, Object code) {
-        Assertions.assertThrows(IllegalStateException.class, () -> EnumerableUtil.valueOfExact(enumerableType, code));
+        Assertions.assertThrows(IllegalStateException.class, () -> DictionaryUtil.valueOfExact(enumerableType, code));
     }
 
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#unEnumerableTypes", "org.caotc.code.provider.Provider#noConstantEnumerableTypes"})
     void valueOfExactUnEnumerable(Class<?> unEnumerableType) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.valueOf(unEnumerableType, 0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> DictionaryUtil.valueOf(unEnumerableType, 0));
     }
 
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#illegalEnumerableTypes"})
     void valueOfExactIllegalEnumerable(Class<?> unEnumerableType) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.valueOf(unEnumerableType, 0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> DictionaryUtil.valueOf(unEnumerableType, 0));
     }
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#enumerableAndCodes")
     void valueOfNullable(Object enumerable, Object code) {
-        Optional<?> optional = EnumerableUtil.valueOfNullable(enumerable.getClass(), code);
+        Optional<?> optional = DictionaryUtil.valueOfNullable(enumerable.getClass(), code);
         Assertions.assertTrue(optional.isPresent());
         Assertions.assertEquals(optional.get(), enumerable);
     }
@@ -113,68 +113,68 @@ class DictionaryUtilTest extends SpringBootJunit5TestApplicationTests {
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#enumerableTypeAndInvalidCode")
     void valueOfNullableInvalidCode(Class<?> enumerableType, Object code) {
-        Optional<?> optional = EnumerableUtil.valueOfNullable(enumerableType, code);
+        Optional<?> optional = DictionaryUtil.valueOfNullable(enumerableType, code);
         Assertions.assertFalse(optional.isPresent());
     }
 
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#unEnumerableTypes", "org.caotc.code.provider.Provider#noConstantEnumerableTypes"})
     void valueOfNullableUnEnumerable(Class<?> unEnumerableType) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.valueOfNullable(unEnumerableType, 0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> DictionaryUtil.valueOfNullable(unEnumerableType, 0));
     }
 
     @ParameterizedTest
     @MethodSource({"org.caotc.code.provider.Provider#illegalEnumerableTypes"})
     void valueOfNullableIllegalEnumerable(Class<?> illegalEnumerableType) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.valueOfNullable(illegalEnumerableType, 0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> DictionaryUtil.valueOfNullable(illegalEnumerableType, 0));
     }
 
     @ParameterizedTest
     @NullSource
     @MethodSource("org.caotc.code.provider.Provider#enumerableTypes")
     void valueOfNullable(Class<?> enumerableType) {
-        Optional<?> optional = EnumerableUtil.valueOfNullable(enumerableType, null);
+        Optional<?> optional = DictionaryUtil.valueOfNullable(enumerableType, null);
         Assertions.assertFalse(optional.isPresent());
     }
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#enumerableAndCodes")
     void toCode(Object enumerable, Object code) {
-        Assertions.assertEquals(EnumerableUtil.toCode(enumerable), code);
+        Assertions.assertEquals(DictionaryUtil.toCode(enumerable), code);
     }
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#unEnumerables")
     void toCodeUnEnumerable(Object unEnumerable) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.toCode(unEnumerable));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> DictionaryUtil.toCode(unEnumerable));
     }
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#noConstantEnumerableAndCodes")
     void toCodeNoConstantEnumerable(Object enumerable, Object code) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.toCode(enumerable));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> DictionaryUtil.toCode(enumerable));
     }
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#enumerableAndCodes")
     void toCodeNullable(Object enumerable, Object code) {
-        Assertions.assertEquals(EnumerableUtil.toCodeNullable(enumerable), code);
+        Assertions.assertEquals(DictionaryUtil.toCodeNullable(enumerable), code);
     }
 
     @Test
     void toCodeNullable() {
-        Assertions.assertNull(EnumerableUtil.toCodeNullable(null));
+        Assertions.assertNull(DictionaryUtil.toCodeNullable(null));
     }
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#noConstantEnumerableAndCodes")
     void toCodeNullableNoConstantEnumerable(Object enumerable, Object code) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.toCodeNullable(enumerable));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> DictionaryUtil.toCodeNullable(enumerable));
     }
 
     @ParameterizedTest
     @MethodSource("org.caotc.code.provider.Provider#unEnumerables")
     void toCodeNullableUnEnumerable(Object unEnumerable) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> EnumerableUtil.toCodeNullable(unEnumerable));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> DictionaryUtil.toCodeNullable(unEnumerable));
     }
 }

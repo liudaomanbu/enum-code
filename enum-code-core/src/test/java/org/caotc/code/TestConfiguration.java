@@ -1,14 +1,20 @@
 package org.caotc.code;
 
-import org.caotc.code.factory.*;
-import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
-import org.caotc.code.service.EnumerableAdapterFactoryService;
-import org.caotc.code.service.EnumerableConstantFactoryService;
-import org.caotc.code.service.EnumerableService;
-import org.caotc.code.service.impl.DefaultEnumerableAdapteeConstantFactoryService;
-import org.caotc.code.service.impl.DefaultEnumerableAdapterFactoryService;
-import org.caotc.code.service.impl.DefaultEnumerableConstantFactoryService;
-import org.caotc.code.service.impl.DefaultEnumerableService;
+import org.caotc.code.factory.CodeReaderDictionaryAdapterFactory;
+import org.caotc.code.factory.DictionaryAdapteeConstantFactory;
+import org.caotc.code.factory.DictionaryAdapteeConstantsFactoryToDictionaryConstantFactoryAdapter;
+import org.caotc.code.factory.DictionaryAdapterFactory;
+import org.caotc.code.factory.DictionaryConstantFactory;
+import org.caotc.code.factory.DictionaryImplFactory;
+import org.caotc.code.factory.EnumConstantFactory;
+import org.caotc.code.service.DictionaryAdapteeConstantFactoryService;
+import org.caotc.code.service.DictionaryAdapterFactoryService;
+import org.caotc.code.service.DictionaryConstantFactoryService;
+import org.caotc.code.service.DictionaryService;
+import org.caotc.code.service.impl.DefaultDictionaryAdapteeConstantFactoryService;
+import org.caotc.code.service.impl.DefaultDictionaryAdapterFactoryService;
+import org.caotc.code.service.impl.DefaultDictionaryConstantFactoryService;
+import org.caotc.code.service.impl.DefaultDictionaryService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,37 +33,37 @@ public class TestConfiguration {
     }
 
     @Bean
-    public EnumerableImplFactory enumerableImplFactory() {
-        return new EnumerableImplFactory();
+    public DictionaryImplFactory enumerableImplFactory() {
+        return new DictionaryImplFactory();
     }
 
     @Bean
-    public EnumerableAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService(Collection<EnumerableAdapteeConstantFactory<?>> factories) {
-        return new DefaultEnumerableAdapteeConstantFactoryService(factories);
+    public DictionaryAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService(Collection<DictionaryAdapteeConstantFactory<?>> factories) {
+        return new DefaultDictionaryAdapteeConstantFactoryService(factories);
     }
 
     @Bean
-    public CodeReaderEnumerableAdapterFactory codeReaderEnumerableAdapterFactory() {
-        return new CodeReaderEnumerableAdapterFactory();
+    public CodeReaderDictionaryAdapterFactory codeReaderEnumerableAdapterFactory() {
+        return new CodeReaderDictionaryAdapterFactory();
     }
 
     @Bean
-    public EnumerableAdapterFactoryService enumerableAdapterFactoryService(Collection<EnumerableAdapterFactory<?>> factories) {
-        return new DefaultEnumerableAdapterFactoryService(factories);
+    public DictionaryAdapterFactoryService enumerableAdapterFactoryService(Collection<DictionaryAdapterFactory<?>> factories) {
+        return new DefaultDictionaryAdapterFactoryService(factories);
     }
 
     @Bean
-    public EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter enumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(EnumerableAdapteeConstantFactoryService enumerableAdapteeConstantFactoryService, EnumerableAdapterFactoryService enumerableAdapterFactoryService) {
-        return new EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(enumerableAdapteeConstantFactoryService, enumerableAdapterFactoryService);
+    public DictionaryAdapteeConstantsFactoryToDictionaryConstantFactoryAdapter enumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(DictionaryAdapteeConstantFactoryService dictionaryAdapteeConstantFactoryService, DictionaryAdapterFactoryService dictionaryAdapterFactoryService) {
+        return new DictionaryAdapteeConstantsFactoryToDictionaryConstantFactoryAdapter(dictionaryAdapteeConstantFactoryService, dictionaryAdapterFactoryService);
     }
 
     @Bean
-    public EnumerableConstantFactoryService enumerableConstantFactoryService(Collection<EnumerableConstantFactory<?>> factories) {
-        return new DefaultEnumerableConstantFactoryService(factories);
+    public DictionaryConstantFactoryService enumerableConstantFactoryService(Collection<DictionaryConstantFactory<?>> factories) {
+        return new DefaultDictionaryConstantFactoryService(factories);
     }
 
     @Bean
-    public EnumerableService enumerableService(EnumerableConstantFactoryService enumerableConstantFactoryService) {
-        return new DefaultEnumerableService(enumerableConstantFactoryService);
+    public DictionaryService enumerableService(DictionaryConstantFactoryService dictionaryConstantFactoryService) {
+        return new DefaultDictionaryService(dictionaryConstantFactoryService);
     }
 }

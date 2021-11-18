@@ -8,7 +8,7 @@ import java.util.Optional;
  * @author caotc
  * @date 2021-11-12
  */
-public interface EnumerableConverter<C, E> {
+public interface DictionaryConverter<C, E> {
     @NonNull
     String group();
 

@@ -21,7 +21,7 @@ import java.util.function.Function;
  */
 @Value
 @Builder
-public class EnumerableConstant<C, E> implements EnumerableConverter<C, E> {
+public class DictionaryConstant<C, E> implements DictionaryConverter<C, E> {
     @NonNull
     Class<E> originalType;
 
@@ -72,7 +72,7 @@ public class EnumerableConstant<C, E> implements EnumerableConverter<C, E> {
             return ((DictionaryAdapter<E, ?>) enumerable).adaptee();
         }
         //todo
-        throw new IllegalStateException(originalType() + " EnumerableConstant dictionary class is " + enumerable.getClass());
+        throw new IllegalStateException(originalType() + " DictionaryConstant dictionary class is " + enumerable.getClass());
     }
 
     @Override

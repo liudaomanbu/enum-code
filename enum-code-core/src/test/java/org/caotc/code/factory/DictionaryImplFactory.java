@@ -13,7 +13,7 @@ import java.util.Objects;
  * @date 2021-10-08
  */
 @Value
-public class EnumerableImplFactory implements EnumerableAdapteeConstantFactory<DictionaryImpl> {
+public class DictionaryImplFactory implements DictionaryAdapteeConstantFactory<DictionaryImpl> {
 
     @SuppressWarnings("unchecked")
     @Override

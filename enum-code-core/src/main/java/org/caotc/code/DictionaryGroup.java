@@ -10,7 +10,7 @@ import lombok.Value;
  */
 @Value
 @Builder
-public class EnumerableGroup<T> {
+public class DictionaryGroup<T> {
     @NonNull
     String name;
     @NonNull

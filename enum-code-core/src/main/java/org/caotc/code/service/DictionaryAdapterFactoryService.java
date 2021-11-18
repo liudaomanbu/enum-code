@@ -2,7 +2,7 @@ package org.caotc.code.service;
 
 import lombok.NonNull;
 import org.caotc.code.Dictionary;
-import org.caotc.code.factory.EnumerableAdapterFactory;
+import org.caotc.code.factory.DictionaryAdapterFactory;
 
 import java.util.function.Function;
 
@@ -11,7 +11,7 @@ import java.util.function.Function;
  * @date 2021-10-08
  */
 
-public interface EnumerableAdapterFactoryService {
+public interface DictionaryAdapterFactoryService {
 
     boolean canAdapt(@NonNull Class<?> type);
 
@@ -22,8 +22,8 @@ public interface EnumerableAdapterFactoryService {
 
     @NonNull <C, E> Dictionary<C, E> adapt(@NonNull E adaptee, Function<? super E, String> groupReader);
 
-    void addFactory(@NonNull EnumerableAdapterFactory<?> factory);
+    void addFactory(@NonNull DictionaryAdapterFactory<?> factory);
 
-    void removeFactory(@NonNull EnumerableAdapterFactory<?> factory);
+    void removeFactory(@NonNull DictionaryAdapterFactory<?> factory);
 
 }

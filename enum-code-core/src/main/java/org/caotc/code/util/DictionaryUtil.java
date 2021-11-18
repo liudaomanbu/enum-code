@@ -9,19 +9,19 @@ import lombok.experimental.UtilityClass;
 import org.caotc.code.CodeFieldReader;
 import org.caotc.code.CodeMethodReader;
 import org.caotc.code.Dictionary;
-import org.caotc.code.factory.CodeReaderEnumerableAdapterFactory;
+import org.caotc.code.factory.CodeReaderDictionaryAdapterFactory;
+import org.caotc.code.factory.DictionaryAdapteeConstantFactory;
+import org.caotc.code.factory.DictionaryAdapteeConstantsFactoryToDictionaryConstantFactoryAdapter;
+import org.caotc.code.factory.DictionaryConstantFactory;
 import org.caotc.code.factory.EnumConstantFactory;
-import org.caotc.code.factory.EnumerableAdapteeConstantFactory;
-import org.caotc.code.factory.EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter;
-import org.caotc.code.factory.EnumerableConstantFactory;
-import org.caotc.code.service.EnumerableAdapteeConstantFactoryService;
-import org.caotc.code.service.EnumerableAdapterFactoryService;
-import org.caotc.code.service.EnumerableConstantFactoryService;
-import org.caotc.code.service.EnumerableService;
-import org.caotc.code.service.impl.DefaultEnumerableAdapteeConstantFactoryService;
-import org.caotc.code.service.impl.DefaultEnumerableAdapterFactoryService;
-import org.caotc.code.service.impl.DefaultEnumerableConstantFactoryService;
-import org.caotc.code.service.impl.DefaultEnumerableService;
+import org.caotc.code.service.DictionaryAdapteeConstantFactoryService;
+import org.caotc.code.service.DictionaryAdapterFactoryService;
+import org.caotc.code.service.DictionaryConstantFactoryService;
+import org.caotc.code.service.DictionaryService;
+import org.caotc.code.service.impl.DefaultDictionaryAdapteeConstantFactoryService;
+import org.caotc.code.service.impl.DefaultDictionaryAdapterFactoryService;
+import org.caotc.code.service.impl.DefaultDictionaryConstantFactoryService;
+import org.caotc.code.service.impl.DefaultDictionaryService;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -41,13 +41,13 @@ import java.util.function.Function;
  **/
 @SuppressWarnings("UnstableApiUsage")
 @UtilityClass
-public class EnumerableUtil {
+public class DictionaryUtil {
     //todo can replace
-    private static final EnumerableAdapteeConstantFactoryService ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE = new DefaultEnumerableAdapteeConstantFactoryService(Lists.newArrayList(new EnumConstantFactory()));
-    private static final EnumerableAdapterFactoryService ENUMERABLE_ADAPTER_FACTORY_SERVICE = new DefaultEnumerableAdapterFactoryService(Lists.newArrayList(new CodeReaderEnumerableAdapterFactory()));
-    private static final EnumerableConstantFactory<Object> ENUMERABLE_CONSTANTS_FACTORY = new EnumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE, ENUMERABLE_ADAPTER_FACTORY_SERVICE);
-    private static final EnumerableConstantFactoryService ENUMERABLE_CONSTANTS_FACTORY_SERVICE = new DefaultEnumerableConstantFactoryService(Lists.newArrayList(ENUMERABLE_CONSTANTS_FACTORY));
-    private static final EnumerableService ENUMERABLE_SERVICE = new DefaultEnumerableService(ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
+    private static final DictionaryAdapteeConstantFactoryService ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE = new DefaultDictionaryAdapteeConstantFactoryService(Lists.newArrayList(new EnumConstantFactory()));
+    private static final DictionaryAdapterFactoryService ENUMERABLE_ADAPTER_FACTORY_SERVICE = new DefaultDictionaryAdapterFactoryService(Lists.newArrayList(new CodeReaderDictionaryAdapterFactory()));
+    private static final DictionaryConstantFactory<Object> ENUMERABLE_CONSTANTS_FACTORY = new DictionaryAdapteeConstantsFactoryToDictionaryConstantFactoryAdapter(ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE, ENUMERABLE_ADAPTER_FACTORY_SERVICE);
+    private static final DictionaryConstantFactoryService ENUMERABLE_CONSTANTS_FACTORY_SERVICE = new DefaultDictionaryConstantFactoryService(Lists.newArrayList(ENUMERABLE_CONSTANTS_FACTORY));
+    private static final DictionaryService ENUMERABLE_SERVICE = new DefaultDictionaryService(ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
 
     public static boolean isEnumerable(@NonNull Class<?> type) {
         //todo super sub
@@ -76,7 +76,7 @@ public class EnumerableUtil {
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static <E, C> Function<E, C> findReaderExact(@NonNull Class<E> enumClass, @NonNull Class<? extends Annotation> annotationType) {
-        return EnumerableUtil.<E, C>findReader(enumClass, annotationType).get();
+        return DictionaryUtil.<E, C>findReader(enumClass, annotationType).get();
     }
 
     @SuppressWarnings("unchecked")
@@ -208,7 +208,7 @@ public class EnumerableUtil {
         ENUMERABLE_SERVICE.evict(type, group);
     }
 
-    public static void addEnumerableAdapteeConstantFactory(@NonNull EnumerableAdapteeConstantFactory<?> factory) {
+    public static void addEnumerableAdapteeConstantFactory(@NonNull DictionaryAdapteeConstantFactory<?> factory) {
         ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE.addFactory(factory);
     }
 }

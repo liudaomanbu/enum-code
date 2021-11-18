@@ -3,10 +3,10 @@ package org.caotc.code.service.impl;
 import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
-import org.caotc.code.EnumerableConstant;
+import org.caotc.code.DictionaryConstant;
 import org.caotc.code.common.ReaderConstant;
-import org.caotc.code.factory.EnumerableConstantFactory;
-import org.caotc.code.service.EnumerableConstantFactoryService;
+import org.caotc.code.factory.DictionaryConstantFactory;
+import org.caotc.code.service.DictionaryConstantFactoryService;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -16,18 +16,18 @@ import java.util.Optional;
  * @date 2021-09-03
  */
 @Value
-public class DefaultEnumerableConstantFactoryService implements EnumerableConstantFactoryService {
+public class DefaultDictionaryConstantFactoryService implements DictionaryConstantFactoryService {
     @NonNull
-    Collection<EnumerableConstantFactory<?>> factories;
+    Collection<DictionaryConstantFactory<?>> factories;
 
     @SuppressWarnings("unchecked")
     @NonNull
-    public <E, C> EnumerableConstant<C, E> create(@NonNull Class<E> enumerableClass, String group) {
+    public <E, C> DictionaryConstant<C, E> create(@NonNull Class<E> enumerableClass, String group) {
         String $group = Optional.ofNullable(group).orElse(ReaderConstant.DEFAULT_GROUP);
-        EnumerableConstantFactory<E> factory = (EnumerableConstantFactory<E>) factories.stream()
+        DictionaryConstantFactory<E> factory = (DictionaryConstantFactory<E>) factories.stream()
                 .filter(enumerableConstantFactory -> enumerableConstantFactory.support(enumerableClass, $group))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(enumerableClass + ":" + $group + " not support create EnumerableConstant"));//todo
+                .orElseThrow(() -> new IllegalArgumentException(enumerableClass + ":" + $group + " not support create DictionaryConstant"));//todo
         return factory.create(enumerableClass, $group);
     }
 
@@ -54,12 +54,12 @@ public class DefaultEnumerableConstantFactoryService implements EnumerableConsta
     }
 
     @Override
-    public void addFactory(@NonNull EnumerableConstantFactory<?> factory) {
+    public void addFactory(@NonNull DictionaryConstantFactory<?> factory) {
         factories.add(factory);
     }
 
     @Override
-    public void removeFactory(@NonNull EnumerableConstantFactory<?> factory) {
+    public void removeFactory(@NonNull DictionaryConstantFactory<?> factory) {
         factories.remove(factory);
     }
 }
