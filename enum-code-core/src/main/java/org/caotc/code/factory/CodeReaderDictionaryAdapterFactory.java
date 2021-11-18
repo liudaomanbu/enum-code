@@ -30,7 +30,7 @@ public class CodeReaderDictionaryAdapterFactory implements DictionaryAdapterFact
                 .nameReader(DictionaryUtil.<E, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Name.class)
                         .orElseGet(ReaderConstant::defaultNameReader))
                 .descriptionReader(DictionaryUtil.<E, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Description.class)
-                        .orElse(ReaderConstant.defaultGroupReader()))
+                        .orElse(ReaderConstant.defaultDescriptionReader()))
                 .groupReader(groupReader)
                 .build();
     }
