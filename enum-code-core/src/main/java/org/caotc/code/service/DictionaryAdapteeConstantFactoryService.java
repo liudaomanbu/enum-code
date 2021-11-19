@@ -10,19 +10,9 @@ import org.caotc.code.factory.DictionaryAdapteeConstantFactory;
  */
 public interface DictionaryAdapteeConstantFactoryService {
 
-    @NonNull
-    ImmutableSet<String> groups(@NonNull Class<?> type);
-
     boolean support(@NonNull Class<?> type);
 
-    boolean support(@NonNull Class<?> type, String group);
-
-    @NonNull
-    default <E> ImmutableSet<E> create(@NonNull Class<E> type) {
-        return create(type, null);
-    }
-
-    @NonNull <E> ImmutableSet<E> create(@NonNull Class<E> type, String group);
+    @NonNull <E> ImmutableSet<E> create(@NonNull Class<E> type);
 
     void addFactory(@NonNull DictionaryAdapteeConstantFactory<?> factory);
 

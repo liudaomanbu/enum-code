@@ -13,7 +13,7 @@ import java.util.function.Function;
 public class ReaderConstant {
     public static final String DEFAULT_GROUP = "default";
     public static final ImmutableSet<String> DEFAULT_GROUPS = ImmutableSet.of(ReaderConstant.DEFAULT_GROUP);
-    public static final Function<Object, String> DEFAULT_GROUP_READER = t -> DEFAULT_GROUP;
+    public static final Function<Object, String> DEFAULT_GROUP_READER = t -> t.getClass().getName();
     public static final Function<Object, String> DEFAULT_NAME_READER = t -> "";
     public static final Function<Object, String> DEFAULT_DESCRIPTION_READER = t -> "";
 

@@ -2,18 +2,18 @@ package org.caotc.code;
 
 import org.caotc.code.factory.CodeReaderDictionaryAdapterFactory;
 import org.caotc.code.factory.DictionaryAdapteeConstantFactory;
-import org.caotc.code.factory.DictionaryAdapteeConstantsFactoryToDictionaryConstantFactoryAdapter;
+import org.caotc.code.factory.DictionaryAdapteeConstantsFactoryToDictionaryConverterFactoryAdapter;
 import org.caotc.code.factory.DictionaryAdapterFactory;
-import org.caotc.code.factory.DictionaryConstantFactory;
+import org.caotc.code.factory.DictionaryConverterFactory;
 import org.caotc.code.factory.DictionaryImplFactory;
 import org.caotc.code.factory.EnumConstantFactory;
 import org.caotc.code.service.DictionaryAdapteeConstantFactoryService;
 import org.caotc.code.service.DictionaryAdapterFactoryService;
-import org.caotc.code.service.DictionaryConstantFactoryService;
+import org.caotc.code.service.DictionaryConverterFactoryService;
 import org.caotc.code.service.DictionaryService;
 import org.caotc.code.service.impl.DefaultDictionaryAdapteeConstantFactoryService;
 import org.caotc.code.service.impl.DefaultDictionaryAdapterFactoryService;
-import org.caotc.code.service.impl.DefaultDictionaryConstantFactoryService;
+import org.caotc.code.service.impl.DefaultDictionaryConverterFactoryService;
 import org.caotc.code.service.impl.DefaultDictionaryService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,17 +53,17 @@ public class TestConfiguration {
     }
 
     @Bean
-    public DictionaryAdapteeConstantsFactoryToDictionaryConstantFactoryAdapter enumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(DictionaryAdapteeConstantFactoryService dictionaryAdapteeConstantFactoryService, DictionaryAdapterFactoryService dictionaryAdapterFactoryService) {
-        return new DictionaryAdapteeConstantsFactoryToDictionaryConstantFactoryAdapter(dictionaryAdapteeConstantFactoryService, dictionaryAdapterFactoryService);
+    public DictionaryAdapteeConstantsFactoryToDictionaryConverterFactoryAdapter enumerableAdapteeConstantsFactoryToEnumerableConstantFactoryAdapter(DictionaryAdapteeConstantFactoryService dictionaryAdapteeConstantFactoryService, DictionaryAdapterFactoryService dictionaryAdapterFactoryService) {
+        return new DictionaryAdapteeConstantsFactoryToDictionaryConverterFactoryAdapter(dictionaryAdapteeConstantFactoryService, dictionaryAdapterFactoryService);
     }
 
     @Bean
-    public DictionaryConstantFactoryService enumerableConstantFactoryService(Collection<DictionaryConstantFactory<?>> factories) {
-        return new DefaultDictionaryConstantFactoryService(factories);
+    public DictionaryConverterFactoryService enumerableConstantFactoryService(Collection<DictionaryConverterFactory<?>> factories) {
+        return new DefaultDictionaryConverterFactoryService(factories);
     }
 
     @Bean
-    public DictionaryService enumerableService(DictionaryConstantFactoryService dictionaryConstantFactoryService) {
-        return new DefaultDictionaryService(dictionaryConstantFactoryService);
+    public DictionaryService enumerableService(DictionaryConverterFactoryService dictionaryConverterFactoryService) {
+        return new DefaultDictionaryService(dictionaryConverterFactoryService);
     }
 }

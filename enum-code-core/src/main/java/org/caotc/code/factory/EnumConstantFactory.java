@@ -3,7 +3,6 @@ package org.caotc.code.factory;
 import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
-import org.caotc.code.common.ReaderConstant;
 
 import java.util.Arrays;
 
@@ -15,16 +14,15 @@ import java.util.Arrays;
 public class EnumConstantFactory implements DictionaryAdapteeConstantFactory<Enum<?>> {
 
     @Override
-    public @NonNull <F extends Enum<?>> ImmutableSet<F> create(@NonNull Class<F> type, @NonNull String group) {
+    public boolean support(@NonNull Class<?> type) {
+        //todo check can adapt?
+        return type.isEnum();
+    }
+
+    @Override
+    public @NonNull <F extends Enum<?>> ImmutableSet<F> create(@NonNull Class<F> type) {
         return Arrays.stream(type.getEnumConstants())
                 .collect(ImmutableSet.toImmutableSet());
     }
 
-    @Override
-    public @NonNull ImmutableSet<String> groups(@NonNull Class<?> type) {
-        if (type.isEnum()) {
-            return ReaderConstant.DEFAULT_GROUPS;
-        }
-        return ImmutableSet.of();
-    }
 }

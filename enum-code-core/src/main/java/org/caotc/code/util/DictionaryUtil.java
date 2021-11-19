@@ -11,16 +11,16 @@ import org.caotc.code.CodeMethodReader;
 import org.caotc.code.Dictionary;
 import org.caotc.code.factory.CodeReaderDictionaryAdapterFactory;
 import org.caotc.code.factory.DictionaryAdapteeConstantFactory;
-import org.caotc.code.factory.DictionaryAdapteeConstantsFactoryToDictionaryConstantFactoryAdapter;
-import org.caotc.code.factory.DictionaryConstantFactory;
+import org.caotc.code.factory.DictionaryAdapteeConstantsFactoryToDictionaryConverterFactoryAdapter;
+import org.caotc.code.factory.DictionaryConverterFactory;
 import org.caotc.code.factory.EnumConstantFactory;
 import org.caotc.code.service.DictionaryAdapteeConstantFactoryService;
 import org.caotc.code.service.DictionaryAdapterFactoryService;
-import org.caotc.code.service.DictionaryConstantFactoryService;
+import org.caotc.code.service.DictionaryConverterFactoryService;
 import org.caotc.code.service.DictionaryService;
 import org.caotc.code.service.impl.DefaultDictionaryAdapteeConstantFactoryService;
 import org.caotc.code.service.impl.DefaultDictionaryAdapterFactoryService;
-import org.caotc.code.service.impl.DefaultDictionaryConstantFactoryService;
+import org.caotc.code.service.impl.DefaultDictionaryConverterFactoryService;
 import org.caotc.code.service.impl.DefaultDictionaryService;
 
 import java.lang.annotation.Annotation;
@@ -45,8 +45,8 @@ public class DictionaryUtil {
     //todo can replace
     private static final DictionaryAdapteeConstantFactoryService ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE = new DefaultDictionaryAdapteeConstantFactoryService(Lists.newArrayList(new EnumConstantFactory()));
     private static final DictionaryAdapterFactoryService ENUMERABLE_ADAPTER_FACTORY_SERVICE = new DefaultDictionaryAdapterFactoryService(Lists.newArrayList(new CodeReaderDictionaryAdapterFactory()));
-    private static final DictionaryConstantFactory<Object> ENUMERABLE_CONSTANTS_FACTORY = new DictionaryAdapteeConstantsFactoryToDictionaryConstantFactoryAdapter(ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE, ENUMERABLE_ADAPTER_FACTORY_SERVICE);
-    private static final DictionaryConstantFactoryService ENUMERABLE_CONSTANTS_FACTORY_SERVICE = new DefaultDictionaryConstantFactoryService(Lists.newArrayList(ENUMERABLE_CONSTANTS_FACTORY));
+    private static final DictionaryConverterFactory<Object> ENUMERABLE_CONSTANTS_FACTORY = new DictionaryAdapteeConstantsFactoryToDictionaryConverterFactoryAdapter(ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE, ENUMERABLE_ADAPTER_FACTORY_SERVICE);
+    private static final DictionaryConverterFactoryService ENUMERABLE_CONSTANTS_FACTORY_SERVICE = new DefaultDictionaryConverterFactoryService(Lists.newArrayList(ENUMERABLE_CONSTANTS_FACTORY));
     private static final DictionaryService ENUMERABLE_SERVICE = new DefaultDictionaryService(ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
 
     public static boolean isEnumerable(@NonNull Class<?> type) {
@@ -157,8 +157,8 @@ public class DictionaryUtil {
     }
 
     @NonNull
-    public static <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
-        return ENUMERABLE_SERVICE.valueOf(enumerableClass, code, group);
+    public static <C, E> Optional<E> valueOf(@NonNull String group, @NonNull C code) {
+        return ENUMERABLE_SERVICE.valueOf(group, code);
     }
 
     @NonNull
@@ -167,8 +167,8 @@ public class DictionaryUtil {
     }
 
     @NonNull
-    public static <C, E> E valueOfExact(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
-        return ENUMERABLE_SERVICE.valueOfExact(enumerableClass, code, group);
+    public static <C, E> E valueOfExact(@NonNull String group, @NonNull C code) {
+        return ENUMERABLE_SERVICE.valueOfExact(group, code);
     }
 
     @NonNull
@@ -177,8 +177,8 @@ public class DictionaryUtil {
     }
 
     @NonNull
-    public static <C, E> Optional<E> valueOfNullable(Class<E> enumerableClass, C code, String group) {
-        return ENUMERABLE_SERVICE.valueOfNullable(enumerableClass, code, group);
+    public static <C, E> Optional<E> valueOfNullable(String group, C code) {
+        return ENUMERABLE_SERVICE.valueOfNullable(group, code);
     }
 
     /**
@@ -204,8 +204,8 @@ public class DictionaryUtil {
         ENUMERABLE_SERVICE.evict(type);
     }
 
-    public static void evict(@NonNull Class<?> type, String group) {
-        ENUMERABLE_SERVICE.evict(type, group);
+    public static void evict(@NonNull String group) {
+        ENUMERABLE_SERVICE.evict(group);
     }
 
     public static void addEnumerableAdapteeConstantFactory(@NonNull DictionaryAdapteeConstantFactory<?> factory) {

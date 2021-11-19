@@ -1,7 +1,9 @@
 package org.caotc.code;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -23,14 +25,15 @@ import java.util.function.Function;
 @Builder
 public class DictionaryConstant<C, E> implements DictionaryConverter<C, E> {
     @NonNull
+    @Singular
+    ImmutableSet<Dictionary<C, E>> dictionaries;
+
+    @NonNull
     Class<E> originalType;
 
     @NonNull
-    String group;
-
-    @NonNull
-    @Singular
-    ImmutableSet<Dictionary<C, E>> dictionaries;
+    @Getter(value = AccessLevel.PUBLIC, lazy = true)
+    String group = initGroup();
 
     @NonNull
     @EqualsAndHashCode.Exclude
@@ -84,5 +87,11 @@ public class DictionaryConstant<C, E> implements DictionaryConverter<C, E> {
     @Override
     public @NonNull C toCode(@NonNull E enumerable) {
         return enumerableAdapteeToCode().get(enumerable);
+    }
+
+    private String initGroup() {
+        ImmutableSet<String> groups = dictionaries().stream().map(Dictionary::group).collect(ImmutableSet.toImmutableSet());
+        Preconditions.checkArgument(groups.size() == 1, "groups %s is not only", groups);
+        return Iterables.getOnlyElement(groups);
     }
 }

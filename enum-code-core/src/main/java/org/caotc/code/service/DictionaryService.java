@@ -10,18 +10,13 @@ import java.util.Optional;
  */
 public interface DictionaryService {
 
-    default void evict(@NonNull Class<?> type) {
-        evict(type, null);
-    }
+     void evict(@NonNull Class<?> type);
 
-    void evict(@NonNull Class<?> type, String group);
+    void evict(@NonNull String group);
 
-    @NonNull
-    default <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code) {
-        return valueOf(enumerableClass, code, null);
-    }
+    @NonNull <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code);
 
-    @NonNull <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code, String group);
+    @NonNull <C, E> Optional<E> valueOf(@NonNull String group, @NonNull C code);
 
     @NonNull
     default <C, E> E valueOfExact(@NonNull Class<E> enumerableClass, @NonNull C code) {
@@ -31,10 +26,10 @@ public interface DictionaryService {
     }
 
     @NonNull
-    default <C, E> E valueOfExact(@NonNull Class<E> enumerableClass, @NonNull C code, String group) {
-        return valueOf(enumerableClass, code, group)
+    default <C, E> E valueOfExact(@NonNull String group, @NonNull C code) {
+        return this.<C, E>valueOf(group, code)
                 //todo
-                .orElseThrow(() -> new IllegalStateException(enumerableClass + " DictionaryConstant not contains dictionary of code" + code));
+                .orElseThrow(() -> new IllegalStateException(group + " DictionaryConstant not contains dictionary of code" + code));
     }
 
     @NonNull
@@ -44,16 +39,16 @@ public interface DictionaryService {
     }
 
     @NonNull
-    default <C, E> Optional<E> valueOfNullable(Class<E> enumerableClass, C code, String group) {
+    default <C, E> Optional<E> valueOfNullable(String group, C code) {
         return Optional.ofNullable(code)
-                .flatMap(c -> valueOf(enumerableClass, c, group));
+                .flatMap(c -> valueOf(group, c));
     }
 
-    @NonNull <C> C toCode(@NonNull Object enumerable);
+    @NonNull <C, E> C toCode(@NonNull E enumerable);
 
-    default <C> C toCodeNullable(Object enumerable) {
+    default <C, E> C toCodeNullable(E enumerable) {
         return Optional.ofNullable(enumerable)
-                .map(this::<C>toCode)
+                .map(this::<C, E>toCode)
                 .orElse(null);
     }
 }

@@ -3,10 +3,7 @@ package org.caotc.code.factory;
 import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Value;
-import org.caotc.code.common.ReaderConstant;
 import org.caotc.code.model.DictionaryImpl;
-
-import java.util.Objects;
 
 /**
  * @author caotc
@@ -15,18 +12,14 @@ import java.util.Objects;
 @Value
 public class DictionaryImplFactory implements DictionaryAdapteeConstantFactory<DictionaryImpl> {
 
+    @Override
+    public boolean support(@NonNull Class<?> type) {
+        return DictionaryImpl.class.equals(type);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull <F extends DictionaryImpl> ImmutableSet<F> create(@NonNull Class<F> type, @NonNull String group) {
+    public @NonNull <F extends DictionaryImpl> ImmutableSet<F> create(@NonNull Class<F> type) {
         return ImmutableSet.of((F) DictionaryImpl.INSTANCE);
     }
-
-    @Override
-    public @NonNull ImmutableSet<String> groups(@NonNull Class<?> type) {
-        if (Objects.equals(DictionaryImpl.class, type)) {
-            return ReaderConstant.DEFAULT_GROUPS;
-        }
-        return ImmutableSet.of();
-    }
-
 }

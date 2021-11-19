@@ -7,7 +7,7 @@ import lombok.NonNull;
  * @author caotc
  * @date 2021-11-12
  */
-public interface DictionaryGroupService {
+public interface DictionaryConverterService {
 
     boolean containsGroup(@NonNull String group);
 

@@ -13,6 +13,9 @@ import static java.lang.annotation.ElementType.TYPE;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {TYPE})
 public @interface Dictionary {
+
+    String group() default "";
+
     /**
      * 专用于枚举类型,可注解在枚举属性和get方法上,以其值作为枚举的对应值
      *
@@ -36,5 +39,11 @@ public @interface Dictionary {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(value = {FIELD, METHOD})
     @interface Description {
+    }
+
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(value = {FIELD, METHOD})
+    @interface Group {
     }
 }

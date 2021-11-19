@@ -7,6 +7,7 @@ import org.caotc.code.adapter.DictionaryAdapterImpl;
 import org.caotc.code.common.ReaderConstant;
 import org.caotc.code.util.DictionaryUtil;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -22,17 +23,24 @@ public class CodeReaderDictionaryAdapterFactory implements DictionaryAdapterFact
     }
 
     @Override
-    public @NonNull <C, E> Dictionary<C, E> adapt(@NonNull E adaptee, @NonNull Function<? super E, String> groupReader) {
+    public @NonNull <C, F> Dictionary<C, F> adapt(@NonNull F adaptee) {
         DictionaryUtil.checkEnumerable(adaptee.getClass());
-        return DictionaryAdapterImpl.<E, C>builder()
+        return DictionaryAdapterImpl.<F, C>builder()
                 .adaptee(adaptee)
                 .codeReader(DictionaryUtil.findReaderExact(adaptee, org.caotc.code.annotation.Dictionary.Code.class))
-                .nameReader(DictionaryUtil.<E, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Name.class)
+                .nameReader(DictionaryUtil.<F, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Name.class)
                         .orElseGet(ReaderConstant::defaultNameReader))
-                .descriptionReader(DictionaryUtil.<E, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Description.class)
-                        .orElse(ReaderConstant.defaultDescriptionReader()))
-                .groupReader(groupReader)
+                .descriptionReader(DictionaryUtil.<F, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Description.class)
+                        .orElseGet(ReaderConstant::defaultDescriptionReader))
+                .groupReader(DictionaryUtil.<F, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Group.class)
+                        .orElseGet(() -> groupReader(adaptee)))
                 .build();
     }
 
+    private static <E> Function<E, String> groupReader(E adaptee) {
+        return Optional.ofNullable(adaptee.getClass().getAnnotation(org.caotc.code.annotation.Dictionary.class))
+                .map(org.caotc.code.annotation.Dictionary::group)
+                .map(group -> (Function<E, String>) a -> group)
+                .orElseGet(ReaderConstant::defaultGroupReader);
+    }
 }
