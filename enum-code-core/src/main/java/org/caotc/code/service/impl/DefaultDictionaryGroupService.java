@@ -9,6 +9,7 @@ import lombok.Value;
 import org.caotc.code.service.DictionaryGroupService;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author caotc
@@ -25,17 +26,34 @@ public class DefaultDictionaryGroupService implements DictionaryGroupService {
     }
 
     @Override
-    public boolean addGroup(@NonNull String group, @NonNull Class<?> type) {
+    public boolean addGroupIfAbsent(@NonNull String group, @NonNull Class<?> type) {
         if (!groupToClass.containsKey(group)) {
             synchronized (this) {
                 if (!groupToClass.containsKey(group)) {
-                    groupToClass.put(group, type);
-                    classToGroup.put(type, group);
+                    addGroup(group, type);
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    @Override
+    synchronized public void addGroup(@NonNull String group, @NonNull Class<?> type) {
+        groupToClass.put(group, type);
+        classToGroup.put(type, group);
+    }
+
+    @Override
+    synchronized public void removeGroup(@NonNull String group) {
+        Optional.ofNullable(groupToClass.remove(group))
+                .ifPresent(type -> classToGroup.remove(type, group));
+    }
+
+    @Override
+    synchronized public void removeAllGroup(@NonNull Class<?> type) {
+        classToGroup.removeAll(type)
+                .forEach(groupToClass::remove);
     }
 
     @Override

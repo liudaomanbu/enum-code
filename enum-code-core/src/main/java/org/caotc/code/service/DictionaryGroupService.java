@@ -11,9 +11,20 @@ public interface DictionaryGroupService {
 
     boolean containsGroup(@NonNull String group);
 
-    //todo 不允许group重复
-    boolean addGroup(@NonNull String group, @NonNull Class<?> type);
+    default boolean containsGroup(@NonNull Class<?> type) {
+        return !groups(type).isEmpty();
+    }
 
     @NonNull
     ImmutableSet<String> groups(@NonNull Class<?> type);
+
+    boolean addGroupIfAbsent(@NonNull String group, @NonNull Class<?> type);
+
+    void addGroup(@NonNull String group, @NonNull Class<?> type);
+
+    void removeGroup(@NonNull String group);
+
+    void removeAllGroup(@NonNull Class<?> type);
+
+
 }

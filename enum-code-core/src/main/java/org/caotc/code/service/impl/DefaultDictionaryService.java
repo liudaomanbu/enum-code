@@ -2,6 +2,7 @@ package org.caotc.code.service.impl;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.SetMultimap;
@@ -12,6 +13,7 @@ import org.caotc.code.DictionaryConstant;
 import org.caotc.code.DictionaryConverter;
 import org.caotc.code.annotation.Dictionary;
 import org.caotc.code.service.DictionaryConverterFactoryService;
+import org.caotc.code.service.DictionaryGroupService;
 import org.caotc.code.service.DictionaryService;
 
 import java.util.Map;
@@ -26,7 +28,7 @@ import java.util.Set;
 @Value
 public class DefaultDictionaryService implements DictionaryService {
     DictionaryConverterFactoryService dictionaryConverterFactoryService;
-    //    DictionaryGroupService dictionaryGroupService;
+    DictionaryGroupService dictionaryGroupService;
     Table<Class<?>, String, DictionaryConstant<?, ?>> classToGroupToEnumerableConstant = HashBasedTable.create();
     Map<Object, Object> enumerableToCode = Maps.newHashMap();
     Map<String, DictionaryConverter<?, ?>> groupToDictionaryConverter = Maps.newHashMap();
@@ -34,12 +36,18 @@ public class DefaultDictionaryService implements DictionaryService {
     SetMultimap<Class<?>, String> classToGroup = HashMultimap.create();
 
     public void evict(@NonNull Class<?> type) {
-        synchronized (this) {
-            classToGroup.removeAll(type)
-                    .forEach(group -> {
-                        groupToClass.remove(group);
-                        groupToDictionaryConverter.remove(group);
-                    });
+        if (dictionaryGroupService.containsGroup(type)) {
+            synchronized (dictionaryGroupService) {
+                ImmutableSet<String> groups = dictionaryGroupService.groups(type);
+                if (!groups.isEmpty()) {
+
+                }
+                classToGroup.removeAll(type)
+                        .forEach(group -> {
+                            groupToClass.remove(group);
+                            groupToDictionaryConverter.remove(group);
+                        });
+            }
         }
     }
 
@@ -159,6 +167,7 @@ public class DefaultDictionaryService implements DictionaryService {
 
     private void register(@NonNull DictionaryConverter<?, ?> dictionaryConverter) {
         groupToDictionaryConverter.put(dictionaryConverter.group(), dictionaryConverter);
+        //todo DictionaryConverter type
         groupToClass.put(dictionaryConverter.group(), ((DictionaryConstant<?, ?>) dictionaryConverter).originalType());
         classToGroup.put(((DictionaryConstant<?, ?>) dictionaryConverter).originalType(), dictionaryConverter.group());
     }
