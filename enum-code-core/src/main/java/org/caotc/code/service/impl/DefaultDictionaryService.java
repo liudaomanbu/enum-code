@@ -1,12 +1,8 @@
 package org.caotc.code.service.impl;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-import com.google.common.collect.SetMultimap;
-import com.google.common.collect.Table;
 import lombok.NonNull;
 import lombok.Value;
 import org.caotc.code.DictionaryConstant;
@@ -29,34 +25,19 @@ import java.util.Set;
 public class DefaultDictionaryService implements DictionaryService {
     DictionaryConverterFactoryService dictionaryConverterFactoryService;
     DictionaryGroupService dictionaryGroupService;
-    Table<Class<?>, String, DictionaryConstant<?, ?>> classToGroupToEnumerableConstant = HashBasedTable.create();
-    Map<Object, Object> enumerableToCode = Maps.newHashMap();
     Map<String, DictionaryConverter<?, ?>> groupToDictionaryConverter = Maps.newHashMap();
-    Map<String, Class<?>> groupToClass = Maps.newHashMap();
-    SetMultimap<Class<?>, String> classToGroup = HashMultimap.create();
 
-    public void evict(@NonNull Class<?> type) {
-        if (dictionaryGroupService.containsGroup(type)) {
-            synchronized (dictionaryGroupService) {
-                ImmutableSet<String> groups = dictionaryGroupService.groups(type);
-                if (!groups.isEmpty()) {
-
-                }
-                classToGroup.removeAll(type)
-                        .forEach(group -> {
-                            groupToClass.remove(group);
-                            groupToDictionaryConverter.remove(group);
-                        });
-            }
+    synchronized public void evict(@NonNull Class<?> type) {
+        ImmutableSet<String> groups = dictionaryGroupService.groups(type);
+        dictionaryGroupService.removeAllGroup(type);
+        if (!groups.isEmpty()) {
+            groups.forEach(groupToDictionaryConverter::remove);
         }
     }
 
-    public void evict(@NonNull String group) {
-        synchronized (this) {
-            groupToDictionaryConverter.remove(group);
-            Optional.ofNullable(groupToClass.remove(group))
-                    .ifPresent(type -> classToGroup.remove(type, group));
-        }
+    synchronized public void evict(@NonNull String group) {
+        groupToDictionaryConverter.remove(group);
+        dictionaryGroupService.removeGroup(group);
     }
 
     /**
@@ -76,7 +57,7 @@ public class DefaultDictionaryService implements DictionaryService {
     @NonNull
     public <C, E> Optional<E> valueOf(@NonNull Class<E> enumerableClass, @NonNull C code) {
         initIfNecessary(enumerableClass);
-        Set<String> groups = classToGroup.get(enumerableClass);
+        Set<String> groups = dictionaryGroupService.groups(enumerableClass);
         if (groups.size() != 1) {
             throw new IllegalArgumentException(enumerableClass + "has groups " + groups + " can't valueOf by class");//todo
         }
@@ -88,8 +69,7 @@ public class DefaultDictionaryService implements DictionaryService {
     @SuppressWarnings("unchecked")
     @NonNull
     public <C, E> Optional<E> valueOf(@NonNull String group, @NonNull C code) {
-        //todo support group
-//        dictionaryConverterFactoryService.support()
+        initIfNecessary(group);
         DictionaryConverter<C, E> dictionaryConverter = (DictionaryConverter<C, E>) groupToDictionaryConverter.get(group);
         return Optional.ofNullable(dictionaryConverter)
                 .flatMap(e -> e.valueOf(code));
@@ -136,7 +116,7 @@ public class DefaultDictionaryService implements DictionaryService {
     public <C, E> C toCode(@NonNull E enumerable) {
         initIfNecessary(enumerable.getClass());
         //todo class extends
-        Set<String> groups = classToGroup.get(enumerable.getClass());
+        Set<String> groups = dictionaryGroupService.groups(enumerable.getClass());
         if (groups.size() != 1) {
             throw new IllegalArgumentException(enumerable.getClass() + "has groups " + groups + " can't valueOf by class");//todo
         }
@@ -156,10 +136,20 @@ public class DefaultDictionaryService implements DictionaryService {
     }
 
     private <E> void initIfNecessary(@NonNull Class<E> enumerableClass) {
-        if (!classToGroup.containsKey(enumerableClass)) {
+        if (!dictionaryGroupService.containsGroup(enumerableClass)) {
             synchronized (this) {
-                if (!classToGroup.containsKey(enumerableClass)) {
+                if (!dictionaryGroupService.containsGroup(enumerableClass)) {
                     dictionaryConverterFactoryService.create(enumerableClass).forEach(this::register);
+                }
+            }
+        }
+    }
+
+    private <E> void initIfNecessary(@NonNull String group) {
+        if (!dictionaryGroupService.containsGroup(group)) {
+            synchronized (this) {
+                if (!dictionaryGroupService.containsGroup(group)) {
+                    register(dictionaryConverterFactoryService.create(group));
                 }
             }
         }
@@ -168,7 +158,6 @@ public class DefaultDictionaryService implements DictionaryService {
     private void register(@NonNull DictionaryConverter<?, ?> dictionaryConverter) {
         groupToDictionaryConverter.put(dictionaryConverter.group(), dictionaryConverter);
         //todo DictionaryConverter type
-        groupToClass.put(dictionaryConverter.group(), ((DictionaryConstant<?, ?>) dictionaryConverter).originalType());
-        classToGroup.put(((DictionaryConstant<?, ?>) dictionaryConverter).originalType(), dictionaryConverter.group());
+        dictionaryGroupService.addGroup(dictionaryConverter.group(), ((DictionaryConstant<?, ?>) dictionaryConverter).originalType());
     }
 }

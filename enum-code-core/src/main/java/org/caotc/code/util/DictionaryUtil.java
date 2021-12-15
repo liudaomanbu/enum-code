@@ -11,8 +11,8 @@ import org.caotc.code.CodeMethodReader;
 import org.caotc.code.Dictionary;
 import org.caotc.code.factory.CodeReaderDictionaryAdapterFactory;
 import org.caotc.code.factory.DictionaryAdapteeConstantFactory;
-import org.caotc.code.factory.DictionaryAdapteeConstantsFactoryToDictionaryConverterFactoryAdapter;
-import org.caotc.code.factory.DictionaryConverterFactory;
+import org.caotc.code.factory.DictionaryAdapteeConstantsFactoryToDictionaryConverterClassFactoryAdapter;
+import org.caotc.code.factory.DictionaryConverterClassFactory;
 import org.caotc.code.factory.EnumConstantFactory;
 import org.caotc.code.service.DictionaryAdapteeConstantFactoryService;
 import org.caotc.code.service.DictionaryAdapterFactoryService;
@@ -21,6 +21,7 @@ import org.caotc.code.service.DictionaryService;
 import org.caotc.code.service.impl.DefaultDictionaryAdapteeConstantFactoryService;
 import org.caotc.code.service.impl.DefaultDictionaryAdapterFactoryService;
 import org.caotc.code.service.impl.DefaultDictionaryConverterFactoryService;
+import org.caotc.code.service.impl.DefaultDictionaryGroupService;
 import org.caotc.code.service.impl.DefaultDictionaryService;
 
 import java.lang.annotation.Annotation;
@@ -45,9 +46,9 @@ public class DictionaryUtil {
     //todo can replace
     private static final DictionaryAdapteeConstantFactoryService ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE = new DefaultDictionaryAdapteeConstantFactoryService(Lists.newArrayList(new EnumConstantFactory()));
     private static final DictionaryAdapterFactoryService ENUMERABLE_ADAPTER_FACTORY_SERVICE = new DefaultDictionaryAdapterFactoryService(Lists.newArrayList(new CodeReaderDictionaryAdapterFactory()));
-    private static final DictionaryConverterFactory<Object> ENUMERABLE_CONSTANTS_FACTORY = new DictionaryAdapteeConstantsFactoryToDictionaryConverterFactoryAdapter(ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE, ENUMERABLE_ADAPTER_FACTORY_SERVICE);
-    private static final DictionaryConverterFactoryService ENUMERABLE_CONSTANTS_FACTORY_SERVICE = new DefaultDictionaryConverterFactoryService(Lists.newArrayList(ENUMERABLE_CONSTANTS_FACTORY));
-    private static final DictionaryService ENUMERABLE_SERVICE = new DefaultDictionaryService(ENUMERABLE_CONSTANTS_FACTORY_SERVICE);
+    private static final DictionaryConverterClassFactory<Object> ENUMERABLE_CONSTANTS_FACTORY = new DictionaryAdapteeConstantsFactoryToDictionaryConverterClassFactoryAdapter(ENUMERABLE_ADAPTEE_CONSTANT_FACTORY_SERVICE, ENUMERABLE_ADAPTER_FACTORY_SERVICE);
+    private static final DictionaryConverterFactoryService ENUMERABLE_CONSTANTS_FACTORY_SERVICE = new DefaultDictionaryConverterFactoryService(Lists.newArrayList(ENUMERABLE_CONSTANTS_FACTORY), Lists.newArrayList());
+    private static final DictionaryService ENUMERABLE_SERVICE = new DefaultDictionaryService(ENUMERABLE_CONSTANTS_FACTORY_SERVICE, new DefaultDictionaryGroupService());
 
     public static boolean isEnumerable(@NonNull Class<?> type) {
         //todo super sub

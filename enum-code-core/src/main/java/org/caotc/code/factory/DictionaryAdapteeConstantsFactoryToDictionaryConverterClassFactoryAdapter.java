@@ -17,7 +17,7 @@ import java.util.function.Function;
  * @date 2021-08-17
  */
 @Value
-public class DictionaryAdapteeConstantsFactoryToDictionaryConverterFactoryAdapter implements DictionaryConverterFactory<Object> {
+public class DictionaryAdapteeConstantsFactoryToDictionaryConverterClassFactoryAdapter implements DictionaryConverterClassFactory<Object> {
     @NonNull
     DictionaryAdapteeConstantFactoryService dictionaryAdapteeConstantFactoryService;
     @NonNull

@@ -1,6 +1,5 @@
 package org.caotc.code.factory;
 
-import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import org.caotc.code.DictionaryConverter;
 
@@ -10,7 +9,7 @@ import org.caotc.code.DictionaryConverter;
  */
 public interface DictionaryConverterFactory<E> {
 
-    boolean support(@NonNull Class<?> type);
+    boolean support(@NonNull String group);
 
-    @NonNull <C, F extends E> ImmutableSet<DictionaryConverter<C, F>> create(@NonNull Class<F> type);
+    @NonNull <C, F extends E> DictionaryConverter<C, F> create(@NonNull String group);
 }
