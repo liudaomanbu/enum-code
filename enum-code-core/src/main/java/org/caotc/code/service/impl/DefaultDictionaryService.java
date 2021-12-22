@@ -145,7 +145,7 @@ public class DefaultDictionaryService implements DictionaryService {
         }
     }
 
-    private <E> void initIfNecessary(@NonNull String group) {
+    private void initIfNecessary(@NonNull String group) {
         if (!dictionaryGroupService.containsGroup(group)) {
             synchronized (this) {
                 if (!dictionaryGroupService.containsGroup(group)) {
