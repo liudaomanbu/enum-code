@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 @Value
 public class DefaultDictionaryConverterService implements DictionaryConverterService {
-    Map<String, DictionaryConverter<?, ?>> groupToDictionaryConverter = Maps.newHashMap();
+    Map<String, DictionaryConverter<?, ?>> groupToDictionaryConverter = Maps.newConcurrentMap();
     DictionaryConverterFactoryService dictionaryConverterFactoryService;
 
     @Override
@@ -44,6 +44,6 @@ public class DefaultDictionaryConverterService implements DictionaryConverterSer
     @NonNull
     @Override
     public <C, E> Optional<DictionaryConverter<C, E>> findDictionaryConverter(@NonNull String group) {
-        return Optional.ofNullable((DictionaryConverter<C, E>) groupToDictionaryConverter.getOrDefault(group, null));
+        return Optional.ofNullable((DictionaryConverter<C, E>) groupToDictionaryConverter.getOrDefault(group, dictionaryConverterFactoryService.create(group)));
     }
 }

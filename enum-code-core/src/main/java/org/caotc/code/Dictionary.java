@@ -13,12 +13,12 @@ public interface Dictionary<C, S> {
     @NonNull
     default String name() {
         return "";
-    }
+    }//todo
 
     @NonNull
     default String description() {
         return "";
-    }
+    }//todo
 
     //todo object?
     @NonNull

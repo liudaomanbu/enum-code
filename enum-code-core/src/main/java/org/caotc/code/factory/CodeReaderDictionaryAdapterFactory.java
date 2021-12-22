@@ -6,6 +6,7 @@ import org.caotc.code.Dictionary;
 import org.caotc.code.adapter.DictionaryAdapterImpl;
 import org.caotc.code.common.ReaderConstant;
 import org.caotc.code.util.DictionaryUtil;
+import org.caotc.code.util.ReflectUtil;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -27,12 +28,12 @@ public class CodeReaderDictionaryAdapterFactory implements DictionaryAdapterFact
         DictionaryUtil.checkEnumerable(adaptee.getClass());
         return DictionaryAdapterImpl.<F, C>builder()
                 .adaptee(adaptee)
-                .codeReader(DictionaryUtil.findReaderExact(adaptee, org.caotc.code.annotation.Dictionary.Code.class))
-                .nameReader(DictionaryUtil.<F, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Name.class)
+                .codeReader(ReflectUtil.findReaderExact(adaptee, org.caotc.code.annotation.Dictionary.Code.class))
+                .nameReader(ReflectUtil.<F, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Name.class)
                         .orElseGet(ReaderConstant::defaultNameReader))
-                .descriptionReader(DictionaryUtil.<F, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Description.class)
+                .descriptionReader(ReflectUtil.<F, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Description.class)
                         .orElseGet(ReaderConstant::defaultDescriptionReader))
-                .groupReader(DictionaryUtil.<F, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Group.class)
+                .groupReader(ReflectUtil.<F, String>findReader(adaptee, org.caotc.code.annotation.Dictionary.Group.class)
                         .orElseGet(() -> groupReader(adaptee)))
                 .build();
     }
