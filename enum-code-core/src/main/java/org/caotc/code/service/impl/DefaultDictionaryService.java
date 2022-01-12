@@ -62,9 +62,9 @@ public class DefaultDictionaryService implements DictionaryService {
         if (groups.size() != 1) {
             throw new IllegalArgumentException(enumerableClass + "has groups " + groups + " can't valueOf by class");//todo
         }
-        DictionaryConstant<C, E> dictionaryConstant = (DictionaryConstant<C, E>) groupToDictionaryConverter.get(Iterables.getOnlyElement(groups));
+        DictionaryConverter<C, E> dictionaryConstant = (DictionaryConverter<C, E>) groupToDictionaryConverter.get(Iterables.getOnlyElement(groups));
         return Optional.ofNullable(dictionaryConstant)
-                .flatMap(e -> e.findAndUnWarpIfNecessary(code));
+                .flatMap(e -> e.valueOf(code));
     }
 
     @SuppressWarnings("unchecked")
