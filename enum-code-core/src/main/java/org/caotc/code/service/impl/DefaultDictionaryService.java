@@ -11,6 +11,7 @@ import org.caotc.code.annotation.Dictionary;
 import org.caotc.code.service.DictionaryConverterFactoryService;
 import org.caotc.code.service.DictionaryGroupService;
 import org.caotc.code.service.DictionaryService;
+import org.springframework.core.ResolvableType;
 
 import java.util.Map;
 import java.util.Objects;
@@ -157,8 +158,19 @@ public class DefaultDictionaryService implements DictionaryService {
     }
 
     private void register(@NonNull DictionaryConverter<?, ?> dictionaryConverter) {
+
         groupToDictionaryConverter.put(dictionaryConverter.group(), dictionaryConverter);
         //todo DictionaryConverter type
-        dictionaryGroupService.addGroup(dictionaryConverter.group(), ((DictionaryConstant<?, ?>) dictionaryConverter).originalType());
+        if (dictionaryConverter instanceof DictionaryConstant) {
+            dictionaryGroupService.addGroup(dictionaryConverter.group(), ((DictionaryConstant<?, ?>) dictionaryConverter).originalType());
+        } else {
+            ResolvableType resolvableType = ResolvableType.forInstance(dictionaryConverter).as(DictionaryConverter.class);
+            Class<?> dictionaryType = resolvableType.resolveGeneric(1);
+            if (Objects.isNull(dictionaryType)) {
+                dictionaryGroupService.addGroup(dictionaryConverter.group(), Object.class);
+            } else {
+                dictionaryGroupService.addGroup(dictionaryConverter.group(), dictionaryType);
+            }
+        }
     }
 }

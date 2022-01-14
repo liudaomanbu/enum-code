@@ -20,7 +20,7 @@ import java.util.Objects;
  * @since 1.0.0
  **/
 @Value
-@MappedTypes(value = {Dictionary.class})
+@MappedTypes(value = {Dictionary.class})//todo annotation
 public class EnumerableTypeHandler extends BaseTypeHandler<Dictionary<?, ?>> {
 
     @Override
